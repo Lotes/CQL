@@ -47,6 +47,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Contexts\FunctionSet.cs" />
+    <Compile Include="Contexts\IFieldSet.cs" />
+    <Compile Include="Contexts\IFunctionSet.cs" />
+    <Compile Include="Contexts\IRuleSet.cs" />
+    <Compile Include="Contexts\RuleSet.cs" />
+    <Compile Include="Contexts\ICQLContext.cs" />
+    <Compile Include="Contexts\ICQLContextBuilder.cs" />
     <Compile Include="Queries.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="StringExtensions.cs" />
@@ -86,6 +93,16 @@
       <Visitor>True</Visitor>
     </Antlr4>
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MainCore.Metrics\MainCore.Metrics.csproj">
+      <Project>{e263a06c-9313-43b1-ab0f-e709411d079d}</Project>
+      <Name>MainCore.Metrics</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MainCore.Tags\MainCore.Tags.csproj">
+      <Project>{3c0f5be3-f377-4922-8bb7-31c332332ced}</Project>
+      <Name>MainCore.Tags</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
