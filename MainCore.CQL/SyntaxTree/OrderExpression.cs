@@ -10,5 +10,11 @@
             Order = order;
             Expression = expression;
         }
+
+        public override string ToString()
+        {
+            var order = Order == SortOrder.Ascending ? "ASC" : "DESC";
+            return $"{Expression.ToString()} {order}";
+        }
     }
 }

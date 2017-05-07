@@ -19,5 +19,9 @@ namespace MainCore.CQL.SyntaxTree
             ParserContext = context;
         }
         public ParserRuleContext ParserContext { get; private set; }
+        public override string ToString()
+        {
+            return $"{Name}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
+        }
     }
 }

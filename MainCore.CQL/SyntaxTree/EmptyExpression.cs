@@ -11,5 +11,9 @@ namespace MainCore.CQL.SyntaxTree
     {
         public EmptyExpression(ParserRuleContext context) { ParserContext = context; }
         public ParserRuleContext ParserContext { get; private set; }
+        public override string ToString()
+        {
+            return "EMPTY";
+        }
     }
 }

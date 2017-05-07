@@ -216,11 +216,7 @@ namespace MainCore.CQL.Visitors
             var text = context.value.Text;
             var value = text
                 .Substring(1, text.Length-2)
-                .Replace("\\\"", "\"")
-                .Replace("\\\r", "\r")
-                .Replace("\\\n", "\n")
-                .Replace("\\\t", "\t")
-                .Replace("\\\\", "\\")
+                .Unescape()
                 ;
             return new StringLiteralExpression(context, value);
         }

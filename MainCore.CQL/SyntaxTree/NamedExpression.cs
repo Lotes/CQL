@@ -16,5 +16,10 @@ namespace MainCore.CQL.SyntaxTree
             Expression = expression;
             Name = name;
         }
+
+        public override string ToString()
+        {
+            return Expression.ToString() + (string.IsNullOrEmpty(Name) ? "" : " AS \""+Name.Escape()+"\"");
+        }
     }
 }

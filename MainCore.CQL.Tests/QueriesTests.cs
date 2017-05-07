@@ -9,7 +9,7 @@ namespace MainCore.CQL.Tests
         [TestMethod]
         public void TestMethod1()
         {
-            CQL.Queries.Parse("a + b");
+            Console.WriteLine(CQL.Queries.Parse("a ORDER BY x ASC SELECT p").ToString());
         }
     }
 }

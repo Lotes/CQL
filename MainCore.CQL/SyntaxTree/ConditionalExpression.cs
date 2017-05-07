@@ -22,5 +22,10 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public override string ToString()
+        {
+            return $"{Condition.ToString()} ? {Then.ToString()} : {Else.ToString()}";
+        }
     }
 }

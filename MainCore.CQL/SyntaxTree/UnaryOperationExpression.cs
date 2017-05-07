@@ -20,5 +20,18 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public override string ToString()
+        {
+            string opStr;
+            switch(Operator)
+            {
+                case UnaryOperator.Minus: opStr = "-"; break;
+                case UnaryOperator.Plus: opStr = "+"; break;
+                case UnaryOperator.Not: opStr = "!"; break;
+                default: throw new InvalidOperationException($"Unhandled operator: {Operator}");
+            }
+            return $"{opStr}{Expression.ToString()}";
+        }
     }
 }

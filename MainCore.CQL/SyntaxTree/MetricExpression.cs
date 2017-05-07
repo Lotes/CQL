@@ -20,5 +20,9 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+        public override string ToString()
+        {
+            return $"{SensorType}.{Name}";
+        }
     }
 }
