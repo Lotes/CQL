@@ -26,5 +26,15 @@ namespace MainCore.CQL.Visitors
             var next = ExpressionVisitor.Visit(context.next);
             return list.Concat(new[] { next });
         }
+        public override IEnumerable<IExpression> VisitParamSingle([NotNull] CQLParser.ParamSingleContext context)
+        {
+            var last = ExpressionVisitor.Visit(context.expr);
+            return new[] { last };
+        }
+        public override IEnumerable<IExpression> VisitElemSingle([NotNull] CQLParser.ElemSingleContext context)
+        {
+            var last = ExpressionVisitor.Visit(context.expr);
+            return new[] { last };
+        }
     }
 }

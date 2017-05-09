@@ -51,5 +51,15 @@ namespace MainCore.CQL.SyntaxTree
             }
             return $"{LeftExpression.ToString()} {opString} {RightExpression.ToString()}";
         }
+
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            var other = node as BinaryOperationExpression;
+            if (other == null)
+                return false;
+            return this.Operator == other.Operator
+                && this.LeftExpression.StructurallyEquals(other.LeftExpression)
+                && this.RightExpression.StructurallyEquals(other.RightExpression);
+        }
     }
 }

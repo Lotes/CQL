@@ -21,9 +21,9 @@ namespace MainCore.CQL
         {
             return @this
                 .Replace("\\\"", "\"")
-                .Replace("\\\r", "\r")
-                .Replace("\\\n", "\n")
-                .Replace("\\\t", "\t")
+                .Replace("\\r", "\r")
+                .Replace("\\n", "\n")
+                .Replace("\\t", "\t")
                 .Replace("\\\\", "\\");
         }
     }

@@ -15,19 +15,19 @@ namespace MainCore.CQL.Visitors
         public override OrderExpression VisitOrderByDesc([NotNull] CQLParser.OrderByDescContext context)
         {
             var expression = expressionVisitor.Visit(context.expr);
-            return new OrderExpression(SortOrder.Descending, expression);
+            return new OrderExpression(context, SortOrder.Descending, expression);
         }
 
         public override OrderExpression VisitOrderByAsc([NotNull] CQLParser.OrderByAscContext context)
         {
             var expression = expressionVisitor.Visit(context.expr);
-            return new OrderExpression(SortOrder.Ascending, expression);
+            return new OrderExpression(context, SortOrder.Ascending, expression);
         }
 
         public override OrderExpression VisitOrderByDefault([NotNull] CQLParser.OrderByDefaultContext context)
         {
             var expression = expressionVisitor.Visit(context.expr);
-            return new OrderExpression(SortOrder.Ascending, expression);
+            return new OrderExpression(context, SortOrder.Ascending, expression);
         }
     }
 }

@@ -20,6 +20,12 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            throw new NotImplementedException();
+        }
+
         public override string ToString()
         {
             return $"{CategoryName}/{TagName}";

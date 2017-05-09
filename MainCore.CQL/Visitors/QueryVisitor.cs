@@ -26,7 +26,7 @@ namespace MainCore.CQL.Visitors
             var expression = expressionVisitor.Visit(context.expr);
             var orderExpressions = context.order == null ? Enumerable.Empty<OrderExpression>() : this.orderExpressionsVisitor.Visit(context.order.exprs);
             var selectExpressions = context.selection == null ? Enumerable.Empty<NamedExpression>() : this.namedExpressionsVisitor.Visit(context.selection.exprs);
-            return new Query(expression, orderExpressions, selectExpressions);
+            return new Query(context, expression, orderExpressions, selectExpressions);
         }
     }
 }

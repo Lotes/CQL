@@ -106,7 +106,7 @@ elementList
 	;
 parameterList
 	: elems=parameterList COMMA next=expression #paramList
-	| expression                                #paramSingle
+	| expr=expression                           #paramSingle
 	;
 constant
     : value=STRING_LITERAL  #string
@@ -119,6 +119,14 @@ constant
 /*
  * Lexer Rules
  */
+BOOLEAN_LITERAL
+    : T R U E
+    | F A L S E
+    ;
+
+NULL_LITERAL: N U L L;
+EMPTY_LITERAL: E M P T Y;
+
 LBRACE: '{';
 TAG: ID? DIV ID;
 METRIC_KEY: ID DOT ID;
@@ -219,15 +227,5 @@ fragment EXPONENT_PART
 fragment DECIMAL_DIGIT
     : [0-9]
     ;
-
-/* Booleans */
-BOOLEAN_LITERAL
-    : T R U E
-    | F A L S E
-    ;
-
-/* Other constants */
-NULL_LITERAL: N U L L;
-EMPTY_LITERAL: E M P T Y;
 
 WHITESPACE :  ( ' ' | '\t' | '\n' | '\r' )+ -> skip;

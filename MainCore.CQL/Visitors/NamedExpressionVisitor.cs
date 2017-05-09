@@ -21,21 +21,21 @@ namespace MainCore.CQL.Visitors
         {
             var expression = ExpressionVisitor.Visit(context.expr);
             var name = context.name.Text;
-            return new NamedExpression(expression, name);
+            return new NamedExpression(context, expression, name);
         }
 
         public override NamedExpression VisitExprWithStringName([NotNull] CQLParser.ExprWithStringNameContext context)
         {
             var expression = ExpressionVisitor.Visit(context.expr);
             var name = context.name.Text;
-            return new NamedExpression(expression, name);
+            return new NamedExpression(context, expression, name);
         }
 
         public override NamedExpression VisitExprWithoutName([NotNull] CQLParser.ExprWithoutNameContext context)
         {
             var expression = ExpressionVisitor.Visit(context.expr);
             var name = (string)null;
-            return new NamedExpression(expression, name);
+            return new NamedExpression(context, expression, name);
         }
     }
 }

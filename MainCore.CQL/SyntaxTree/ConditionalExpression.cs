@@ -27,5 +27,15 @@ namespace MainCore.CQL.SyntaxTree
         {
             return $"{Condition.ToString()} ? {Then.ToString()} : {Else.ToString()}";
         }
+
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            var other = node as ConditionalExpression;
+            if (other == null)
+                return false;
+            return this.Condition.StructurallyEquals(other.Condition)
+                && this.Then.StructurallyEquals(other.Then)
+                && this.Else.StructurallyEquals(other.Else);
+        }
     }
 }

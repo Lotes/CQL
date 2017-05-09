@@ -19,6 +19,14 @@ namespace MainCore.CQL.SyntaxTree
 
         public ParserRuleContext ParserContext { get; private set; }
 
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            var other = node as BooleanLiteralExpression;
+            if (other == null)
+                return false;
+            return this.Value == other.Value;
+        }
+
         public override string ToString()
         {
             return Value.ToString();

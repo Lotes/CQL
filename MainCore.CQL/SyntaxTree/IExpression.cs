@@ -7,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public interface IExpression
+    public interface IExpression: ISyntaxTreeNode
     {
-        ParserRuleContext ParserContext { get; }
-        //bool StructurallyEquals(IExpression other);
+
     }
 }

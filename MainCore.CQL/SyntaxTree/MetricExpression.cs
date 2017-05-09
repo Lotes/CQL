@@ -24,5 +24,10 @@ namespace MainCore.CQL.SyntaxTree
         {
             return $"{SensorType}.{Name}";
         }
+
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

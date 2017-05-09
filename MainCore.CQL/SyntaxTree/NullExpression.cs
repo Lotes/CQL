@@ -11,6 +11,12 @@ namespace MainCore.CQL.SyntaxTree
     {
         public NullExpression(ParserRuleContext context) { ParserContext = context; }
         public ParserRuleContext ParserContext { get; private set; }
+
+        public bool StructurallyEquals(ISyntaxTreeNode node)
+        {
+            return node as NullExpression != null;
+        }
+
         public override string ToString()
         {
             return "NULL";

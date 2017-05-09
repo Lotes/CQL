@@ -65,6 +65,8 @@
   <ItemGroup>
     <Compile Include="Contexts\Implementation\Context.cs" />
     <Compile Include="SyntaxTree\CastExpression.cs" />
+    <Compile Include="SyntaxTree\Extensions.cs" />
+    <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\Field.cs" />
     <Compile Include="Contexts\Functions.cs" />
