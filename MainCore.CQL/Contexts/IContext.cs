@@ -8,11 +8,12 @@ using System.Threading.Tasks;
 
 namespace MainCore.CQL.Contexts
 {
-    public interface ICQLContext
+    public interface IContext
     {
         IEnumerable<Tag> Tags { get; }
         IEnumerable<MetricKey> MetricKeys { get; }
         IRuleSet Rules { get; }
         IFunctionSet Functions { get; }
+        IFieldSet Fields { get; }
     }
 }

@@ -9,9 +9,6 @@ namespace MainCore.CQL.Contexts
 {
     public interface IFunctionSet
     {
-        Func<object> Get(string name);
-        Func<object, object> Get<TArg1>(string name);
-        Func<object, object, object> Get<TArg1, TArg2>(string name);
-        Func<object, object, object, object> Get<TArg1, TArg2, TArg3>(string name);
+        IFunction Get(string name);
     }
 }

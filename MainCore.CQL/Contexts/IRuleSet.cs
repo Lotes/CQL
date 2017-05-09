@@ -9,7 +9,7 @@ namespace MainCore.CQL.Contexts
 {
     public interface IRuleSet
     {
-        Func<object, object, object> this[BinaryOperator op, Type left, Type right] { get; }
-        Func<object, object> this[UnaryOperator op, Type operand] { get; }
+        BinaryOperation Get(BinaryOperator op, Type left, Type right);
+        UnaryOperation Get(UnaryOperator op, Type operand);
     }
 }
