@@ -9,6 +9,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainCore.CQL", "..\MainCore
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainCore.CQL.Tests", "..\MainCore.CQL.Tests\MainCore.CQL.Tests.csproj", "{1D669631-D619-42F9-962E-CB4CC4A31616}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainCore.CQL.WPF", "..\MainCore.CQL.WPF\MainCore.CQL.WPF.csproj", "{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{1D669631-D619-42F9-962E-CB4CC4A31616}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1D669631-D619-42F9-962E-CB4CC4A31616}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1D669631-D619-42F9-962E-CB4CC4A31616}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

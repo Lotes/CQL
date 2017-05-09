@@ -83,6 +83,7 @@
     <Compile Include="TypeSystem\Implementation\TypeSystem.cs" />
     <Compile Include="TypeSystem\Implementation\TypeSystemBuilder.cs" />
     <Compile Include="TypeSystem\ITypeSystemBuilder.cs" />
+    <Compile Include="TypeSystem\QType.cs" />
     <Compile Include="TypeSystem\UnaryOperation.cs" />
     <Compile Include="DictionaryExtensions.cs" />
     <Compile Include="Queries.cs" />

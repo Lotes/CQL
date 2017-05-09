@@ -94,6 +94,16 @@
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MainCore.CQL.WPF\MainCore.CQL.WPF.csproj">
+      <Project>{1dec8c20-f9e0-4b6e-baab-26847204cb12}</Project>
+      <Name>MainCore.CQL.WPF</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\MainCore.CQL\MainCore.CQL.csproj">
+      <Project>{e07e2313-aa23-4498-afec-28e2b7c6fd33}</Project>
+      <Name>MainCore.CQL</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

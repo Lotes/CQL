@@ -11,9 +11,9 @@ namespace MainCore.CQL.TypeSystem.Implementation
     {
         private TypeSystem typeSystem = new TypeSystem();
 
-        public void AddType<TType>()
+        public void AddType<TType>(string name)
         {
-            typeSystem.AddType<TType>();
+            typeSystem.AddType<TType>(name);
             AddEqualsRule<TType>((a, b) => a.Equals(b));
             if (typeof(TType).IsAssignableFrom(typeof(IComparable)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);
