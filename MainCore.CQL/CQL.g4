@@ -92,8 +92,7 @@ factor
     | MINUS expr=factor                            #minusFactor
     | expr=constant                                #const
     | expr=list                                    #ls
-    | tag=TAG                                      #tagFactor
-    | metric=METRIC_KEY                            #metricFactor
+    | id=DOUBLE_ID                                 #doubleIdFactor
 	| LPAREN castingType=ID RPAREN expr=expression #castFactor     
     ;
 list
@@ -128,8 +127,6 @@ NULL_LITERAL: N U L L;
 EMPTY_LITERAL: E M P T Y;
 
 LBRACE: '{';
-TAG: ID? DIV ID;
-METRIC_KEY: ID DOT ID;
 DOT: '.';
 RBRACE: '}';
 LBRACKET: '[';
@@ -163,6 +160,8 @@ DOES_NOT_CONTAIN: '!~';
 IS: I S;
 SELECT: S E L E C T;
 AS: A S;
+SLASH: '/';
+DOUBLE_ID: ID (SLASH|DOT|'->'|'#'|'$') ID;
 ID : [a-zA-Z_][A-Za-z_0-9]*;
 
 fragment A : ('A'|'a') ;

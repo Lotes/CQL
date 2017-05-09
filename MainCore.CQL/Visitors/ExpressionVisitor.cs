@@ -4,12 +4,14 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace MainCore.CQL.Visitors
 {
     public class ExpressionVisitor : CQLBaseVisitor<IExpression>
     {
+        private Regex doubleIdMatcher = new Regex(@"([a-zA-Z_][A-Za-z_0-9]*)(->|\.|/|#|$)([a-zA-Z_][A-Za-z_0-9]*)");
         private ExpressionsVisitor exprListVisitor;
 
         public ExpressionVisitor()
@@ -220,19 +222,26 @@ namespace MainCore.CQL.Visitors
                 ;
             return new StringLiteralExpression(context, value);
         }
-        public override IExpression VisitTagFactor([NotNull] CQLParser.TagFactorContext context)
+        public override IExpression VisitDoubleIdFactor([NotNull] CQLParser.DoubleIdFactorContext context)
         {
-            var parts = context.tag.Text.Split('/');
-            var category = parts[0];
-            var tag = parts[1];
-            return new TagExpression(context, category, tag);
-        }
-        public override IExpression VisitMetricFactor([NotNull] CQLParser.MetricFactorContext context)
-        {
-            var parts = context.metric.Text.Split('.');
-            var sensorType = parts[0];
-            var name = parts[1];
-            return new MetricExpression(context, sensorType, name);
+            var match = doubleIdMatcher.Match(context.id.Text);
+            if (!match.Success)
+                throw new InvalidOperationException("Unhandled delimter!");
+            var firstName = match.Groups[1].Value;
+            var secondName = match.Groups[3].Value;
+            var delimiterString = match.Groups[2].Value;
+            IdDelimiter delimiter;
+            switch(delimiterString)
+            {
+                case ".": delimiter = IdDelimiter.Dot; break;
+                case "/": delimiter = IdDelimiter.Slash; break;
+                case "->": delimiter = IdDelimiter.SingleArrow; break;
+                case "#": delimiter = IdDelimiter.Hash; break;
+                case "$": delimiter = IdDelimiter.Dollar; break;
+                default:
+                    throw new InvalidOperationException("Unhandled delimiter!");
+            }
+            return new DoubleIdExpression(context, delimiter, firstName, secondName);
         }
         public override IExpression VisitCastFactor([NotNull] CQLParser.CastFactorContext context)
         {

@@ -77,7 +77,13 @@ namespace MainCore.CQL.Tests
         {
             AssertQueryEquals("1+2", new Query(pc, new BinaryOperationExpression(pc, BinaryOperator.Add, new DecimalLiteralExpression(pc, 1), new DecimalLiteralExpression(pc, 2))));
         }
-        
+
+        [TestMethod]
+        public void DoubleIdExpressionTest()
+        {
+            AssertQueryEquals("a->b", new Query(pc, new DoubleIdExpression(pc, IdDelimiter.SingleArrow, "a", "b")));
+        }
+
         [TestMethod]
         public void CastExpressionTest()
         {

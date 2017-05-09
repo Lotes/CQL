@@ -11,15 +11,17 @@ namespace MainCore.CQL.TypeSystem.Implementation
 {
     public class TypeSystem: ITypeSystem
     {
-        private HashSet<Type> types = new HashSet<Type>();
+        private Dictionary<string, QType> types = new Dictionary<string, QType>();
         private Dictionary<BinaryOperator, Dictionary<Type, Dictionary<Type, BinaryOperation>>> binaryOpRules = new Dictionary<BinaryOperator, Dictionary<Type, Dictionary<Type, BinaryOperation>>>();
         private Dictionary<UnaryOperator, Dictionary<Type, UnaryOperation>> unaryOpRules = new Dictionary<UnaryOperator, Dictionary<Type, UnaryOperation>>();
         private BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>> allCoercionRules = new BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>>();
         private BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>> implicitCoercionRules = new BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>>();
 
-        public void AddType<TType>()
+        public void AddType<TType>(string name)
         {
-            types.Add(typeof(TType));
+            if (types.Values.Any(t => t.ActualType == typeof(TType)))
+                throw new InvalidOperationException("Type is already registered!");
+            types.Add(name.ToLower(), new QType(name, typeof(TType)));
         }
 
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)
@@ -84,13 +86,29 @@ namespace MainCore.CQL.TypeSystem.Implementation
             return null;
         }
 
-        public IEnumerable<Type> Types { get { return types; } }
+        public IEnumerable<QType> Types { get { return types.Values; } }
+
+        IEnumerable<QType> ITypeSystem.Types
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public CoercionRule GetCoercionRule(Type original, Type casting)
         {
             TaggedEdge<Type, CoercionRule> edge;
             if (allCoercionRules.TryGetEdge(original, casting, out edge))
                 return edge.Tag;
+            return null;
+        }
+
+        public QType GetType(string name)
+        {
+            QType type;
+            if (types.TryGetValue(name.ToLower(), out type))
+                return type;
             return null;
         }
     }

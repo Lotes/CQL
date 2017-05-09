@@ -66,6 +66,7 @@
     <Compile Include="Contexts\Implementation\Context.cs" />
     <Compile Include="SyntaxTree\CastExpression.cs" />
     <Compile Include="SyntaxTree\Extensions.cs" />
+    <Compile Include="SyntaxTree\IdDelimiter.cs" />
     <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\Field.cs" />
@@ -96,7 +97,6 @@
     <Compile Include="SyntaxTree\EmptyExpression.cs" />
     <Compile Include="SyntaxTree\FunctionCallExpression.cs" />
     <Compile Include="SyntaxTree\IExpression.cs" />
-    <Compile Include="SyntaxTree\MetricExpression.cs" />
     <Compile Include="SyntaxTree\NamedExpression.cs" />
     <Compile Include="SyntaxTree\NullExpression.cs" />
     <Compile Include="SyntaxTree\OrderExpression.cs" />
@@ -104,7 +104,7 @@
     <Compile Include="SyntaxTree\Query.cs" />
     <Compile Include="SyntaxTree\SortOrder.cs" />
     <Compile Include="SyntaxTree\StringLiteralExpression.cs" />
-    <Compile Include="SyntaxTree\TagExpression.cs" />
+    <Compile Include="SyntaxTree\DoubleIdExpression.cs" />
     <Compile Include="SyntaxTree\UnaryOperationExpression.cs" />
     <Compile Include="SyntaxTree\UnaryOperator.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
