@@ -234,5 +234,11 @@ namespace MainCore.CQL.Visitors
             var name = parts[1];
             return new MetricExpression(context, sensorType, name);
         }
+        public override IExpression VisitCastFactor([NotNull] CQLParser.CastFactorContext context)
+        {
+            var castTypeName = context.castingType.Text;
+            var expression = Visit(context.expr);
+            return new CastExpression(context, castTypeName, expression);
+        }
     }
 }

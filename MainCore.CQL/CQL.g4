@@ -84,16 +84,17 @@ specialTerm
 	| expr=factor                                  #toFactor
 	;
 factor
-    : var=ID                        #var
-    | LPAREN expr=expression RPAREN #expr
-    | name=ID LPAREN params=parameterList? RPAREN #function
-    | NOT expr=factor               #notFactor
-    | PLUS expr=factor              #plusFactor
-    | MINUS expr=factor             #minusFactor
-    | expr=constant                 #const
-    | expr=list                     #ls
-    | tag=TAG                       #tagFactor
-    | metric=METRIC_KEY             #metricFactor      
+    : var=ID                                       #var
+    | LPAREN expr=expression RPAREN                #expr
+    | name=ID LPAREN params=parameterList? RPAREN  #function
+    | NOT expr=factor                              #notFactor
+    | PLUS expr=factor                             #plusFactor
+    | MINUS expr=factor                            #minusFactor
+    | expr=constant                                #const
+    | expr=list                                    #ls
+    | tag=TAG                                      #tagFactor
+    | metric=METRIC_KEY                            #metricFactor
+	| LPAREN castingType=ID RPAREN expr=expression #castFactor     
     ;
 list
     : LBRACE elems=elementList RBRACE     #braceElems

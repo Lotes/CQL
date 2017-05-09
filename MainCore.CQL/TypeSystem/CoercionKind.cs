@@ -4,10 +4,11 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainCore.CQL.Contexts
+namespace MainCore.CQL.TypeSystem
 {
-    public interface IFunctionSet
+    public enum CoercionKind
     {
-        IFunction Get(string name);
+        Implicit,
+        Explicit
     }
 }

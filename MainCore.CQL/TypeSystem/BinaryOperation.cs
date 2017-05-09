@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainCore.CQL.Contexts
+namespace MainCore.CQL.TypeSystem
 {
     public class BinaryOperation
     {

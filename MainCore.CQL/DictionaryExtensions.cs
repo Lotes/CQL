@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainCore.Metrics
+namespace MainCore.CQL
 {
     public static class DictionaryExtensions
     {

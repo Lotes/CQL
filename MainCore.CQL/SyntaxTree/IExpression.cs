@@ -10,5 +10,6 @@ namespace MainCore.CQL.SyntaxTree
     public interface IExpression
     {
         ParserRuleContext ParserContext { get; }
+        //bool StructurallyEquals(IExpression other);
     }
 }
