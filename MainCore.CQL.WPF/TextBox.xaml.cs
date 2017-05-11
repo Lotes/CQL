@@ -1,5 +1,8 @@
-﻿using System;
+﻿using ICSharpCode.AvalonEdit.Highlighting;
+using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +15,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Xml;
 
 namespace MainCore.CQL.WPF
 {
@@ -23,6 +27,13 @@ namespace MainCore.CQL.WPF
         public TextBox()
         {
             InitializeComponent();
+            using (var s = new StringReader(Properties.Resources.SyntaxHighlighting))
+            {
+                using (var reader = new XmlTextReader(s))
+                {
+                    textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
+                }
+            }
         }
     }
 }

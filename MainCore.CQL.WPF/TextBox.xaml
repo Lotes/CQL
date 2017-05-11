@@ -6,6 +6,15 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300">
-    <avalon:TextEditor Name="textEditor" FontFamily="Consolas" SyntaxHighlighting="C#" FontSize="10pt"/>
+             d:DesignHeight="30" d:DesignWidth="800">
+    <avalon:TextEditor 
+        ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+        ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+        Name="textEditor" 
+        FontFamily="Consolas" 
+        SyntaxHighlighting="C#" 
+        FontSize="10pt"
+        Text="a AND 1 == Main.FileLOC OR a CONTAINS &quot;xyz&quot; AND i IS true Or NULL ORDER BY a SELECT b">
+        
+    </avalon:TextEditor>
 </UserControl>
