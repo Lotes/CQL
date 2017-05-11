@@ -37,13 +37,19 @@ namespace MainCore.CQL
             var speakLexer = new CQLLexer(inputStream);
             var commonTokenStream = new CommonTokenStream(speakLexer);
             var parser = new CQLParser(commonTokenStream);
-            var errors = new List<Exception>();
-            parser.AddErrorListener((recognizer, offendingSymbol, line, charPositionInLine, msg, e) => errors.Add(e));
+            var errors = new List<LocateableException>();
+            parser.AddErrorListener((recognizer, offendingSymbol, line, charPositionInLine, msg, e) =>
+            {
+                errors.Add(new LocateableException(offendingSymbol.StartIndex, offendingSymbol.StopIndex, msg, e));
+            });
             var parseContext = parser.query();
             var visitor = new QueryVisitor();
             var result = visitor.Visit(parseContext);
             if (errors.Any())
-                throw errors.First();
+            {
+                var ex = errors.First();
+                throw ex;
+            }
             return result;
         }
     }

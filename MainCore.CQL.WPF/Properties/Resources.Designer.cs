@@ -62,20 +62,23 @@ namespace MainCore.CQL.WPF.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to &lt;?xml version=&quot;1.0&quot; encoding=&quot;utf-8&quot; ?&gt;
-        ///&lt;SyntaxDefinition name=&quot;CQL&quot; xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
-        ///  &lt;Color name=&quot;Comment&quot; foreground=&quot;Green&quot; /&gt;
+        ///&lt;SyntaxDefinition 
+        ///	name=&quot;CQL&quot; 
+        ///	xmlns=&quot;http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008&quot;&gt;
         ///  &lt;Color name=&quot;String&quot; foreground=&quot;Blue&quot; /&gt;
         ///
         ///  &lt;!-- This is the main ruleset. --&gt;
         ///  &lt;RuleSet&gt;
-        ///    &lt;Span color=&quot;Comment&quot; begin=&quot;//&quot; /&gt;
-        ///    &lt;Span color=&quot;Comment&quot; multiline=&quot;true&quot; begin=&quot;/\*&quot; end=&quot;\*/&quot; /&gt;
-        ///
         ///    &lt;Span color=&quot;String&quot;&gt;
         ///      &lt;Begin&gt;&quot;&lt;/Begin&gt;
         ///      &lt;End&gt;&quot;&lt;/End&gt;
         ///      &lt;RuleSet&gt;
-        ///        &lt;!-- nested span for  [rest of string was truncated]&quot;;.
+        ///        &lt;!-- nested span for escape sequences --&gt;
+        ///        &lt;Span begin=&quot;\\&quot; end=&quot;.&quot; /&gt;
+        ///      &lt;/RuleSet&gt;
+        ///    &lt;/Span&gt;
+        ///
+        ///    &lt;!-- code generator: http://rextester.com/YRVZM38234 --&gt;        /// [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string SyntaxHighlighting {
             get {

@@ -14,6 +14,9 @@
         FontFamily="Consolas" 
         SyntaxHighlighting="C#" 
         FontSize="10pt"
+        Padding="3"
+        PreviewKeyDown="textEditor_PreviewKeyDown"
+        TextChanged="textEditor_TextChanged"
         Text="a AND 1 == Main.FileLOC OR a CONTAINS &quot;xyz&quot; AND i IS true Or NULL ORDER BY a SELECT b">
         
     </avalon:TextEditor>

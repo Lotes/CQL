@@ -24,8 +24,8 @@ namespace MainCore.CQL.Visitors
         public override Query VisitQuery([NotNull] CQLParser.QueryContext context)
         {
             var expression = expressionVisitor.Visit(context.expr);
-            var orderExpressions = context.order == null ? Enumerable.Empty<OrderExpression>() : this.orderExpressionsVisitor.Visit(context.order.exprs);
-            var selectExpressions = context.selection == null ? Enumerable.Empty<NamedExpression>() : this.namedExpressionsVisitor.Visit(context.selection.exprs);
+            var orderExpressions = context.order == null || context.order.exprs == null ? Enumerable.Empty<OrderExpression>() : this.orderExpressionsVisitor.Visit(context.order.exprs);
+            var selectExpressions = context.selection == null || context.selection.exprs == null ? Enumerable.Empty<NamedExpression>() : this.namedExpressionsVisitor.Visit(context.selection.exprs);
             return new Query(context, expression, orderExpressions, selectExpressions);
         }
     }

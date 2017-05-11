@@ -9,8 +9,9 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MainCore.CQL.WPF</RootNamespace>
     <AssemblyName>MainCore.CQL.WPF</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -58,6 +59,7 @@
     <Compile Include="TextBox.xaml.cs">
       <DependentUpon>TextBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="TextMarkerService.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="AvalonEditSchema.xsd" />
@@ -75,6 +77,12 @@
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
     <None Include="SyntaxHighlighting.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\MainCore.CQL\MainCore.CQL.csproj">
+      <Project>{e07e2313-aa23-4498-afec-28e2b7c6fd33}</Project>
+      <Name>MainCore.CQL</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

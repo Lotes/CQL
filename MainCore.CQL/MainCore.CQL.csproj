@@ -10,10 +10,11 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>MainCore.CQL</RootNamespace>
     <AssemblyName>MainCore.CQL</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -64,6 +65,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Contexts\Implementation\Context.cs" />
+    <Compile Include="LocateableException.cs" />
     <Compile Include="SyntaxTree\CastExpression.cs" />
     <Compile Include="SyntaxTree\Extensions.cs" />
     <Compile Include="SyntaxTree\IdDelimiter.cs" />
