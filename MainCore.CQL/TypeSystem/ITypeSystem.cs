@@ -10,8 +10,11 @@ namespace MainCore.CQL.TypeSystem
     public interface ITypeSystem
     {
         IEnumerable<QType> Types { get; }
-        QType GetType(string name);
+        QType GetTypeByName(string name);
+        // can throw exception
+        QType GetTypeByNative(Type type);
         CoercionRule GetCoercionRule(Type original, Type casting);
+        IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType);
         BinaryOperation GetBinaryOperation(BinaryOperator op, Type left, Type right);
         UnaryOperation GetUnaryOperation(UnaryOperator op, Type operand);
     }

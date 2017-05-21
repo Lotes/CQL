@@ -4,12 +4,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public class NamedExpression: ISyntaxTreeNode
+    public class NamedExpression: ISyntaxTreeNode<NamedExpression>
     {
-        public readonly IExpression Expression;
+        public IExpression Expression { get; private set; }
         public readonly string Name;
 
         public NamedExpression(ParserRuleContext context, IExpression expression, string name = null)
@@ -33,6 +35,12 @@ namespace MainCore.CQL.SyntaxTree
         public override string ToString()
         {
             return Expression.ToString() + (string.IsNullOrEmpty(Name) ? "" : " AS \""+Name.Escape()+"\"");
+        }
+
+        public NamedExpression Validate(IContext context)
+        {
+            Expression = Expression.Validate(context);
+            return this;
         }
     }
 }

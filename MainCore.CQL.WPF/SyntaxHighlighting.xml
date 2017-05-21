@@ -115,6 +115,10 @@
       <Word>EMPTY</Word>
     </Keywords>
     <Keywords fontWeight="bold" foreground="Fuchsia">
+      <Word>in</Word>
+      <Word>iN</Word>
+      <Word>In</Word>
+      <Word>IN</Word>
       <Word>is</Word>
       <Word>iS</Word>
       <Word>Is</Word>

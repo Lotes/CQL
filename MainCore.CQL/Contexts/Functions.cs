@@ -27,6 +27,7 @@ namespace MainCore.CQL.Contexts
         string Usage { get; }
         Type ResultType { get; }
         object Invoke(params object[] parameters);
+        IEnumerable<Parameter> Parameters { get; }
     }
 
     public abstract class AbstractFunction : IFunction
@@ -41,6 +42,9 @@ namespace MainCore.CQL.Contexts
 
         public int Arity { get; private set; }
         public string Name { get; private set; }
+
+        public virtual IEnumerable<Parameter> Parameters { get { return Enumerable.Empty<Parameter>(); } }
+
         public Type ResultType { get; private set; }
         public string Usage { get; private set; }
         public abstract object Invoke(params object[] parameters);
@@ -77,6 +81,8 @@ namespace MainCore.CQL.Contexts
         {
             return Definition(parameters[0]);
         }
+
+        public override IEnumerable<Parameter> Parameters { get { return new[] { Argument1 }; } }
     }
 
     public class Function2 : AbstractFunction
@@ -97,6 +103,8 @@ namespace MainCore.CQL.Contexts
         {
             return Definition(parameters[0], parameters[1]);
         }
+
+        public override IEnumerable<Parameter> Parameters { get { return new[] { Argument1, Argument2 }; } }
     }
 
     public class Function3 : AbstractFunction
@@ -119,5 +127,7 @@ namespace MainCore.CQL.Contexts
         {
             return Definition(parameters[0], parameters[1], parameters[2]);
         }
+
+        public override IEnumerable<Parameter> Parameters { get { return new[] { Argument1, Argument2, Argument3 }; } }
     }
 }

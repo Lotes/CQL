@@ -12,7 +12,7 @@
         ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
         Name="textEditor" 
         FontFamily="Consolas" 
-        SyntaxHighlighting="C#" 
+        SyntaxHighlighting="CQL" 
         FontSize="10pt"
         Padding="3"
         PreviewKeyDown="textEditor_PreviewKeyDown"

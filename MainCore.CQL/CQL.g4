@@ -84,7 +84,7 @@ specialTerm
 	| expr=factor                                  #toFactor
 	;
 factor
-    : var=ID                                       #var
+    : id=MULTI_ID                                  #multiId
     | LPAREN expr=expression RPAREN                #expr
     | name=ID LPAREN params=parameterList? RPAREN  #function
     | NOT expr=factor                              #notFactor
@@ -92,7 +92,6 @@ factor
     | MINUS expr=factor                            #minusFactor
     | expr=constant                                #const
     | expr=list                                    #ls
-    | id=DOUBLE_ID                                 #doubleIdFactor
 	| LPAREN castingType=ID RPAREN expr=expression #castFactor     
     ;
 list
@@ -161,8 +160,8 @@ IS: I S;
 SELECT: S E L E C T;
 AS: A S;
 SLASH: '/';
-DOUBLE_ID: ID (SLASH|DOT|'->'|'#'|'$') ID;
 ID : [a-zA-Z_][A-Za-z_0-9]*;
+MULTI_ID: ID ((SLASH|DOT|'->'|'#'|'$') ID)*;
 
 fragment A : ('A'|'a') ;
 fragment B : ('B'|'b') ;

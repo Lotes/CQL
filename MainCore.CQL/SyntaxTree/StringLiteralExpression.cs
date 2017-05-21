@@ -1,9 +1,11 @@
 ﻿using Antlr4.Runtime;
 using System;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public class StringLiteralExpression: IExpression
+    public class StringLiteralExpression: IExpression<StringLiteralExpression>
     {
         public readonly string Value;
 
@@ -14,6 +16,8 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public Type SemanticType { get { return typeof(string); } }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -26,6 +30,16 @@ namespace MainCore.CQL.SyntaxTree
         public override string ToString()
         {
             return $"\"{Value.Escape()}\"";
+        }
+
+        public StringLiteralExpression Validate(IContext context)
+        {
+            return this;
+        }
+
+        IExpression IExpression.Validate(IContext context)
+        {
+            return Validate(context);
         }
     }
 }

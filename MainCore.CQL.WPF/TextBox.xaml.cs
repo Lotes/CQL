@@ -1,22 +1,13 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
-using ICSharpCode.AvalonEdit.Rendering;
+using MainCore.CQL.ErrorHandling;
 using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
 using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 using System.Xml;
 
 namespace MainCore.CQL.WPF
@@ -35,6 +26,8 @@ namespace MainCore.CQL.WPF
             SetupErrorVisualization();
             SetupSyntaxHighlighting();
             SetupPasting();
+
+            textEditor_TextChanged(this, null);
         }
 
         private void SetupErrorVisualization()
@@ -156,14 +149,14 @@ namespace MainCore.CQL.WPF
             if (textMarkerService == null)
                 return;
             textMarkerService.Clear();
-            try
-            {
-                Queries.Parse(textEditor.Text);
-            }
-            catch (LocateableException ex)
-            {
-                textMarkerService.Create(ex.StartIndex, ex.Length, ex.Message);
-            }
+            var errorListener = new ErrorListener();
+            errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
+            Queries.ParseForSyntaxOnly(textEditor.Text, errorListener);
+        }
+
+        private void ErrorDetectedErrorListener_ErrorDetected(object sender, LocateableException e)
+        {
+            textMarkerService.Create(e.StartIndex, e.Length, e.Message);
         }
     }
 }

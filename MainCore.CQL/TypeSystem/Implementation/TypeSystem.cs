@@ -28,6 +28,8 @@ namespace MainCore.CQL.TypeSystem.Implementation
         {
             var original = typeof(TOriginalType);
             var casting = typeof(TCastingType);
+            if (GetTypeByNative(original) == null) throw new UnknownTypeException(original);
+            if (GetTypeByNative(casting) == null) throw new UnknownTypeException(casting);
             var rule = new CoercionRule(kind, original, casting, a => cast((TOriginalType)a));
             TaggedEdge<Type, CoercionRule> existingEdge;
             if (allCoercionRules.TryGetEdge(original, casting, out existingEdge))
@@ -88,14 +90,6 @@ namespace MainCore.CQL.TypeSystem.Implementation
 
         public IEnumerable<QType> Types { get { return types.Values; } }
 
-        IEnumerable<QType> ITypeSystem.Types
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-        }
-
         public CoercionRule GetCoercionRule(Type original, Type casting)
         {
             TaggedEdge<Type, CoercionRule> edge;
@@ -104,12 +98,30 @@ namespace MainCore.CQL.TypeSystem.Implementation
             return null;
         }
 
-        public QType GetType(string name)
+        public QType GetTypeByName(string name)
         {
             QType type;
             if (types.TryGetValue(name.ToLower(), out type))
                 return type;
             return null;
+        }
+
+        public IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType)
+        {
+            IEnumerable<TaggedEdge<Type, CoercionRule>> result;
+            if (implicitCoercionRules.ShortestPathsDijkstra(t => 1, original)(destinationType, out result))
+                return result.Select(e => e.Tag).ToArray();
+            return Enumerable.Empty<CoercionRule>();
+        }
+
+        public QType GetTypeByNative(Type type)
+        {
+            var matchingQTypes = types.Values.Where(q => q.ActualType.IsAssignableFrom(type)).ToArray();
+            if (matchingQTypes.Length == 0)
+                return null;
+            if (matchingQTypes.Length == 1)
+                return matchingQTypes[0];
+            throw new AmbigiousTypeException(type, matchingQTypes);
         }
     }
 }

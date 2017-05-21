@@ -11,7 +11,8 @@ namespace MainCore.CQL.Visitors
 {
     public class ExpressionVisitor : CQLBaseVisitor<IExpression>
     {
-        private Regex doubleIdMatcher = new Regex(@"([a-zA-Z_][A-Za-z_0-9]*)(->|\.|/|#|$)([a-zA-Z_][A-Za-z_0-9]*)");
+        private Regex multiIdHeadMatcher = new Regex(@"^([a-zA-Z_][A-Za-z_0-9]*)");
+        private Regex multiIdTrailerMatcher = new Regex(@"(->|\.|/|#|\$)([a-zA-Z_][A-Za-z_0-9]*)");
         private ExpressionsVisitor exprListVisitor;
 
         public ExpressionVisitor()
@@ -145,9 +146,36 @@ namespace MainCore.CQL.Visitors
             var rhs = Visit(context.rhs);
             return new BinaryOperationExpression(context, BinaryOperator.NotIn, lhs, rhs);
         }
-        public override IExpression VisitVar([NotNull] CQLParser.VarContext context)
+        public override IExpression VisitMultiId([NotNull] CQLParser.MultiIdContext context)
         {
-            return new VariableExpression(context, context.var.Text);
+            var id = context.id.Text;
+            var matchHead = multiIdHeadMatcher.Match(id);
+            var matchesTrailer = multiIdTrailerMatcher.Matches(id);
+            if (!matchHead.Success)
+                throw new InvalidOperationException("Unhandled situation!");
+            foreach(Match match in matchesTrailer)
+                if(!match.Success)
+                    throw new InvalidOperationException("Unhandled situation!");
+            var firstName = matchHead.Groups[1].Value;
+            var trailingNames = new List<MultiIdExpression.TrailingName>();
+            foreach (Match match in matchesTrailer)
+            {
+                var nextName = match.Groups[2].Value;
+                var delimiterString = match.Groups[1].Value;
+                IdDelimiter delimiter;
+                switch (delimiterString)
+                {
+                    case ".": delimiter = IdDelimiter.Dot; break;
+                    case "/": delimiter = IdDelimiter.Slash; break;
+                    case "->": delimiter = IdDelimiter.SingleArrow; break;
+                    case "#": delimiter = IdDelimiter.Hash; break;
+                    case "$": delimiter = IdDelimiter.Dollar; break;
+                    default:
+                        throw new InvalidOperationException("Unhandled delimiter!");
+                }
+                trailingNames.Add(new MultiIdExpression.TrailingName(delimiter, nextName));
+            }
+            return new MultiIdExpression(context, firstName, trailingNames);
         }
         public override IExpression VisitExpr([NotNull] CQLParser.ExprContext context)
         {
@@ -222,32 +250,11 @@ namespace MainCore.CQL.Visitors
                 ;
             return new StringLiteralExpression(context, value);
         }
-        public override IExpression VisitDoubleIdFactor([NotNull] CQLParser.DoubleIdFactorContext context)
-        {
-            var match = doubleIdMatcher.Match(context.id.Text);
-            if (!match.Success)
-                throw new InvalidOperationException("Unhandled delimter!");
-            var firstName = match.Groups[1].Value;
-            var secondName = match.Groups[3].Value;
-            var delimiterString = match.Groups[2].Value;
-            IdDelimiter delimiter;
-            switch(delimiterString)
-            {
-                case ".": delimiter = IdDelimiter.Dot; break;
-                case "/": delimiter = IdDelimiter.Slash; break;
-                case "->": delimiter = IdDelimiter.SingleArrow; break;
-                case "#": delimiter = IdDelimiter.Hash; break;
-                case "$": delimiter = IdDelimiter.Dollar; break;
-                default:
-                    throw new InvalidOperationException("Unhandled delimiter!");
-            }
-            return new DoubleIdExpression(context, delimiter, firstName, secondName);
-        }
         public override IExpression VisitCastFactor([NotNull] CQLParser.CastFactorContext context)
         {
             var castTypeName = context.castingType.Text;
             var expression = Visit(context.expr);
-            return new CastExpression(context, castTypeName, expression);
+            return new CastExpression(context, TypeSystem.CoercionKind.Explicit, castTypeName, expression);
         }
     }
 }

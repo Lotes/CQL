@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public class BooleanLiteralExpression: IExpression
+    public class BooleanLiteralExpression: IExpression<BooleanLiteralExpression>
     {
         public readonly bool Value;
 
@@ -18,6 +20,8 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public Type SemanticType { get { return typeof(bool); } }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -30,6 +34,16 @@ namespace MainCore.CQL.SyntaxTree
         public override string ToString()
         {
             return Value.ToString();
+        }
+
+        public BooleanLiteralExpression Validate(IContext context)
+        {
+            return this;
+        }
+
+        IExpression IExpression.Validate(IContext context)
+        {
+            return Validate(context);
         }
     }
 }

@@ -12,7 +12,7 @@ namespace MainCore.CQL.Contexts.Implementation
 
         public void Add<THost, TField>(string name, Func<THost, TField> getter)
         {
-            if (Get(name) == null)
+            if (Get(name) != null)
                 throw new InvalidOperationException("Such a field does already exist!");
             fields[name.ToLower()] = new Field(name, typeof(THost), typeof(TField), host => getter((THost)host));
         }

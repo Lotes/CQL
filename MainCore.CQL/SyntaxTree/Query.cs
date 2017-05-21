@@ -4,14 +4,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public class Query: ISyntaxTreeNode
+    public class Query: ISyntaxTreeNode<Query>
     {
-        public readonly IExpression Expression;
-        public readonly IEnumerable<OrderExpression> OrderByExpressions;
-        public readonly IEnumerable<NamedExpression> SelectExpressions;
+        public IExpression Expression { get; private set; }
+        public IEnumerable<OrderExpression> OrderByExpressions { get; private set; }
+        public IEnumerable<NamedExpression> SelectExpressions { get; private set; }
 
         /// <summary>
         /// 
@@ -45,6 +47,16 @@ namespace MainCore.CQL.SyntaxTree
             return Expression.ToString()
                 + (OrderByExpressions.Any() ? " ORDER BY "+string.Join(", ", OrderByExpressions.Select(o => o.ToString())) : "")
                 + (SelectExpressions.Any() ? " SELECT "+string.Join(", ", SelectExpressions.Select(s => s.ToString())): "");
+        }
+
+        public Query Validate(IContext context)
+        {
+            Expression = Expression.Validate(context);
+            OrderByExpressions = OrderByExpressions.Select(o => o.Validate(context)).ToArray();
+            SelectExpressions = SelectExpressions.Select(s => s.Validate(context)).ToArray();
+            if (Expression.SemanticType != typeof(bool))
+                throw new LocateableException(Expression.ParserContext, "Query expression type must be boolean!");
+            return this;
         }
     }
 }

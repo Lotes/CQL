@@ -11,6 +11,12 @@ namespace MainCore.CQL.TypeSystem.Implementation
     {
         private TypeSystem typeSystem = new TypeSystem();
 
+        public TypeSystemBuilder()
+        {
+            AddType<bool>("boolean");
+            AddType<double>("double");
+        }
+
         public void AddType<TType>(string name)
         {
             typeSystem.AddType<TType>(name);

@@ -10,7 +10,7 @@ namespace MainCore.CQL.Tests
         private static ParserRuleContext pc = new ParserRuleContext();
         private void AssertQueryEquals(string actualString, Query expected)
         {
-            var actual = Queries.Parse(actualString);
+            var actual = Queries.ParseForSyntaxOnly(actualString);
             Assert.IsTrue(actual.StructurallyEquals(expected));
         }
 
@@ -39,7 +39,7 @@ namespace MainCore.CQL.Tests
         [TestMethod]
         public void VariableExpressionTest()
         {
-            AssertQueryEquals("zwerg", new Query(pc, new VariableExpression(pc, "zwerg")));
+            AssertQueryEquals("zwerg", new Query(pc, new MultiIdExpression(pc, "zwerg")));
         }
 
         [TestMethod]
@@ -79,15 +79,15 @@ namespace MainCore.CQL.Tests
         }
 
         [TestMethod]
-        public void DoubleIdExpressionTest()
+        public void MultiIdExpressionTest()
         {
-            AssertQueryEquals("a->b", new Query(pc, new DoubleIdExpression(pc, IdDelimiter.SingleArrow, "a", "b")));
+            AssertQueryEquals("a->b", new Query(pc, new MultiIdExpression(pc, "a", new[] { new MultiIdExpression.TrailingName(IdDelimiter.SingleArrow, "b")})));
         }
 
         [TestMethod]
         public void CastExpressionTest()
         {
-            AssertQueryEquals("(Integer)true", new Query(pc, new CastExpression(pc, "Integer", new BooleanLiteralExpression(pc, true))));
+            AssertQueryEquals("(Integer)true", new Query(pc, new CastExpression(pc, TypeSystem.CoercionKind.Explicit, "Integer", new BooleanLiteralExpression(pc, true))));
         }
 
         [TestMethod]
@@ -104,28 +104,28 @@ namespace MainCore.CQL.Tests
         public void SelectNoNameQuery()
         {
             AssertQueryEquals("1 SELECT a", new Query(pc, new DecimalLiteralExpression(pc, 1), null,
-                new[] { new NamedExpression(pc, new VariableExpression(pc, "a")) }));
+                new[] { new NamedExpression(pc, new MultiIdExpression(pc, "a")) }));
         }
 
         [TestMethod]
         public void SelectWithQuery()
         {
             AssertQueryEquals("1 SELECT a AS test", new Query(pc, new DecimalLiteralExpression(pc, 1), null,
-                new[] { new NamedExpression(pc, new VariableExpression(pc, "a"), "test") }));
+                new[] { new NamedExpression(pc, new MultiIdExpression(pc, "a"), "test") }));
         }
 
         [TestMethod]
         public void OrderByNoOrder()
         {
             AssertQueryEquals("1 ORDER BY a", new Query(pc, new DecimalLiteralExpression(pc, 1),
-                new[] { new OrderExpression(pc, SortOrder.Ascending, new VariableExpression(pc, "a")) }));
+                new[] { new OrderExpression(pc, SortOrder.Ascending, new MultiIdExpression(pc, "a")) }));
         }
 
         [TestMethod]
         public void OrderByWithOrder()
         {
             AssertQueryEquals("1 ORDER BY a DESC", new Query(pc, new DecimalLiteralExpression(pc, 1),
-                new[] { new OrderExpression(pc, SortOrder.Descending, new VariableExpression(pc, "a")) }));
+                new[] { new OrderExpression(pc, SortOrder.Descending, new MultiIdExpression(pc, "a")) }));
         }
     }
 }

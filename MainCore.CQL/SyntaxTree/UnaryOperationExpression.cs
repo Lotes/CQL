@@ -4,10 +4,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public class UnaryOperationExpression: IExpression
+    public class UnaryOperationExpression: IExpression<UnaryOperationExpression>
     {
         public readonly IExpression Expression;
         public readonly UnaryOperator Operator;
@@ -20,6 +22,19 @@ namespace MainCore.CQL.SyntaxTree
         }
 
         public ParserRuleContext ParserContext { get; private set; }
+
+        public Type SemanticType
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -41,6 +56,16 @@ namespace MainCore.CQL.SyntaxTree
                 default: throw new InvalidOperationException($"Unhandled operator: {Operator}");
             }
             return $"{opStr}{Expression.ToString()}";
+        }
+
+        public UnaryOperationExpression Validate(IContext context)
+        {
+            throw new NotImplementedException();
+        }
+
+        IExpression IExpression.Validate(IContext context)
+        {
+            return Validate(context);
         }
     }
 }
