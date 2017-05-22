@@ -6,13 +6,15 @@ using System.Text;
 using System.Threading.Tasks;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.ErrorHandling;
+using MainCore.CQL.TypeSystem;
 
 namespace MainCore.CQL.SyntaxTree
 {
     public class UnaryOperationExpression: IExpression<UnaryOperationExpression>
     {
-        public readonly IExpression Expression;
+        public IExpression Expression { get; private set; }
         public readonly UnaryOperator Operator;
+        private UnaryOperation operation;
 
         public UnaryOperationExpression(ParserRuleContext context, UnaryOperator @operator, IExpression expression)
         {
@@ -23,18 +25,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public ParserRuleContext ParserContext { get; private set; }
 
-        public Type SemanticType
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
+        public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -60,7 +51,14 @@ namespace MainCore.CQL.SyntaxTree
 
         public UnaryOperationExpression Validate(IContext context)
         {
-            throw new NotImplementedException();
+            Expression = Expression.Validate(context);
+            operation = context.TypeSystem.GetUnaryOperation(Operator, Expression.SemanticType);
+            if (operation == null)
+            {
+                throw new LocateableException(ParserContext, "No unary operation found for given operator!");
+            }
+            SemanticType = operation.ResultType;
+            return this;
         }
 
         IExpression IExpression.Validate(IContext context)

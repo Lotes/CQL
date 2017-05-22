@@ -14,7 +14,7 @@ namespace MainCore.CQL.SyntaxTree
         public EmptyExpression(ParserRuleContext context) { ParserContext = context; }
         public ParserRuleContext ParserContext { get; private set; }
 
-        public Type SemanticType { get { return null; } }
+        public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -28,6 +28,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public EmptyExpression Validate(IContext context)
         {
+            SemanticType = context.TypeSystem.EmptyType;
             return this;
         }
 

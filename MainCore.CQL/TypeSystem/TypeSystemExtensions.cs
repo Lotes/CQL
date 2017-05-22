@@ -23,5 +23,28 @@ namespace MainCore.CQL.TypeSystem
                 current = new CastExpression(rule, current, context);
             return current;
         }
+
+        public static Type AlignTypes(this IContext @this, ref IExpression lhs, ref IExpression rhs, Func<Exception> generateError)
+        {
+            var chain = @this.TypeSystem.GetImplicitlyCastChain(lhs.SemanticType, rhs.SemanticType);
+            var newLeft = chain.ApplyCast(lhs, @this);
+            if (newLeft != null)
+            {
+                lhs = newLeft;
+                return lhs.SemanticType;
+            }
+            else
+            {
+                chain = @this.TypeSystem.GetImplicitlyCastChain(rhs.SemanticType, lhs.SemanticType);
+                var newRight = chain.ApplyCast(rhs, @this);
+                if (newRight != null)
+                {
+                    rhs = newRight;
+                    return rhs.SemanticType;
+                }
+                else
+                    throw generateError();
+            }
+        }
     }
 }

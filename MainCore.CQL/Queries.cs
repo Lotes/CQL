@@ -39,7 +39,7 @@ namespace MainCore.CQL
             }
         }
 
-        public static Query Parse(string text, IContext context, IErrorListener errorListener = null)
+        public static Query ParseSemantically(string text, IContext context, IErrorListener errorListener = null)
         {
             var query = ParseForSyntaxOnly(text);
             query = query.Validate(context);

@@ -6,20 +6,24 @@ using System.Text;
 using System.Threading.Tasks;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.ErrorHandling;
+using MainCore.CQL.TypeSystem;
 
 namespace MainCore.CQL.SyntaxTree
 {
     public class ConditionalExpression: IExpression<ConditionalExpression>
     {
+        private IExpression @else;
+        private IExpression then;
+
         public IExpression Condition { get; private set; }
-        public IExpression Then { get; private set; }
-        public IExpression Else { get; private set; }
+        public IExpression Then { get { return then; } }
+        public IExpression Else { get { return @else; } }
 
         public ConditionalExpression(ParserRuleContext context, IExpression condition, IExpression then, IExpression @else)
         {
             Condition = condition;
-            Then = then;
-            Else = @else;
+            this.then = then;
+            this.@else = @else;
             ParserContext = context;
         }
 
@@ -45,11 +49,19 @@ namespace MainCore.CQL.SyntaxTree
         public ConditionalExpression Validate(IContext context)
         {
             Condition = Condition.Validate(context);
-            Then = Then.Validate(context);
-            Else = Else.Validate(context);
+            then = then.Validate(context);
+            @else = @else.Validate(context);
             if (Condition.SemanticType != typeof(bool))
                 throw new LocateableException(Condition.ParserContext, "Condition must be a boolean!");
-            SemanticType = new[] { Then.SemanticType, Else.SemanticType }.GetCommonBaseClass();
+            if (Then.SemanticType != Else.SemanticType)
+            {
+                SemanticType = context.AlignTypes(ref then, ref @else,
+                    () => new LocateableException(ParserContext, "In the end the Then and the Else part must have the same type (also using implicit type conversion)!"));
+            }
+            else
+            {
+                SemanticType = Then.SemanticType;
+            }
             return this;
         }
 

@@ -17,5 +17,7 @@ namespace MainCore.CQL.TypeSystem
         IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType);
         BinaryOperation GetBinaryOperation(BinaryOperator op, Type left, Type right);
         UnaryOperation GetUnaryOperation(UnaryOperator op, Type operand);
+        Type NullType { get; }
+        Type EmptyType { get; }
     }
 }

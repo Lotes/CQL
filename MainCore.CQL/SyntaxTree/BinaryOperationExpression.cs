@@ -8,15 +8,17 @@ namespace MainCore.CQL.SyntaxTree
 {
     public class BinaryOperationExpression: IExpression<BinaryOperationExpression>
     {
-        public IExpression LeftExpression { get; private set; }
-        public IExpression RightExpression { get; private set; }
+        private IExpression leftExpression;
+        private IExpression rightExpression;
+        public IExpression LeftExpression { get { return leftExpression; } }
+        public IExpression RightExpression { get { return rightExpression; } }
         public readonly BinaryOperator Operator;
         private BinaryOperation operation = null;
 
         public BinaryOperationExpression(ParserRuleContext context, BinaryOperator @operator, IExpression leftExpression, IExpression rightExpression)
         {
-            LeftExpression = leftExpression;
-            RightExpression = rightExpression;
+            this.leftExpression = leftExpression;
+            this.rightExpression = rightExpression;
             Operator = @operator;
             ParserContext = context;
             SemanticType = null;
@@ -67,29 +69,12 @@ namespace MainCore.CQL.SyntaxTree
 
         public BinaryOperationExpression Validate(IContext context)
         {
-            LeftExpression = LeftExpression.Validate(context);
-            RightExpression = RightExpression.Validate(context);
+            this.leftExpression = this.leftExpression.Validate(context);
+            this.rightExpression = this.rightExpression.Validate(context);
             operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
             if(operation == null)
-            {
-                var chain = context.TypeSystem.GetImplicitlyCastChain(LeftExpression.SemanticType, RightExpression.SemanticType);
-                var newLeft = chain.ApplyCast(LeftExpression, context);
-                if(newLeft != null)
-                {
-                    LeftExpression = newLeft;
-                }
-                else
-                {
-                    chain = context.TypeSystem.GetImplicitlyCastChain(RightExpression.SemanticType, LeftExpression.SemanticType);
-                    var newRight = chain.ApplyCast(RightExpression, context);
-                    if (newRight != null)
-                    {
-                        RightExpression = newRight;
-                    }
-                    else
-                        throw new LocateableException(ParserContext, "No operation found for given operator");
-                }
-            }
+                context.AlignTypes(ref leftExpression, ref rightExpression, 
+                    () => new LocateableException(ParserContext, "No binary operation found for given operator"));
             operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
             if(operation == null)
             {

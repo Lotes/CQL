@@ -14,7 +14,13 @@ namespace MainCore.CQL.TypeSystem.Implementation
         public TypeSystemBuilder()
         {
             AddType<bool>("boolean");
+            typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
             AddType<double>("double");
+            typeSystem.AddRule<double, double>(UnaryOperator.Minus, value => -value);
+            typeSystem.AddRule<double, double>(UnaryOperator.Plus, value => +value);
+            AddType<string>("string");
+            typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
+            AddContainsRule<string, string>((haystack, needle) => haystack.IndexOf(needle) > -1);
         }
 
         public void AddType<TType>(string name)
@@ -53,6 +59,28 @@ namespace MainCore.CQL.TypeSystem.Implementation
         public ITypeSystem Build()
         {
             return typeSystem;
+        }
+
+        public void AddRule<TOperand, TResult>(UnaryOperator op, Func<TOperand, TResult> func)
+        {
+            typeSystem.AddRule(op, func);
+        }
+
+        public void AddRule<TLeft, TRight, TResult>(BinaryOperator op, Func<TLeft, TRight, TResult> aggregate)
+        {
+            typeSystem.AddRule(op, aggregate);
+        }
+
+        public void AddIsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
+        {
+            typeSystem.AddRule(BinaryOperator.Is, aggregate);
+            typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.IsNot, (lhs, rhs) => !aggregate(lhs, rhs));
+        }
+
+        public void AddInRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
+        {
+            typeSystem.AddRule(BinaryOperator.In, aggregate);
+            typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.NotIn, (lhs, rhs) => !aggregate(lhs, rhs));
         }
     }
 }
