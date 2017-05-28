@@ -99,33 +99,5 @@ namespace MainCore.CQL.Tests
                 new DecimalLiteralExpression(pc, 2)
             )));
         }
-
-        [TestMethod]
-        public void SelectNoNameQuery()
-        {
-            AssertQueryEquals("1 SELECT a", new Query(pc, new DecimalLiteralExpression(pc, 1), null,
-                new[] { new NamedExpression(pc, new MultiIdExpression(pc, "a")) }));
-        }
-
-        [TestMethod]
-        public void SelectWithQuery()
-        {
-            AssertQueryEquals("1 SELECT a AS test", new Query(pc, new DecimalLiteralExpression(pc, 1), null,
-                new[] { new NamedExpression(pc, new MultiIdExpression(pc, "a"), "test") }));
-        }
-
-        [TestMethod]
-        public void OrderByNoOrder()
-        {
-            AssertQueryEquals("1 ORDER BY a", new Query(pc, new DecimalLiteralExpression(pc, 1),
-                new[] { new OrderExpression(pc, SortOrder.Ascending, new MultiIdExpression(pc, "a")) }));
-        }
-
-        [TestMethod]
-        public void OrderByWithOrder()
-        {
-            AssertQueryEquals("1 ORDER BY a DESC", new Query(pc, new DecimalLiteralExpression(pc, 1),
-                new[] { new OrderExpression(pc, SortOrder.Descending, new MultiIdExpression(pc, "a")) }));
-        }
     }
 }

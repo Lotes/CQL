@@ -16,5 +16,16 @@ namespace MainCore.CQL.SyntaxTree
                   && @this.Zip(other, (first, second) => first.StructurallyEquals(second))
                         .All(a => a)));
         }
+
+        public static bool IfArrayTryGetElementType(this IExpression @this, out Type elementType)
+        {
+            if (@this is ArrayExpression)
+            {
+                elementType = ((ArrayExpression)@this).ElementType;
+                return true;
+            }
+            else
+                return @this.SemanticType.IfEnumerableTryGetElementType(out elementType);
+        }
     }
 }

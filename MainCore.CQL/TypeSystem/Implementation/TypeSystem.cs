@@ -23,7 +23,8 @@ namespace MainCore.CQL.TypeSystem.Implementation
             if (types.Values.Any(t => t.ActualType == typeof(TType)))
                 throw new InvalidOperationException("Type is already registered!");
             types.Add(name.ToLower(), new QType(name, typeof(TType)));
-            AddType<TType[]>(name+"[]", false);
+            if(addArrayTypeToo)
+                AddType<TType[]>(name+"[]", false);
         }
 
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)

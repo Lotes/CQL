@@ -8,7 +8,18 @@ namespace MainCore.CQL
 {
     public static class TypeExtensions
     {
-       public static Type GetCommonBaseClass(this IEnumerable<Type> @this)
+        public static bool IfEnumerableTryGetElementType(this Type @this, out Type elementType)
+        {
+            elementType = @this
+                .GetInterfaces()
+                .FirstOrDefault(t => 
+                    t.IsGenericType
+                    && t.GetGenericTypeDefinition() == typeof(IEnumerable<>))?
+                .GetGenericArguments()[0];
+            return elementType != null;
+        }
+
+        public static Type GetCommonBaseClass(this IEnumerable<Type> @this)
         {
             var types = @this.ToArray();
             if (types.Length == 0)

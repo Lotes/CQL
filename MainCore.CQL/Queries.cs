@@ -41,9 +41,17 @@ namespace MainCore.CQL
 
         public static Query ParseSemantically(string text, IContext context, IErrorListener errorListener = null)
         {
-            var query = ParseForSyntaxOnly(text);
-            query = query.Validate(context);
-            return query;
+            try
+            {
+                var query = ParseForSyntaxOnly(text);
+                return query.Validate(context);
+            }
+            catch (LocateableException ex)
+            {
+                if (errorListener != null)
+                    errorListener.TriggerError(ex);
+                return null;
+            }
         }
     }
 }

@@ -22,7 +22,10 @@ namespace MainCore.CQL.SyntaxTree
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
-            throw new NotImplementedException();
+            var other = node as ParenthesisExpression;
+            if (other == null)
+                return false;
+            return Expression.StructurallyEquals(other.Expression);
         }
 
         public override string ToString()

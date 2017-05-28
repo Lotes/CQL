@@ -55,7 +55,7 @@ namespace MainCore.CQL.SyntaxTree
             operation = context.TypeSystem.GetUnaryOperation(Operator, Expression.SemanticType);
             if (operation == null)
             {
-                throw new LocateableException(ParserContext, "No unary operation found for given operator!");
+                throw new LocateableException(ParserContext, "Unary operation not supported for that type of operand!");
             }
             SemanticType = operation.ResultType;
             return this;

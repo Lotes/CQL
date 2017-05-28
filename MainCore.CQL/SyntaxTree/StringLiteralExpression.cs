@@ -17,7 +17,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public ParserRuleContext ParserContext { get; private set; }
 
-        public Type SemanticType { get { return typeof(string); } }
+        public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -34,6 +34,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public StringLiteralExpression Validate(IContext context)
         {
+            SemanticType = typeof(string);
             return this;
         }
 

@@ -107,12 +107,9 @@
     <Compile Include="SyntaxTree\DecimalLiteralExpression.cs" />
     <Compile Include="SyntaxTree\EmptyExpression.cs" />
     <Compile Include="SyntaxTree\FunctionCallExpression.cs" />
-    <Compile Include="SyntaxTree\NamedExpression.cs" />
     <Compile Include="SyntaxTree\NullExpression.cs" />
-    <Compile Include="SyntaxTree\OrderExpression.cs" />
     <Compile Include="SyntaxTree\ParenthesisExpression.cs" />
     <Compile Include="SyntaxTree\Query.cs" />
-    <Compile Include="SyntaxTree\SortOrder.cs" />
     <Compile Include="SyntaxTree\StringLiteralExpression.cs" />
     <Compile Include="SyntaxTree\MultiIdExpression.cs" />
     <Compile Include="SyntaxTree\UnaryOperationExpression.cs" />
@@ -121,10 +118,6 @@
     <Compile Include="TypeSystem\AmbigiousTypeException.cs" />
     <Compile Include="Visitors\ExpressionsVisitor.cs" />
     <Compile Include="Visitors\ExpressionVisitor.cs" />
-    <Compile Include="Visitors\NamedExpressionsVisitor.cs" />
-    <Compile Include="Visitors\NamedExpressionVisitor.cs" />
-    <Compile Include="Visitors\OrderExpressionsVistor.cs" />
-    <Compile Include="Visitors\OrderExpressionVisitor.cs" />
     <Compile Include="Visitors\QueryVisitor.cs" />
   </ItemGroup>
   <ItemGroup>

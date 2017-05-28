@@ -185,7 +185,7 @@ namespace MainCore.CQL.Visitors
         public override IExpression VisitFunction([NotNull] CQLParser.FunctionContext context)
         {
             var name = context.name.Text;
-            var parameters = exprListVisitor.Visit(context.@params);
+            var parameters = context.@params == null ? Enumerable.Empty<IExpression>() : exprListVisitor.Visit(context.@params);
             return new FunctionCallExpression(context, name, parameters);
         }
         public override IExpression VisitNotFactor([NotNull] CQLParser.NotFactorContext context)

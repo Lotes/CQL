@@ -24,19 +24,8 @@ namespace MainCore.CQL.SyntaxTree
         }
         public ParserRuleContext ParserContext { get; private set; }
 
-        public Type SemanticType
-        {
-            get
-            {
-                throw new NotImplementedException();
-            }
-
-            set
-            {
-                throw new NotImplementedException();
-            }
-        }
-
+        public Type SemanticType { get; private set; }
+       
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as FunctionCallExpression;
@@ -55,7 +44,7 @@ namespace MainCore.CQL.SyntaxTree
         {
             this.function = context.Functions.Get(this.Name);
             if (function == null)
-                throw new LocateableException(ParserContext, "Unknown function name!");
+                throw new LocateableException(ParserContext, "Unsupported function!");
             if (function.Arity != Parameters.Count())
                 throw new LocateableException(ParserContext, $"This function expects exactly {function.Arity} parameters, not {Parameters.Count()}!");
 
@@ -73,6 +62,8 @@ namespace MainCore.CQL.SyntaxTree
                 }
             }
             this.Parameters = actuals;
+
+            this.SemanticType = function.ResultType;
             return this;
         }
 

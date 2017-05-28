@@ -18,10 +18,12 @@ namespace MainCore.CQL.SyntaxTree
             Elements = elements.ToArray();
             ParserContext = context;
             SemanticType = null;
+            ElementType = null;
         }
 
         public ParserRuleContext ParserContext { get; private set; }
 
+        public Type ElementType { get; private set; }
         public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
@@ -40,7 +42,8 @@ namespace MainCore.CQL.SyntaxTree
         public ArrayExpression Validate(IContext context)
         {
             Elements = Elements.Select(e => e.Validate(context)).ToArray();
-            SemanticType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
+            ElementType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
+            SemanticType = ElementType.MakeArrayType();
             return this;
         }
 

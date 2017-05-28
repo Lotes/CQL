@@ -17,7 +17,7 @@
         Padding="3"
         PreviewKeyDown="textEditor_PreviewKeyDown"
         TextChanged="textEditor_TextChanged"
-        Text="a AND 1 == Main.FileLOC OR a CONTAINS &quot;xyz&quot; AND i IS true Or NULL ORDER BY a SELECT b">
+        Text="1=1">
         
     </avalon:TextEditor>
 </UserControl>

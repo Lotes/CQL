@@ -71,16 +71,16 @@ namespace MainCore.CQL.TypeSystem.Implementation
             typeSystem.AddRule(op, aggregate);
         }
 
-        public void AddIsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
-        {
-            typeSystem.AddRule(BinaryOperator.Is, aggregate);
-            typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.IsNot, (lhs, rhs) => !aggregate(lhs, rhs));
-        }
+        //public void AddIsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
+        //{
+        //    typeSystem.AddRule(BinaryOperator.Is, aggregate);
+        //    typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.IsNot, (lhs, rhs) => !aggregate(lhs, rhs));
+        //}
 
-        public void AddInRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
-        {
-            typeSystem.AddRule(BinaryOperator.In, aggregate);
-            typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.NotIn, (lhs, rhs) => !aggregate(lhs, rhs));
-        }
+        //public void AddInRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
+        //{
+        //    typeSystem.AddRule(BinaryOperator.In, aggregate);
+        //    typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.NotIn, (lhs, rhs) => !aggregate(lhs, rhs));
+        //}
     }
 }

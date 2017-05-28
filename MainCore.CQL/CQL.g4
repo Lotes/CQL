@@ -5,34 +5,7 @@ grammar CQL;
  */
 
 /* Queries */
-query: expr=expression order=orderByPart? selection=selectPart? EOF;
-
-orderByPart: ORDER BY exprs=orderByExpressions;
-
-orderByExpressions
-	: firsts=orderByExpressions COMMA next=orderByExpression #orderByConcat
-	| last=orderByExpression                                 #orderBySingle
-	;
-
-orderByExpression
-	: expr=expression ASC   #orderByAsc
-	| expr=expression DESC  #orderByDesc
-	| expr=expression       #orderByDefault
-	;
-
-/* Selections */
-selectPart: SELECT exprs=namedExpressions;
-
-namedExpressions
-	: firsts=namedExpressions next=namedExpression #selectConcat
-	| last=namedExpression                         #selectSingle
-	;
-
-namedExpression
-	: expr=expression AS name=STRING_LITERAL       #exprWithStringName
-	| expr=expression AS name=ID                   #exprWithIdName
-	| expr=expression                              #exprWithoutName
-	;
+query: expr=expression EOF;
 
 /* Expressions */
 expression
@@ -84,15 +57,15 @@ specialTerm
 	| expr=factor                                  #toFactor
 	;
 factor
-    : id=MULTI_ID                                  #multiId
+    : name=MULTI_ID LPAREN params=parameterList? RPAREN  #function
+    | id=MULTI_ID                                  #multiId
     | LPAREN expr=expression RPAREN                #expr
-    | name=ID LPAREN params=parameterList? RPAREN  #function
     | NOT expr=factor                              #notFactor
     | PLUS expr=factor                             #plusFactor
     | MINUS expr=factor                            #minusFactor
     | expr=constant                                #const
     | expr=list                                    #ls
-	| LPAREN castingType=ID RPAREN expr=expression #castFactor     
+	| LPAREN castingType=MULTI_ID RPAREN expr=expression #castFactor     
     ;
 list
     : LBRACE elems=elementList RBRACE     #braceElems
@@ -136,10 +109,8 @@ LPAREN: '(';
 RPAREN: ')';
 COMMA: ',';
 AND : A N D;
-ORDER : O R D E R;
 OR : O R;
 NOT : N O T | '!';
-BY : B Y;
 ASC: A S C;
 DESC: D E S C;
 PLUS : '+';
@@ -157,10 +128,9 @@ IN: I N;
 CONTAINS: '~';
 DOES_NOT_CONTAIN: '!~';
 IS: I S;
-SELECT: S E L E C T;
 AS: A S;
 SLASH: '/';
-ID : [a-zA-Z_][A-Za-z_0-9]*;
+fragment ID : [a-zA-Z_][A-Za-z_0-9]*;
 MULTI_ID: ID ((SLASH|DOT|'->'|'#'|'$') ID)*;
 
 fragment A : ('A'|'a') ;

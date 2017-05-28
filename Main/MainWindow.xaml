@@ -7,7 +7,14 @@
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
-    <Grid>
-        <cqlWpf:TextBox/>
+    <Grid Height="322" Margin="0,0,0.4,0" VerticalAlignment="Top">
+        <cqlWpf:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top"/>
+        <ListView x:Name="listView" Margin="10,38,10,10">
+            <ListView.View>
+                <GridView>
+                    <GridViewColumn/>
+                </GridView>
+            </ListView.View>
+        </ListView>
     </Grid>
 </Window>

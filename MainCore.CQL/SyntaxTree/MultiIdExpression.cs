@@ -26,7 +26,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public ParserRuleContext ParserContext { get; private set; }
 
-        public Type SemanticType { get { return field?.FieldType; } }
+        public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -52,6 +52,7 @@ namespace MainCore.CQL.SyntaxTree
             if (field == null)
                 throw new LocateableException(ParserContext, "Unknown field!");
             this.field = field;
+            this.SemanticType = field.FieldType;
             return this;
         }
 
@@ -83,7 +84,6 @@ namespace MainCore.CQL.SyntaxTree
                     case IdDelimiter.Slash: delimiterString = "/"; break;
                     default:
                         throw new InvalidOperationException("Unhandled delimiter!");
-                        break;
                 }
                 return $"{delimiterString}{Name}";
             }

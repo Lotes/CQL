@@ -1,7 +1,10 @@
 ﻿using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
+using MainCore.CQL.Contexts;
+using MainCore.CQL.Contexts.Implementation;
 using MainCore.CQL.ErrorHandling;
+using MainCore.CQL.TypeSystem.Implementation;
 using System;
 using System.IO;
 using System.Linq;
@@ -19,6 +22,7 @@ namespace MainCore.CQL.WPF
     {
         private TextMarkerService textMarkerService;
         private ToolTip toolTip;
+        private IContext context;
 
         public TextBox()
         {
@@ -26,6 +30,11 @@ namespace MainCore.CQL.WPF
             SetupErrorVisualization();
             SetupSyntaxHighlighting();
             SetupPasting();
+
+            var typeSystemBuilder = new TypeSystemBuilder();
+            var typeSystem = typeSystemBuilder.Build();
+            var contextBuilder = new ContextBuilder(typeSystem);
+            context = contextBuilder.Build();
 
             textEditor_TextChanged(this, null);
         }
@@ -151,7 +160,7 @@ namespace MainCore.CQL.WPF
             textMarkerService.Clear();
             var errorListener = new ErrorListener();
             errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
-            Queries.ParseForSyntaxOnly(textEditor.Text, errorListener);
+            Queries.ParseSemantically(textEditor.Text, context, errorListener);
         }
 
         private void ErrorDetectedErrorListener_ErrorDetected(object sender, LocateableException e)

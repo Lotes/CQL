@@ -9,11 +9,11 @@ namespace MainCore.CQL.SyntaxTree
 {
     public interface IEvaluator
     {
-        object Evaluate(object input, IContext context);
+        object Evaluate(object input);
     }
 
     public interface IEvaluator<TInput, TResult>: IEvaluator
     {
-        TResult Evaluate(TInput input, IContext context);
+        TResult Evaluate(TInput input);
     }
 }

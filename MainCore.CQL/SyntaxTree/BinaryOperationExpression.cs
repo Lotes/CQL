@@ -3,6 +3,8 @@ using System;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.ErrorHandling;
 using MainCore.CQL.TypeSystem;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace MainCore.CQL.SyntaxTree
 {
@@ -71,16 +73,74 @@ namespace MainCore.CQL.SyntaxTree
         {
             this.leftExpression = this.leftExpression.Validate(context);
             this.rightExpression = this.rightExpression.Validate(context);
-            operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
-            if(operation == null)
-                context.AlignTypes(ref leftExpression, ref rightExpression, 
-                    () => new LocateableException(ParserContext, "No binary operation found for given operator"));
-            operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
-            if(operation == null)
+            switch (this.Operator)
             {
-                throw new LocateableException(ParserContext, "No operation found!");
+                case BinaryOperator.In:
+                case BinaryOperator.NotIn:
+                    {
+                        Type needleType = leftExpression.SemanticType;
+                        Type elementType;
+                        if (rightExpression.IfArrayTryGetElementType(out elementType))
+                            throw new LocateableException(ParserContext, "The 'in' operator requires an array expression for the right operand.");
+                        if(elementType != needleType)
+                            throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand.");
+                        Type haystackType = typeof(IEnumerable<>).MakeGenericType(elementType);
+                        var equalsOperator = Operator == BinaryOperator.In ? BinaryOperator.Equals : BinaryOperator.NotEquals;
+                        var equals = context.TypeSystem.GetBinaryOperation(equalsOperator, needleType, elementType);
+                        if (equals == null)
+                            throw new LocateableException(ParserContext, "The elements of the array are not comparable with the left operand.");
+                        operation = new BinaryOperation(needleType, haystackType, typeof(bool), Operator, (needle, haystack) =>
+                        {
+                            if(haystack is ArrayExpression)
+                            {
+                                var array = haystack as ArrayExpression;
+                                foreach (var element in array.Elements)
+                                    if ((bool)equals.Operation(needle, element) == true)
+                                        return true;
+                            }
+                            else
+                            {
+                                foreach (object element in ((IEnumerable)haystack))
+                                    if ((bool)equals.Operation(needle, element) == true)
+                                        return true;
+                            }
+                            return false;
+                        });
+                        SemanticType = typeof(bool);
+                    }
+                    break;
+                case BinaryOperator.Is:
+                case BinaryOperator.IsNot:
+                    {
+                        if (rightExpression is NullExpression)
+                        {
+                            throw new NotImplementedException();
+                        }
+                        else if (rightExpression is EmptyExpression)
+                        {
+                            throw new NotImplementedException();
+                        }
+                        else if (rightExpression is MultiIdExpression)
+                        {
+                            throw new NotImplementedException();
+                        }
+                        else
+                            throw new LocateableException(rightExpression.ParserContext, "Right operand must be NULL, EMPTY or a type name.");
+                    }
+                    break;
+                default:
+                    operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
+                    if (operation == null)
+                        context.AlignTypes(ref leftExpression, ref rightExpression,
+                            () => new LocateableException(ParserContext, "Binary operation not supported!"));
+                    operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
+                    if (operation == null)
+                    {
+                        throw new LocateableException(ParserContext, "Binary operation not supported!");
+                    }
+                    SemanticType = operation.ResultType;
+                    break;
             }
-            SemanticType = operation.ResultType;
             return this;
         }
 

@@ -1,14 +1,13 @@
-﻿using System;
+﻿using GalaSoft.MvvmLight;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainCore.CQL.SyntaxTree
+namespace Main
 {
-    public enum SortOrder
+    public class ViewModel: ViewModelBase
     {
-        Ascending,
-        Descending
     }
 }
