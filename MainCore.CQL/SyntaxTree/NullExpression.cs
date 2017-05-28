@@ -16,6 +16,11 @@ namespace MainCore.CQL.SyntaxTree
 
         public Type SemanticType { get; private set; }
 
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            return null;
+        }
+
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             return node as NullExpression != null;

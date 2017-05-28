@@ -71,5 +71,10 @@ namespace MainCore.CQL.SyntaxTree
         {
             return Validate(context);
         }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            return function.Invoke(Parameters.Select(p => p.Evaluate(subject)).ToArray());
+        }
     }
 }

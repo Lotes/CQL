@@ -19,6 +19,11 @@ namespace MainCore.CQL.SyntaxTree
 
         public Type SemanticType { get; private set; }
 
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            return Value;
+        }
+
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as StringLiteralExpression;

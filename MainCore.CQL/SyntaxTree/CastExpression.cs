@@ -68,5 +68,11 @@ namespace MainCore.CQL.SyntaxTree
         {
             return this.Validate(context);
         }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            var operand = Expression.Evaluate(subject);
+            return rule.Cast(operand);
+        }
     }
 }

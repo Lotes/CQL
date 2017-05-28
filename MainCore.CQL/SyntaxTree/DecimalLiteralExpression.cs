@@ -22,7 +22,12 @@ namespace MainCore.CQL.SyntaxTree
         public ParserRuleContext ParserContext { get; private set; }
 
         public Type SemanticType { get { return typeof(double); } }
-        
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            return Value;
+        }
+
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as DecimalLiteralExpression;

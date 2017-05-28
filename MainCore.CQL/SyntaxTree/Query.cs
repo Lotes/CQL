@@ -46,5 +46,10 @@ namespace MainCore.CQL.SyntaxTree
                 throw new LocateableException(Expression.ParserContext, "Query expression type must be boolean!");
             return this;
         }
+
+        public bool Evaluate<TSubject>(TSubject subject)
+        {
+            return (bool)Expression.Evaluate(subject);
+        }
     }
 }

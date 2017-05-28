@@ -44,5 +44,10 @@ namespace MainCore.CQL.SyntaxTree
         {
             return Validate(context);
         }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            return Expression.Evaluate(subject);
+        }
     }
 }

@@ -69,5 +69,18 @@ namespace MainCore.CQL.SyntaxTree
         {
             return Validate(context);
         }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            var condition = Condition.Evaluate(subject);
+            if((bool)condition == true)
+            {
+                return Then.Evaluate(subject);
+            }
+            else
+            {
+                return Else.Evaluate(subject);
+            }
+        }
     }
 }

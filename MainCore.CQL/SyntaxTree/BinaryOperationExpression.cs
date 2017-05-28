@@ -148,5 +148,12 @@ namespace MainCore.CQL.SyntaxTree
         {
             return Validate(context);
         }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            var lhs = leftExpression.Evaluate(subject);
+            var rhs = rightExpression.Evaluate(subject);
+            return operation.Operation(lhs, rhs);
+        }
     }
 }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MainCore.CQL.SyntaxTree
 {
-    public interface IExpression: ISyntaxTreeNode
+    public interface IExpression: ISyntaxTreeNode, IEvaluator
     {
         Type SemanticType { get; }
 

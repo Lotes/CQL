@@ -13,6 +13,7 @@ namespace MainCore.CQL.SyntaxTree
     {
         public readonly IEnumerable<TrailingName> TrailingNames;
         public readonly string Name;
+        private Type hostType;
         private Func<object, object> getter = null;
         private Func<object, bool> isNull = null;
 
@@ -55,6 +56,7 @@ namespace MainCore.CQL.SyntaxTree
             if (nameable is Field)
             {
                 var field = nameable as Field;
+                hostType = field.HostType;
                 getter = field.Getter;
                 isNull = field.IsNull;
                 SemanticType = field.FieldType;
@@ -62,6 +64,7 @@ namespace MainCore.CQL.SyntaxTree
             else if (nameable is Constant)
             {
                 var constant = nameable as Constant;
+                hostType = typeof(object);
                 getter = a => constant.Getter();
                 isNull = a => false;
                 SemanticType = constant.FieldType;
@@ -74,6 +77,13 @@ namespace MainCore.CQL.SyntaxTree
         IExpression IExpression.Validate(IContext context)
         {
             return this.Validate(context);
+        }
+
+        public object Evaluate<TSubject>(TSubject subject)
+        {
+            if (!hostType.IsAssignableFrom(typeof(TSubject)) || isNull(subject))
+                return null;
+            return getter(subject);
         }
 
         public class TrailingName
