@@ -2,6 +2,7 @@
 using MainCore.CQL.SyntaxTree;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -230,7 +231,7 @@ namespace MainCore.CQL.Visitors
         }
         public override IExpression VisitDecimal([NotNull] CQLParser.DecimalContext context)
         {
-            var value = Convert.ToDouble(context.value.Text);
+            var value = Convert.ToDouble(context.value.Text, CultureInfo.InvariantCulture);
             return new DecimalLiteralExpression(context, value);
         }
         public override IExpression VisitEmpty([NotNull] CQLParser.EmptyContext context)

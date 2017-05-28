@@ -57,7 +57,7 @@ namespace MainCore.CQL.Tests
         [TestMethod]
         public void DecimalLiteralExpressionTest()
         {
-            AssertQueryEquals("1", new Query(pc, new DecimalLiteralExpression(pc, 1)));
+            AssertQueryEquals("0.5", new Query(pc, new DecimalLiteralExpression(pc, 0.5)));
         }
 
         [TestMethod]

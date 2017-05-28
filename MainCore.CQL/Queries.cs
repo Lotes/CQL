@@ -56,5 +56,23 @@ namespace MainCore.CQL
                 throw ex;
             }
         }
+
+        public static bool? Evaluate<TSubject>(string text, TSubject subject, IContext context, IErrorListener errorListener = null)
+        {
+            try
+            { 
+                var query = ParseSemantically(text, context, errorListener);
+                return query.Evaluate(subject);
+            }
+            catch (LocateableException ex)
+            {
+                if (errorListener != null)
+                {
+                    errorListener.TriggerError(ex);
+                    return null;
+                }
+                throw ex;
+            }
+        }
     }
 }

@@ -20,8 +20,6 @@ namespace MainCore.CQL.Tests
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            typeSystemBuilder.AddType<int>("integer");
-            typeSystemBuilder.AddCoercionRule<int, double>(TypeSystem.CoercionKind.Implicit, @int => (double)@int);
             var contextBuilder = new ContextBuilder(typeSystemBuilder.Build());
             contextBuilder.AddField<int, int>("a.b.c", "Test variable", a => 1, a => false);
             context = contextBuilder.Build();
@@ -102,13 +100,6 @@ namespace MainCore.CQL.Tests
         public void IsNull_SuccessTest()
         {
             Queries.ParseSemantically("a.b.c IS NULL", context);
-        }
-
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
-        public void IsNull_FailNoIdentifierTest()
-        {
-            Queries.ParseSemantically("true IS NULL", context);
         }
     }
 }
