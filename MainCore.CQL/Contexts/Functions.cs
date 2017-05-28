@@ -20,11 +20,9 @@ namespace MainCore.CQL.Contexts
         }
     }
 
-    public interface IFunction
+    public interface IFunction: INameable
     {
         int Arity { get; }
-        string Name { get; }
-        string Usage { get; }
         Type ResultType { get; }
         object Invoke(params object[] parameters);
         IEnumerable<Parameter> Parameters { get; }

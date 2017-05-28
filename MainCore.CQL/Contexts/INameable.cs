@@ -6,8 +6,9 @@ using System.Threading.Tasks;
 
 namespace MainCore.CQL.Contexts
 {
-    public interface IFieldSet
+    public interface INameable
     {
-        Field Get(string name);
+        string Name { get; }
+        string Usage { get; }
     }
 }

@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -11,24 +12,139 @@ namespace MainCore.CQL.TypeSystem.Implementation
     {
         private TypeSystem typeSystem = new TypeSystem();
 
-        public TypeSystemBuilder()
+        public TypeSystemBuilder(bool initialzeDefaults = true)
         {
-            AddType<bool>("boolean");
-            typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
-            AddType<double>("double");
-            typeSystem.AddRule<double, double>(UnaryOperator.Minus, value => -value);
-            typeSystem.AddRule<double, double>(UnaryOperator.Plus, value => +value);
-            AddType<string>("string");
-            typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
-            AddContainsRule<string, string>((haystack, needle) => haystack.IndexOf(needle) > -1);
+            if(initialzeDefaults)
+            {
+                AddType<bool>("boolean");
+                typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
+                typeSystem.AddRule<bool, bool, bool>(BinaryOperator.And, (lhs, rhs) => lhs && rhs);
+                typeSystem.AddRule<bool, bool, bool>(BinaryOperator.Or, (lhs, rhs) => lhs || rhs);
+                AddType<double>("double");
+                AddType<int>("int");
+                AddCoercionRule<int, double>(CoercionKind.Implicit, @int => (double)@int);
+                AddCoercionRule<double, int>(CoercionKind.Explicit, @double => (int)@double);
+                AddType<string>("string");
+                AddCoercionRule<int, string>(CoercionKind.Explicit, @int => @int.ToString());
+                AddCoercionRule<double, string>(CoercionKind.Explicit, @double => @double.ToString());
+                AddCoercionRule<bool, string>(CoercionKind.Explicit, @bool => @bool.ToString());
+                AddCoercionRule<bool, int>(CoercionKind.Explicit, @bool => @bool ? 1 : 0);
+                AddCoercionRule<bool, double>(CoercionKind.Explicit, @bool => @bool ? 1.0 : 0.0);
+                typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
+                AddContainsRule<string, string>((haystack, needle) => haystack.IndexOf(needle) > -1);
+            }
         }
 
         public void AddType<TType>(string name)
         {
             typeSystem.AddType<TType>(name);
             AddEqualsRule<TType>((a, b) => a.Equals(b));
-            if (typeof(TType).IsAssignableFrom(typeof(IComparable)))
+            if (typeof(IComparable).IsAssignableFrom(typeof(TType)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);
+            if(typeof(TType).IsNumeric())
+            {
+                TryAddBinaryNumericOperation<TType>(BinaryOperator.Add);
+                TryAddBinaryNumericOperation<TType>(BinaryOperator.Sub);
+                TryAddBinaryNumericOperation<TType>(BinaryOperator.Div);
+                TryAddBinaryNumericOperation<TType>(BinaryOperator.Mul);
+                TryAddBinaryNumericOperation<TType>(BinaryOperator.Mod);
+                TryAddUnaryNumericOperation<TType>(UnaryOperator.Plus);
+                TryAddUnaryNumericOperation<TType>(UnaryOperator.Minus);
+            }
+        }
+
+        private bool TryAddUnaryNumericOperation<TType>(UnaryOperator op)
+        {
+            try
+            {
+                var constant = Expression.Constant(default(TType));
+                switch (op)
+                {
+                    case UnaryOperator.Minus:
+                        Expression.Negate(constant);
+                        AddRule<TType, TType>(UnaryOperator.Minus, expr =>
+                        {
+                            dynamic dexpr = expr;
+                            return -dexpr;
+                        });
+                        break;
+                    case UnaryOperator.Plus:
+                        Expression.UnaryPlus(constant);
+                        AddRule<TType, TType>(UnaryOperator.Plus, expr =>
+                        {
+                            dynamic dexpr = expr;
+                            return +dexpr;
+                        });
+                        break;
+                    default:
+                        throw new InvalidOperationException("Unhandled operator!");
+                }
+                return true;
+            }
+            catch { return false; }
+        }
+
+        private bool TryAddBinaryNumericOperation<TType>(BinaryOperator op)
+        {
+            try
+            {
+                var constant = Expression.Constant(default(TType));
+                switch (op)
+                {
+                    case BinaryOperator.Add:
+                        Expression.Add(constant, constant);
+                        AddRule<TType, TType, TType>(op, (lhs, rhs) =>
+                        {
+                            dynamic dl = lhs;
+                            dynamic dr = rhs;
+                            return dl + dr;
+                        });
+                        break;
+                    case BinaryOperator.Sub:
+                        Expression.Subtract(constant, constant);
+                        AddRule<TType, TType, TType>(op, (lhs, rhs) =>
+                        {
+                            dynamic dl = lhs;
+                            dynamic dr = rhs;
+                            return dl - dr;
+                        });
+                        break;
+                    case BinaryOperator.Div:
+                        Expression.Divide(constant, constant);
+                        AddRule<TType, TType, TType>(op, (lhs, rhs) =>
+                        {
+                            dynamic dl = lhs;
+                            dynamic dr = rhs;
+                            return dl / dr;
+                        });
+                        break;
+                    case BinaryOperator.Mul:
+                        Expression.Multiply(constant, constant);
+                        AddRule<TType, TType, TType>(op, (lhs, rhs) =>
+                        {
+                            dynamic dl = lhs;
+                            dynamic dr = rhs;
+                            return dl * dr;
+                        });
+                        break;
+                    case BinaryOperator.Mod:
+                        Expression.Modulo(constant, constant);
+                        AddRule<TType, TType, TType>(op, (lhs, rhs) =>
+                        {
+                            dynamic dl = lhs;
+                            dynamic dr = rhs;
+                            return dl % dr;
+                        });
+                        break;
+                    default:
+                        throw new InvalidOperationException("Unhandled operator!");
+                }
+                return true;
+            }
+            catch
+            {
+                return false;
+            }
         }
 
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)
@@ -70,17 +186,5 @@ namespace MainCore.CQL.TypeSystem.Implementation
         {
             typeSystem.AddRule(op, aggregate);
         }
-
-        //public void AddIsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
-        //{
-        //    typeSystem.AddRule(BinaryOperator.Is, aggregate);
-        //    typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.IsNot, (lhs, rhs) => !aggregate(lhs, rhs));
-        //}
-
-        //public void AddInRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
-        //{
-        //    typeSystem.AddRule(BinaryOperator.In, aggregate);
-        //    typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.NotIn, (lhs, rhs) => !aggregate(lhs, rhs));
-        //}
     }
 }

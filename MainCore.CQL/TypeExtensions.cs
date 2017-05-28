@@ -8,6 +8,27 @@ namespace MainCore.CQL
 {
     public static class TypeExtensions
     {
+        public static bool IsNumeric(this Type @this)
+        {
+            switch(Type.GetTypeCode(@this))
+            {
+                case TypeCode.Byte:
+                case TypeCode.Decimal:
+                case TypeCode.Double:
+                case TypeCode.Int16:
+                case TypeCode.Int32:
+                case TypeCode.Int64:
+                case TypeCode.SByte:
+                case TypeCode.Single:
+                case TypeCode.UInt16:
+                case TypeCode.UInt32:
+                case TypeCode.UInt64:
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
         public static bool IfEnumerableTryGetElementType(this Type @this, out Type elementType)
         {
             elementType = @this

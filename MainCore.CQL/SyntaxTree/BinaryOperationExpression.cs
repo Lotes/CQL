@@ -80,7 +80,7 @@ namespace MainCore.CQL.SyntaxTree
                     {
                         Type needleType = leftExpression.SemanticType;
                         Type elementType;
-                        if (rightExpression.IfArrayTryGetElementType(out elementType))
+                        if (!rightExpression.IfArrayTryGetElementType(out elementType))
                             throw new LocateableException(ParserContext, "The 'in' operator requires an array expression for the right operand.");
                         if(elementType != needleType)
                             throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand.");
@@ -91,19 +91,9 @@ namespace MainCore.CQL.SyntaxTree
                             throw new LocateableException(ParserContext, "The elements of the array are not comparable with the left operand.");
                         operation = new BinaryOperation(needleType, haystackType, typeof(bool), Operator, (needle, haystack) =>
                         {
-                            if(haystack is ArrayExpression)
-                            {
-                                var array = haystack as ArrayExpression;
-                                foreach (var element in array.Elements)
-                                    if ((bool)equals.Operation(needle, element) == true)
-                                        return true;
-                            }
-                            else
-                            {
-                                foreach (object element in ((IEnumerable)haystack))
-                                    if ((bool)equals.Operation(needle, element) == true)
-                                        return true;
-                            }
+                            foreach (object element in ((IEnumerable)haystack))
+                                if ((bool)equals.Operation(needle, element) == true)
+                                    return true;
                             return false;
                         });
                         SemanticType = typeof(bool);
@@ -112,20 +102,30 @@ namespace MainCore.CQL.SyntaxTree
                 case BinaryOperator.Is:
                 case BinaryOperator.IsNot:
                     {
+                        var negate = Operator == BinaryOperator.IsNot;
                         if (rightExpression is NullExpression)
                         {
-                            throw new NotImplementedException();
+                            //almost everything could be null
+                            SemanticType = typeof(bool);
+                            operation = new BinaryOperation(leftExpression.SemanticType, rightExpression.SemanticType, typeof(bool), Operator,
+                                (lhs, _) => { return negate ^ object.Equals(lhs, null); });
                         }
                         else if (rightExpression is EmptyExpression)
                         {
-                            throw new NotImplementedException();
-                        }
-                        else if (rightExpression is MultiIdExpression)
-                        {
-                            throw new NotImplementedException();
+                            Type elementType;
+                            if (!leftExpression.IfArrayTryGetElementType(out elementType))
+                                throw new LocateableException(leftExpression.ParserContext, "Left operand must be of an array type.");
+                            SemanticType = typeof(bool);
+                            operation = new BinaryOperation(leftExpression.SemanticType, rightExpression.SemanticType, typeof(bool), Operator,
+                                (lhs, _) =>
+                                {
+                                    foreach (object element in ((IEnumerable)lhs))
+                                        return negate;
+                                    return !negate;
+                                });
                         }
                         else
-                            throw new LocateableException(rightExpression.ParserContext, "Right operand must be NULL, EMPTY or a type name.");
+                            throw new LocateableException(rightExpression.ParserContext, "Right operand must be NULL or EMPTY.");
                     }
                     break;
                 default:

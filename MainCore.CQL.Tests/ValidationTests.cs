@@ -23,7 +23,7 @@ namespace MainCore.CQL.Tests
             typeSystemBuilder.AddType<int>("integer");
             typeSystemBuilder.AddCoercionRule<int, double>(TypeSystem.CoercionKind.Implicit, @int => (double)@int);
             var contextBuilder = new ContextBuilder(typeSystemBuilder.Build());
-            contextBuilder.AddField<int, int>("a.b.c", a => 1);
+            contextBuilder.AddField<int, int>("a.b.c", "Test variable", a => 1, a => false);
             context = contextBuilder.Build();
         }
 

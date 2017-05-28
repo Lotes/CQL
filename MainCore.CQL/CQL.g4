@@ -115,7 +115,7 @@ ASC: A S C;
 DESC: D E S C;
 PLUS : '+';
 MINUS : '-';
-MUL : M U L;
+MUL : '*';
 MOD : M O D;
 DIV : D I V;
 EQUALS: '=';

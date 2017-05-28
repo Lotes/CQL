@@ -42,7 +42,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public FunctionCallExpression Validate(IContext context)
         {
-            this.function = context.Functions.Get(this.Name);
+            function = context.Get(Name) as IFunction;
             if (function == null)
                 throw new LocateableException(ParserContext, "Unsupported function!");
             if (function.Arity != Parameters.Count())

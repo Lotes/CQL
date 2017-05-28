@@ -49,8 +49,11 @@ namespace MainCore.CQL
             catch (LocateableException ex)
             {
                 if (errorListener != null)
+                {
                     errorListener.TriggerError(ex);
-                return null;
+                    return null;
+                }
+                throw ex;
             }
         }
     }

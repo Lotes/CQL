@@ -3,6 +3,7 @@ using QuickGraph;
 using QuickGraph.Algorithms;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 
 namespace MainCore.CQL.TypeSystem.Implementation
@@ -22,6 +23,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
         {
             if (types.Values.Any(t => t.ActualType == typeof(TType)))
                 throw new InvalidOperationException("Type is already registered!");
+            Debug.WriteLine($"- added type '{name}'");
             types.Add(name.ToLower(), new QType(name, typeof(TType)));
             if(addArrayTypeToo)
                 AddType<TType[]>(name+"[]", false);
@@ -53,6 +55,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
             allCoercionRules.AddVertex(original);
             allCoercionRules.AddVertex(casting);
             allCoercionRules.AddEdge(edge);
+            Debug.WriteLine($"- added coercion rule from '{original.Name}' to '{casting.Name}'");
         }
 
         public void AddRule<TLeft, TRight, TResult>(BinaryOperator op, Func<TLeft, TRight, TResult> aggregate)
@@ -68,6 +71,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
             binaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<Type, Dictionary<Type, BinaryOperation>>())
                 .GetValueOrInsertedLazyDefault(left, () => new Dictionary<Type, BinaryOperation>())
                 [right] = new BinaryOperation(left, right, result, op, (a, b) => aggregate((TLeft)a, (TRight)b));
+            Debug.WriteLine($"- added binary operation '{op}: {left.Name} x {right.Name} -> {result.Name}'");
         }
 
         public void AddRule<TOperand, TResult>(UnaryOperator op, Func<TOperand, TResult> func)
@@ -80,6 +84,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
                 throw new InvalidOperationException("Such a rule already exists!");
             unaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<Type, UnaryOperation>())
                 [operand] = new UnaryOperation(operand, result, op, (a) => func((TOperand)a));
+            Debug.WriteLine($"- added unary operation '{op}: {operand.Name} -> {result.Name}'");
         }
 
         public BinaryOperation GetBinaryOperation(BinaryOperator op, Type left, Type right)

@@ -13,7 +13,8 @@ namespace MainCore.CQL.SyntaxTree
     {
         public readonly IEnumerable<TrailingName> TrailingNames;
         public readonly string Name;
-        private Field field = null;
+        private Func<object, object> getter = null;
+        private Func<object, bool> isNull = null;
 
         public MultiIdExpression(ParserRuleContext context, string firstName, IEnumerable<TrailingName> trailingNames = null)
         {
@@ -48,11 +49,25 @@ namespace MainCore.CQL.SyntaxTree
 
         public MultiIdExpression Validate(IContext context)
         {
-            var field = context.Fields.Get(FullName);
-            if (field == null)
+            var nameable = context.Get(FullName);
+            if (nameable == null)
                 throw new LocateableException(ParserContext, "Unknown field!");
-            this.field = field;
-            this.SemanticType = field.FieldType;
+            if (nameable is Field)
+            {
+                var field = nameable as Field;
+                getter = field.Getter;
+                isNull = field.IsNull;
+                SemanticType = field.FieldType;
+            }
+            else if (nameable is Constant)
+            {
+                var constant = nameable as Constant;
+                getter = a => constant.Getter();
+                isNull = a => false;
+                SemanticType = constant.FieldType;
+            }
+            else
+                throw new LocateableException(ParserContext, "Name must identify a constant or a field.");
             return this;
         }
 
