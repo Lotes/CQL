@@ -45,7 +45,6 @@ namespace MainCore.CQL.SyntaxTree
                 case BinaryOperator.GreaterThanEquals: opString = ">="; break;
                 case BinaryOperator.In: opString = "IN"; break;
                 case BinaryOperator.Is: opString = "IS"; break;
-                case BinaryOperator.IsNot: opString = "IS NOT"; break;
                 case BinaryOperator.LessThan: opString = "<"; break;
                 case BinaryOperator.LessThanEquals: opString = "<="; break;
                 case BinaryOperator.Mod: opString = "%"; break;
@@ -100,9 +99,8 @@ namespace MainCore.CQL.SyntaxTree
                     }
                     break;
                 case BinaryOperator.Is:
-                case BinaryOperator.IsNot:
                     {
-                        var negate = Operator == BinaryOperator.IsNot;
+                        var negate = false;
                         if (rightExpression is NullExpression)
                         {
                             //almost everything could be null

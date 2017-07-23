@@ -13,7 +13,7 @@
         //Strings/Regexs
         Contains, DoesNotContain,
         //Types/Null/Empty
-        Is, IsNot,
+        Is,
         //Array
         In, NotIn
     }

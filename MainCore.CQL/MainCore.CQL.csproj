@@ -64,6 +64,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AutoCompletion\AutoCompletionSuggestor.cs" />
+    <Compile Include="AutoCompletion\ErrorListener.cs" />
+    <Compile Include="AutoCompletion\Extensions.cs" />
+    <Compile Include="AutoCompletion\IAutoCompletionSuggester.cs" />
+    <Compile Include="AutoCompletion\ParserStack.cs" />
     <Compile Include="Contexts\Constant.cs" />
     <Compile Include="Contexts\Implementation\Context.cs" />
     <Compile Include="Contexts\INameable.cs" />
@@ -116,6 +121,7 @@
     <Compile Include="TypeSystem\AmbigiousTypeException.cs" />
     <Compile Include="Visitors\ExpressionsVisitor.cs" />
     <Compile Include="Visitors\ExpressionVisitor.cs" />
+    <Compile Include="Visitors\NameVisitor.cs" />
     <Compile Include="Visitors\QueryVisitor.cs" />
   </ItemGroup>
   <ItemGroup>

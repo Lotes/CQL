@@ -15,11 +15,13 @@ namespace MainCore.CQL.Visitors
         private Regex multiIdHeadMatcher = new Regex(@"^([a-zA-Z_][A-Za-z_0-9]*)");
         private Regex multiIdTrailerMatcher = new Regex(@"(->|\.|/|#|\$)([a-zA-Z_][A-Za-z_0-9]*)");
         private ExpressionsVisitor exprListVisitor;
+        private NameVisitor nameVisitor;
 
         public ExpressionVisitor()
             : base()
         {
             exprListVisitor = new ExpressionsVisitor(this);
+            nameVisitor = new NameVisitor();
         }
 
         public override IExpression VisitExpression([NotNull] CQLParser.ExpressionContext context)
@@ -129,12 +131,6 @@ namespace MainCore.CQL.Visitors
             var rhs = Visit(context.rhs);
             return new BinaryOperationExpression(context, BinaryOperator.Is, lhs, rhs);
         }
-        public override IExpression VisitIsNot([NotNull] CQLParser.IsNotContext context)
-        {
-            var lhs = Visit(context.lhs);
-            var rhs = Visit(context.rhs);
-            return new BinaryOperationExpression(context, BinaryOperator.IsNot, lhs, rhs);
-        }
         public override IExpression VisitIn([NotNull] CQLParser.InContext context)
         {
             var lhs = Visit(context.lhs);
@@ -149,7 +145,7 @@ namespace MainCore.CQL.Visitors
         }
         public override IExpression VisitMultiId([NotNull] CQLParser.MultiIdContext context)
         {
-            var id = context.id.Text;
+            var id = nameVisitor.Visit(context.varName);
             var matchHead = multiIdHeadMatcher.Match(id);
             var matchesTrailer = multiIdTrailerMatcher.Matches(id);
             if (!matchHead.Success)
@@ -185,7 +181,7 @@ namespace MainCore.CQL.Visitors
         }
         public override IExpression VisitFunction([NotNull] CQLParser.FunctionContext context)
         {
-            var name = context.name.Text;
+            var name = nameVisitor.Visit(context.name);
             var parameters = context.@params == null ? Enumerable.Empty<IExpression>() : exprListVisitor.Visit(context.@params);
             return new FunctionCallExpression(context, name, parameters);
         }
@@ -253,7 +249,7 @@ namespace MainCore.CQL.Visitors
         }
         public override IExpression VisitCastFactor([NotNull] CQLParser.CastFactorContext context)
         {
-            var castTypeName = context.castingType.Text;
+            var castTypeName = nameVisitor.Visit(context.type);
             var expression = Visit(context.expr);
             return new CastExpression(context, TypeSystem.CoercionKind.Explicit, castTypeName, expression);
         }

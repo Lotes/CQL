@@ -53,20 +53,28 @@ specialTerm
 	| lhs=specialTerm IN rhs=factor                #in
 	| lhs=specialTerm NOT IN rhs=factor            #notIn
 	| lhs=specialTerm IS rhs=factor                #is
-	| lhs=specialTerm IS NOT rhs=factor            #isNot
 	| expr=factor                                  #toFactor
 	;
 factor
-    : name=MULTI_ID LPAREN params=parameterList? RPAREN  #function
-    | id=MULTI_ID                                  #multiId
+    : name=functionName LPAREN params=parameterList? RPAREN  #function
+    | varName=variableName                         #multiId
     | LPAREN expr=expression RPAREN                #expr
     | NOT expr=factor                              #notFactor
     | PLUS expr=factor                             #plusFactor
     | MINUS expr=factor                            #minusFactor
     | expr=constant                                #const
     | expr=list                                    #ls
-	| LPAREN castingType=MULTI_ID RPAREN expr=expression #castFactor     
+	| LPAREN type=typeName RPAREN expr=expression #castFactor     
     ;
+functionName
+	: name=MULTI_ID
+	;
+variableName
+	: id=MULTI_ID
+	;
+typeName
+	: castingType=MULTI_ID
+	;
 list
     : LBRACE elems=elementList RBRACE     #braceElems
     | LBRACKET elems=elementList RBRACKET #bracketElems
@@ -99,7 +107,6 @@ NULL_LITERAL: N U L L;
 EMPTY_LITERAL: E M P T Y;
 
 LBRACE: '{';
-DOT: '.';
 RBRACE: '}';
 LBRACKET: '[';
 RBRACKET: ']';
@@ -131,7 +138,8 @@ IS: I S;
 AS: A S;
 SLASH: '/';
 fragment ID : [a-zA-Z_][A-Za-z_0-9]*;
-MULTI_ID: ID ((SLASH|DOT|'->'|'#'|'$') ID)*;
+fragment NX : SLASH|'.'|'->'|'#'|'$';
+MULTI_ID: NX? ID (NX ID)* NX?;
 
 fragment A : ('A'|'a') ;
 fragment B : ('B'|'b') ;
