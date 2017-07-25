@@ -68,10 +68,11 @@
     <Compile Include="AutoCompletion\ErrorListener.cs" />
     <Compile Include="AutoCompletion\Extensions.cs" />
     <Compile Include="AutoCompletion\IAutoCompletionSuggester.cs" />
+    <Compile Include="AutoCompletion\MyTokenStream.cs" />
     <Compile Include="AutoCompletion\ParserStack.cs" />
     <Compile Include="Contexts\Constant.cs" />
     <Compile Include="Contexts\Implementation\Context.cs" />
-    <Compile Include="Contexts\INameable.cs" />
+    <Compile Include="INameable.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
     <Compile Include="ErrorHandling\ErrorListener.cs" />
     <Compile Include="ErrorHandling\LocateableException.cs" />
@@ -82,6 +83,7 @@
     <Compile Include="SyntaxTree\IExpression.cs" />
     <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
     <Compile Include="SyntaxTree\SyntaxTreeExtensions.cs" />
+    <Compile Include="Token.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />

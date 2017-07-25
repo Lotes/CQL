@@ -11,6 +11,7 @@ namespace MainCore.CQL.TypeSystem
     {
         IEnumerable<QType> Types { get; }
         QType GetTypeByName(string name);
+        IEnumerable<QType> GetTypesByPrefix(string prefix);
         // can throw exception
         QType GetTypeByNative(Type type);
         CoercionRule GetCoercionRule(Type original, Type casting);

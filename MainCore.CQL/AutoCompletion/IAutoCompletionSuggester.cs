@@ -4,6 +4,6 @@ namespace MainCore.CQL.AutoCompletion
 {
     public interface IAutoCompletionSuggester
     {
-        IEnumerable<int> GetSuggestions(string code);
+        IEnumerable<INameable> GetSuggestions(string code);
     }
 }

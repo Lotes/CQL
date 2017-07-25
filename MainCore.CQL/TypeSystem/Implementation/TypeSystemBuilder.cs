@@ -16,15 +16,15 @@ namespace MainCore.CQL.TypeSystem.Implementation
         {
             if(initialzeDefaults)
             {
-                AddType<bool>("boolean");
+                AddType<bool>("boolean", "true or false");
                 typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.And, (lhs, rhs) => lhs && rhs);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.Or, (lhs, rhs) => lhs || rhs);
-                AddType<double>("double");
-                AddType<int>("int");
+                AddType<double>("double", "floating point number");
+                AddType<int>("int", "whole numbers");
                 AddCoercionRule<int, double>(CoercionKind.Implicit, @int => (double)@int);
                 AddCoercionRule<double, int>(CoercionKind.Explicit, @double => (int)@double);
-                AddType<string>("string");
+                AddType<string>("string", "sequence of chars");
                 AddCoercionRule<int, string>(CoercionKind.Explicit, @int => @int.ToString());
                 AddCoercionRule<double, string>(CoercionKind.Explicit, @double => @double.ToString());
                 AddCoercionRule<bool, string>(CoercionKind.Explicit, @bool => @bool.ToString());
@@ -35,9 +35,9 @@ namespace MainCore.CQL.TypeSystem.Implementation
             }
         }
 
-        public void AddType<TType>(string name)
+        public void AddType<TType>(string name, string usage)
         {
-            typeSystem.AddType<TType>(name);
+            typeSystem.AddType<TType>(name, usage);
             AddEqualsRule<TType>((a, b) => a.Equals(b));
             if (typeof(IComparable).IsAssignableFrom(typeof(TType)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);

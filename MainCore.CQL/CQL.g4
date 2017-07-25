@@ -99,13 +99,17 @@ constant
  * Lexer Rules
  */
 BOOLEAN_LITERAL
-    : T R U E
-    | F A L S E
+    : TRUE
+    | FALSE
     ;
 
-NULL_LITERAL: N U L L;
-EMPTY_LITERAL: E M P T Y;
+NULL_LITERAL: NULL;
+EMPTY_LITERAL: EMPTY;
 
+TRUE: T R U E;
+FALSE: F A L S E;
+EMPTY: E M P T Y;
+NULL: N U L L;
 LBRACE: '{';
 RBRACE: '}';
 LBRACKET: '[';
@@ -118,8 +122,6 @@ COMMA: ',';
 AND : A N D;
 OR : O R;
 NOT : N O T | '!';
-ASC: A S C;
-DESC: D E S C;
 PLUS : '+';
 MINUS : '-';
 MUL : '*';

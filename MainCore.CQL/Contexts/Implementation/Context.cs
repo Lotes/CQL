@@ -28,7 +28,8 @@ namespace MainCore.CQL.Contexts.Implementation
         public IEnumerable<INameable> GetByPrefix(string prefix)
         {
             prefix = prefix.ToLower();
-            return @namespace.Where(kv => kv.Key.StartsWith(prefix)).Select(kv => kv.Value).ToArray();
+            var types = TypeSystem.GetTypesByPrefix(prefix);
+            return @namespace.Where(kv => kv.Key.StartsWith(prefix)).Select(kv => kv.Value).Concat(types).ToArray();
         }
     }
 }
