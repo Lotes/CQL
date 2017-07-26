@@ -161,11 +161,17 @@ namespace MainCore.CQL.WPF
             var errorListener = new ErrorListener();
             errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
             Queries.ParseSemantically(textEditor.Text, context, errorListener);
+            popupSuggestions.IsOpen = true;
         }
 
         private void ErrorDetectedErrorListener_ErrorDetected(object sender, LocateableException e)
         {
             textMarkerService.Create(e.StartIndex, e.Length, e.Message);
+        }
+
+        private void textEditor_LostFocus(object sender, RoutedEventArgs e)
+        {
+            popupSuggestions.IsOpen = false;
         }
     }
 }

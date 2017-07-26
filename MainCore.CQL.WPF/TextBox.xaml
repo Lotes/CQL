@@ -7,17 +7,34 @@
              xmlns:local="clr-namespace:MainCore.CQL.WPF"
              mc:Ignorable="d" 
              d:DesignHeight="30" d:DesignWidth="800">
-    <avalon:TextEditor 
-        ScrollViewer.VerticalScrollBarVisibility="Hidden" 
-        ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
-        Name="textEditor" 
-        FontFamily="Consolas" 
-        SyntaxHighlighting="CQL" 
-        FontSize="10pt"
-        Padding="3"
-        PreviewKeyDown="textEditor_PreviewKeyDown"
-        TextChanged="textEditor_TextChanged"
-        Text="1=1">
-        
-    </avalon:TextEditor>
+    <Grid>
+        <avalon:TextEditor 
+            ScrollViewer.VerticalScrollBarVisibility="Hidden" 
+            ScrollViewer.HorizontalScrollBarVisibility="Hidden" 
+            Name="textEditor" 
+            FontFamily="Consolas" 
+            SyntaxHighlighting="CQL" 
+            FontSize="10pt"
+            Padding="3"
+            PreviewKeyDown="textEditor_PreviewKeyDown"
+            TextChanged="textEditor_TextChanged"
+            LostFocus="textEditor_LostFocus"
+            Text="1=1"/>
+        <Popup Placement="Bottom" PlacementTarget="{Binding ElementName=textEditor}" Name="popupSuggestions" VerticalOffset="-5">
+            <Border BorderBrush="Black" BorderThickness="1" Background="White">
+                <ListBox Name="listBoxSuggestions" Margin="2">
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock>
+                                    <TextBlock Text="{Binding Name}"/>
+                                    <TextBlock Text="{Binding Usage}" Foreground="Silver" FontStyle="Italic"/>
+                                </TextBlock>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+            </Border>
+        </Popup>
+    </Grid>
 </UserControl>
