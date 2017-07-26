@@ -10,6 +10,7 @@ using MainCore.CQL.SyntaxTree;
 using MainCore.CQL.Visitors;
 using MainCore.CQL.ErrorHandling;
 using MainCore.CQL.Contexts;
+using MainCore.CQL.AutoCompletion;
 
 namespace MainCore.CQL
 {
@@ -55,6 +56,12 @@ namespace MainCore.CQL
                 }
                 throw ex;
             }
+        }
+
+        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IContext context)
+        {
+            var suggester = new AutoCompletionSuggester(context);
+            return suggester.GetSuggestions(textUntilCaret);
         }
 
         public static bool? Evaluate<TSubject>(string text, TSubject subject, IContext context, IErrorListener errorListener = null)

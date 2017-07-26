@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace MainCore.CQL
+namespace MainCore.CQL.AutoCompletion
 {
     public class Token : INameable
     {

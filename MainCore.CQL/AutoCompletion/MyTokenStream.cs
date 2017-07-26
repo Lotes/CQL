@@ -44,7 +44,7 @@ namespace MainCore.CQL.AutoCompletion
             var next = Next();
             var nextNext = NextNext();
             return next.Type < 0
-                || (nextNext.Type < 0 && next.StopIndex + 1 == nextNext.StartIndex);
+                || (nextNext.Type < 0 && next.Type == CQLLexer.MULTI_ID && next.StopIndex + 1 == nextNext.StartIndex);
         }
         public MyTokenStream Move() { return new MyTokenStream(tokens, start + 1); }
     }

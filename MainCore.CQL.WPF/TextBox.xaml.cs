@@ -32,8 +32,13 @@ namespace MainCore.CQL.WPF
             SetupPasting();
 
             var typeSystemBuilder = new TypeSystemBuilder();
+            typeSystemBuilder.AddType<DateTime>("integerxxx", "lol");
             var typeSystem = typeSystemBuilder.Build();
             var contextBuilder = new ContextBuilder(typeSystem);
+            contextBuilder.AddField<TextBox, int>("hallo", "hohohooh", t => (int)t.Width, t => true);
+            contextBuilder.AddField<TextBox, int>("hillo", "hihihihi", t => (int)t.Width, t => true);
+            contextBuilder.BeginFunction<int>("hollu", "lach lach lach").End(() => 3);
+            contextBuilder.BeginFunction<int>("hollu2", "lach lach lach").Parameter<int>("alpha", "plopp").End((a) => 3);
             context = contextBuilder.Build();
 
             textEditor_TextChanged(this, null);
@@ -46,7 +51,6 @@ namespace MainCore.CQL.WPF
             textView.BackgroundRenderers.Add(textMarkerService);
             textView.LineTransformers.Add(textMarkerService);
             textView.Services.AddService(typeof(TextMarkerService), textMarkerService);
-
             textView.MouseHover += MouseHover;
             textView.MouseHoverStopped += TextEditorMouseHoverStopped;
             textView.VisualLinesChanged += VisualLinesChanged;
@@ -151,6 +155,13 @@ namespace MainCore.CQL.WPF
             {
                 e.Handled = true;
             }
+
+            var suggestions = Queries.AutoComplete(textEditor.Text.Substring(0, textEditor.TextArea.Caret.Column - 1), context);
+            popupSuggestions.IsOpen = suggestions.Any();
+            listBoxSuggestions.ItemsSource = suggestions;
+
+            var offset = textEditor.TextArea.TextView.GetVisualPosition(textEditor.TextArea.Caret.Position, ICSharpCode.AvalonEdit.Rendering.VisualYPosition.LineBottom);
+            popupSuggestions.HorizontalOffset = offset.X;
         }
 
         private void textEditor_TextChanged(object sender, EventArgs e)
@@ -161,7 +172,6 @@ namespace MainCore.CQL.WPF
             var errorListener = new ErrorListener();
             errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
             Queries.ParseSemantically(textEditor.Text, context, errorListener);
-            popupSuggestions.IsOpen = true;
         }
 
         private void ErrorDetectedErrorListener_ErrorDetected(object sender, LocateableException e)

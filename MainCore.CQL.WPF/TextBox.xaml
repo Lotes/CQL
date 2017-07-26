@@ -27,7 +27,27 @@
                         <DataTemplate>
                             <StackPanel Orientation="Horizontal">
                                 <TextBlock>
-                                    <TextBlock Text="{Binding Name}"/>
+                                    <Grid Width="16" Height="16">
+                                        <Grid.Style>
+                                            <Style TargetType="Grid">
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding SuggestionType}" Value="Token">
+                                                        <Setter Property="Background" Value="Black"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SuggestionType}" Value="Function">
+                                                        <Setter Property="Background" Value="Fuchsia"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SuggestionType}" Value="Variable">
+                                                        <Setter Property="Background" Value="Green"/>
+                                                    </DataTrigger>
+                                                    <DataTrigger Binding="{Binding SuggestionType}" Value="Type">
+                                                        <Setter Property="Background" Value="Orange"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </Grid.Style>
+                                     </Grid>
+                                    <TextBlock Text="{Binding Text}"/>
                                     <TextBlock Text="{Binding Usage}" Foreground="Silver" FontStyle="Italic"/>
                                 </TextBlock>
                             </StackPanel>

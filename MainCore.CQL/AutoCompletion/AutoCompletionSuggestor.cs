@@ -16,11 +16,17 @@ namespace MainCore.CQL.AutoCompletion
         private IVocabulary vocabulary;
         private ATN atn;
         private IContext context;
-        private Dictionary<int, Func<INameable, bool>> lookupByRuleId = new Dictionary<int, Func<INameable, bool>>()
+        private Dictionary<int, Func<INameable, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<INameable, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is QType },
             { CQLParser.RULE_functionName, symbol => symbol is IFunction },
             { CQLParser.RULE_variableName, symbol => symbol is Field || symbol is Constant }
+        };
+        private Dictionary<int, SuggestionType> lookupSuggestionByRuleId = new Dictionary<int, SuggestionType>()
+        {
+            { CQLParser.RULE_typeName, SuggestionType.Type },
+            { CQLParser.RULE_functionName, SuggestionType.Function },
+            { CQLParser.RULE_variableName, SuggestionType.Variable }
         };
         private Dictionary<int, IEnumerable<INameable>> suggestionsByTokenType;
 
@@ -40,16 +46,16 @@ namespace MainCore.CQL.AutoCompletion
             }
         }
 
-        public IEnumerable<INameable> GetSuggestions(string code)
+        public IEnumerable<Suggestion> GetSuggestions(string code)
         {
-            var collector = new HashSet<INameable>();
+            var collector = new HashSet<Suggestion>();
             var charStream = new AntlrInputStream(code);
             var lexer = new CQLLexer(charStream);
             Process(atn.states[0], new MyTokenStream(lexer.ToList()), collector, new ParserStack());
             return collector;
         }
 
-        private void Process(ATNState state, MyTokenStream tokens, ICollection<INameable> collector, ParserStack parserStack)
+        private void Process(ATNState state, MyTokenStream tokens, ICollection<Suggestion> collector, ParserStack parserStack)
         {
             var atCaret = tokens.AtCaret();
             var stackRes = parserStack.Process(state);
@@ -111,24 +117,29 @@ namespace MainCore.CQL.AutoCompletion
             }
         }
 
-        private void AddSymbol(ICollection<INameable> collector, ParserStack parserStack, int currentTokenType, IToken token)
+        private void AddSymbol(ICollection<Suggestion> collector, ParserStack parserStack, int currentTokenType, IToken token)
         {
             switch(currentTokenType)
             {
                 case CQLLexer.MULTI_ID:
                     var ruleId = parserStack.Top.ruleIndex;
                     var nameables = context
-                        .GetByPrefix(token.Text)
-                        .Where(lookupByRuleId[ruleId])
+                        .GetByPrefix(token.Type < 0 ? "" : token.Text)
+                        .Where(lookupPredicateByRuleId[ruleId])
                         .OrderBy(n => n.Name)
                         .ToArray();
-                    foreach(var nameable in nameables)
-                        collector.Add(nameable);
+                    var type = lookupSuggestionByRuleId[ruleId];
+                    if (type == SuggestionType.Function)
+                        foreach (var nameable in nameables.OfType<IFunction>())
+                            collector.Add(new Suggestion(type, token.Column, token.Text.Length, nameable.Name + "("+string.Join(", ", nameable.Parameters.Select(p => p.Name))+")", nameable.Usage));
+                    else
+                        foreach(var nameable in nameables)
+                            collector.Add(new Suggestion(type, token.Column, token.Text.Length, nameable.Name, nameable.Usage));
                     break;
                 default:
                     if(suggestionsByTokenType.ContainsKey(currentTokenType))
                         foreach(var suggestion in suggestionsByTokenType[currentTokenType])
-                            collector.Add(suggestion);
+                            collector.Add(new Suggestion(SuggestionType.Token, token.Column, 0, suggestion.Name, suggestion.Usage));
                     break;
             }
         }

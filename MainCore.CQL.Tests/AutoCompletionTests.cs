@@ -19,9 +19,8 @@ namespace MainCore.CQL.Tests
             var contextBuilder = new ContextBuilder(typeSystemBuilder.Build());
             contextBuilder.AddField<int, int>("a.b.c", "Test variable", a => 1, a => false);
             var context = contextBuilder.Build();
-            var suggester = new AutoCompletionSuggester(context);
-            var result = suggester.GetSuggestions(code);
-            Console.WriteLine(string.Join(",", result.Select(r => r.Name)));
+            var result = Queries.AutoComplete(code, context);
+            Console.WriteLine(string.Join(",", result.Select(r => r.Text)));
             /*
             var foundButNotExpected = result.FirstOrDefault(it => !suggestedTokenTypes.Contains(it));
             var expectedButNotFound = suggestedTokenTypes.FirstOrDefault(it => !result.Contains(it));
