@@ -81,7 +81,7 @@ namespace MainCore.CQL.Tests
         [TestMethod]
         public void MultiIdExpressionTest()
         {
-            AssertQueryEquals("a->b", new Query(pc, new MultiIdExpression(pc, "a", new[] { new MultiIdExpression.TrailingName(IdDelimiter.SingleArrow, "b")})));
+            AssertQueryEquals("a->b", new Query(pc, new MultiIdExpression(pc, "a->b")));
         }
 
         [TestMethod]

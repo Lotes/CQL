@@ -43,10 +43,10 @@ namespace MainCore.CQL.SyntaxTree
             {
                 case UnaryOperator.Minus: opStr = "-"; break;
                 case UnaryOperator.Plus: opStr = "+"; break;
-                case UnaryOperator.Not: opStr = "!"; break;
+                case UnaryOperator.Not: opStr = "NOT"; break;
                 default: throw new InvalidOperationException($"Unhandled operator: {Operator}");
             }
-            return $"{opStr}{Expression.ToString()}";
+            return $"{opStr} {Expression.ToString()}";
         }
 
         public UnaryOperationExpression Validate(IContext context)

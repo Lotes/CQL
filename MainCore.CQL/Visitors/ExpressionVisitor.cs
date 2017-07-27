@@ -12,8 +12,6 @@ namespace MainCore.CQL.Visitors
 {
     public class ExpressionVisitor : CQLBaseVisitor<IExpression>
     {
-        private Regex multiIdHeadMatcher = new Regex(@"^([a-zA-Z_][A-Za-z_0-9]*)");
-        private Regex multiIdTrailerMatcher = new Regex(@"(->|\.|/|#|\$)([a-zA-Z_][A-Za-z_0-9]*)");
         private ExpressionsVisitor exprListVisitor;
         private NameVisitor nameVisitor;
 
@@ -146,33 +144,7 @@ namespace MainCore.CQL.Visitors
         public override IExpression VisitMultiId([NotNull] CQLParser.MultiIdContext context)
         {
             var id = nameVisitor.Visit(context.varName);
-            var matchHead = multiIdHeadMatcher.Match(id);
-            var matchesTrailer = multiIdTrailerMatcher.Matches(id);
-            if (!matchHead.Success)
-                throw new InvalidOperationException("Unhandled situation!");
-            foreach(Match match in matchesTrailer)
-                if(!match.Success)
-                    throw new InvalidOperationException("Unhandled situation!");
-            var firstName = matchHead.Groups[1].Value;
-            var trailingNames = new List<MultiIdExpression.TrailingName>();
-            foreach (Match match in matchesTrailer)
-            {
-                var nextName = match.Groups[2].Value;
-                var delimiterString = match.Groups[1].Value;
-                IdDelimiter delimiter;
-                switch (delimiterString)
-                {
-                    case ".": delimiter = IdDelimiter.Dot; break;
-                    case "/": delimiter = IdDelimiter.Slash; break;
-                    case "->": delimiter = IdDelimiter.SingleArrow; break;
-                    case "#": delimiter = IdDelimiter.Hash; break;
-                    case "$": delimiter = IdDelimiter.Dollar; break;
-                    default:
-                        throw new InvalidOperationException("Unhandled delimiter!");
-                }
-                trailingNames.Add(new MultiIdExpression.TrailingName(delimiter, nextName));
-            }
-            return new MultiIdExpression(context, firstName, trailingNames);
+            return new MultiIdExpression(context, id);
         }
         public override IExpression VisitExpr([NotNull] CQLParser.ExprContext context)
         {

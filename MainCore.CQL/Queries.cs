@@ -16,6 +16,8 @@ namespace MainCore.CQL
 {
     public static class Queries
     {
+        public static readonly Query True = new Query(ParserRuleContext.EmptyContext, new BooleanLiteralExpression(ParserRuleContext.EmptyContext, true));
+
         public static Query ParseForSyntaxOnly(string text, IErrorListener errorListener = null)
         {
             var inputStream = new AntlrInputStream(text);

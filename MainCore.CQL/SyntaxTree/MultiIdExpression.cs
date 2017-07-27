@@ -11,18 +11,14 @@ namespace MainCore.CQL.SyntaxTree
 {
     public class MultiIdExpression: IExpression<MultiIdExpression>
     {
-        public readonly IEnumerable<TrailingName> TrailingNames;
         public readonly string Name;
         private Type hostType;
         private Func<object, object> getter = null;
         private Func<object, bool> isNull = null;
 
-        public MultiIdExpression(ParserRuleContext context, string firstName, IEnumerable<TrailingName> trailingNames = null)
+        public MultiIdExpression(ParserRuleContext context, string name)
         {
-            if (trailingNames == null)
-                trailingNames = Enumerable.Empty<TrailingName>();
-            Name = firstName;
-            TrailingNames = trailingNames.ToArray();
+            Name = name;
             ParserContext = context;
         }
 
@@ -35,10 +31,7 @@ namespace MainCore.CQL.SyntaxTree
             var other = node as MultiIdExpression;
             if (other == null)
                 return false;
-            return this.Name == other.Name
-                && this.TrailingNames.Count() == other.TrailingNames.Count()
-                && this.TrailingNames.Zip(other.TrailingNames, (a, b) => a.Name == b.Name && a.Delimiter == b.Delimiter)
-                .All(a => a);
+            return this.Name == other.Name;
         }
 
         public override string ToString()
@@ -46,7 +39,7 @@ namespace MainCore.CQL.SyntaxTree
             return FullName;
         }
 
-        public string FullName { get { return $"{Name}{string.Join("", TrailingNames.Select(tn => tn.ToString()))}"; } }
+        public string FullName { get { return $"{Name}"; } }
 
         public MultiIdExpression Validate(IContext context)
         {
@@ -84,34 +77,6 @@ namespace MainCore.CQL.SyntaxTree
             if (!hostType.IsAssignableFrom(typeof(TSubject)) || isNull(subject))
                 return null;
             return getter(subject);
-        }
-
-        public class TrailingName
-        {
-            public readonly IdDelimiter Delimiter;
-            public readonly string Name;
-
-            public TrailingName(IdDelimiter delimiter, string name)
-            {
-                Delimiter = delimiter;
-                Name = name;
-            }
-
-            public override string ToString()
-            {
-                string delimiterString;
-                switch (Delimiter)
-                {
-                    case IdDelimiter.Dollar: delimiterString = "$"; break;
-                    case IdDelimiter.Dot: delimiterString = "."; break;
-                    case IdDelimiter.Hash: delimiterString = "#"; break;
-                    case IdDelimiter.SingleArrow: delimiterString = "->"; break;
-                    case IdDelimiter.Slash: delimiterString = "/"; break;
-                    default:
-                        throw new InvalidOperationException("Unhandled delimiter!");
-                }
-                return $"{delimiterString}{Name}";
-            }
         }
     }
 }

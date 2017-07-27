@@ -3,6 +3,7 @@ using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using MainCore.CQL.Contexts;
+using MainCore.CQL.SyntaxTree;
 using MainCore.CQL.Contexts.Implementation;
 using MainCore.CQL.ErrorHandling;
 using MainCore.CQL.TypeSystem.Implementation;
@@ -17,15 +18,13 @@ using System.Xml;
 
 namespace MainCore.CQL.WPF
 {
-    /// <summary>
-    /// Interaction logic for TextBox.xaml
-    /// </summary>
     public partial class TextBox : UserControl
     {
         private TextMarkerService textMarkerService;
         private ToolTip toolTip;
-        private IContext context;
+        private IContext nullContext;
         private CompletionWindow completionWindow;
+        private bool isUpdatingText = false;
 
         public TextBox()
         {
@@ -35,19 +34,88 @@ namespace MainCore.CQL.WPF
             SetupPasting();
 
             var typeSystemBuilder = new TypeSystemBuilder();
-            typeSystemBuilder.AddType<DateTime>("integerxxx", "lol");
             var typeSystem = typeSystemBuilder.Build();
             var contextBuilder = new ContextBuilder(typeSystem);
-            contextBuilder.AddField<TextBox, int>("hallo", "hohohooh", t => (int)t.Width, t => true);
-            contextBuilder.AddField<TextBox, int>("hillo", "hihihihi", t => (int)t.Width, t => true);
-            contextBuilder.BeginFunction<int>("hollu", "lach lach lach").End(() => 3);
-            contextBuilder.BeginFunction<int>("hollu2", "lach lach lach").Parameter<int>("alpha", "plopp").End((a) => 3);
-            context = contextBuilder.Build();
+            nullContext = contextBuilder.Build();
 
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
             textEditor.TextArea.PreviewKeyDown += TextArea_PreviewKeyDown;
 
             textEditor_TextChanged(this, null);
+        }
+
+
+
+        public IContext Context
+        {
+            get { return (IContext)GetValue(ContextProperty); }
+            set { SetValue(ContextProperty, value); }
+        }
+        private IContext InternalContext { get { return Context ?? nullContext; } }
+        public Query Query
+        {
+            get { return (Query)GetValue(QueryProperty); }
+            set { SetValue(QueryProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Query.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty QueryProperty =
+            DependencyProperty.Register("Query", typeof(Query), typeof(TextBox), new PropertyMetadata(Queries.True, queryChangedCallback));
+        public static readonly DependencyProperty ContextProperty =
+            DependencyProperty.Register("Context", typeof(IContext), typeof(TextBox), new PropertyMetadata(null, contextChangedCallback));
+
+        private void InitializeText(string text)
+        {
+            if (isUpdatingText)
+                return;
+            isUpdatingText = true;
+            try
+            {
+                textEditor.Document.Text = text;
+            } finally { isUpdatingText = false; }
+        }
+
+        private static void PropertyChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var component = (TextBox)d;
+            var text = ((Query)e.NewValue).ToString();
+            if (component != null && component.textEditor != null)
+                component.InitializeText(text);
+            else
+            {
+                Action<object, RoutedEventArgs> listener = null;
+                listener = (sender, ev) =>
+                {
+                    component.InitializeText(text);
+                    component.Loaded -= new RoutedEventHandler(listener);
+                };
+                component.Loaded += new RoutedEventHandler(listener);
+            }
+        }
+
+        private static void queryChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (TextBox)d;
+            if (control.Query != null)
+                control.InitializeText(control.Query.ToString());
+        }
+
+        private static void contextChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var control = (TextBox)d;
+            control.Update();
+        }
+
+        private void Update()
+        {
+            if (textMarkerService == null)
+                return;
+            textMarkerService.Clear();
+            var errorListener = new ErrorListener();
+            errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
+            isUpdatingText = true;
+            Query = Queries.ParseSemantically(textEditor.Text, InternalContext, errorListener);
+            isUpdatingText = false;
         }
 
         private void TextArea_PreviewKeyDown(object sender, KeyEventArgs e)
@@ -79,7 +147,7 @@ namespace MainCore.CQL.WPF
             // Open code completion after the user has pressed dot:
             completionWindow = new CompletionWindow(textEditor.TextArea);
             IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
-            var suggestions = Queries.AutoComplete(textEditor.Text.Substring(0, textEditor.TextArea.Caret.Column - 1), context);
+            var suggestions = Queries.AutoComplete(textEditor.Text.Substring(0, textEditor.TextArea.Caret.Column - 1), InternalContext);
             foreach (var suggestion in suggestions)
                 data.Add(new CompletionData(suggestion));
             completionWindow.Show();
@@ -196,21 +264,12 @@ namespace MainCore.CQL.WPF
 
         private void textEditor_TextChanged(object sender, EventArgs e)
         {
-            if (textMarkerService == null)
-                return;
-            textMarkerService.Clear();
-            var errorListener = new ErrorListener();
-            errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
-            Queries.ParseSemantically(textEditor.Text, context, errorListener);
+            Update();
         }
 
         private void ErrorDetectedErrorListener_ErrorDetected(object sender, LocateableException e)
         {
             textMarkerService.Create(e.StartIndex, e.Length, e.Message);
-        }
-
-        private void textEditor_LostFocus(object sender, RoutedEventArgs e)
-        {
         }
     }
 }

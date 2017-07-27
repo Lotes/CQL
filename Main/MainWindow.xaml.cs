@@ -23,6 +23,7 @@ namespace Main
         public MainWindow()
         {
             InitializeComponent();
+            this.DataContext = new ViewModel();
         }
     }
 }

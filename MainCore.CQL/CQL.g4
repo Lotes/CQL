@@ -140,7 +140,7 @@ AS: A S;
 SLASH: '/';
 fragment ID : [a-zA-Z_][A-Za-z_0-9]*;
 fragment NX : SLASH|'.'|'->'|'#'|'$';
-MULTI_ID: NX? ID (NX ID)* NX?;
+MULTI_ID: (NX|) ID (NX ID)* NX?;
 
 fragment A : ('A'|'a') ;
 fragment B : ('B'|'b') ;

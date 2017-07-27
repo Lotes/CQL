@@ -8,11 +8,13 @@
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid Height="322" Margin="0,0,0.4,0" VerticalAlignment="Top">
-        <cqlWpf:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top"/>
-        <ListView x:Name="listView" Margin="10,38,10,10">
+        <cqlWpf:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <ListView x:Name="listView" Margin="10,38,10,10" ItemsSource="{Binding FilteredSubjects}">
             <ListView.View>
                 <GridView>
-                    <GridViewColumn/>
+                    <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
+                    <GridViewColumn Header="Age" DisplayMemberBinding="{Binding Age}"/>
+                    <GridViewColumn Header="Class" DisplayMemberBinding="{Binding Class}"/>
                 </GridView>
             </ListView.View>
         </ListView>

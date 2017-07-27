@@ -74,7 +74,7 @@ namespace MainCore.CQL.AutoCompletion
                     if (last != null && last.loopBackState == loopState.loopBackState)
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
                 }
-                return new Tuple<bool, ParserStack>(false, this);
+                return new Tuple<bool, ParserStack>(true, this);
             }
             if (state is RuleStopState)
             {
@@ -85,7 +85,7 @@ namespace MainCore.CQL.AutoCompletion
                     if (last != null && last.stopState == ruleState)
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
                 }
-                return new Tuple<bool, ParserStack>(false, this);
+                return new Tuple<bool, ParserStack>(true, this);
             }
             if (remainingTypes.Any(t => t == currentType))
                 return new Tuple<bool, ParserStack>(true, this);

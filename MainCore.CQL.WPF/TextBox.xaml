@@ -17,7 +17,5 @@
         SyntaxHighlighting="CQL" 
         FontSize="10pt"
         Padding="3"
-        TextChanged="textEditor_TextChanged"
-        LostFocus="textEditor_LostFocus"
-        Text=""/>
+        TextChanged="textEditor_TextChanged"/>
 </UserControl>

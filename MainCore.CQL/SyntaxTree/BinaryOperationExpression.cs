@@ -36,9 +36,9 @@ namespace MainCore.CQL.SyntaxTree
             switch(Operator)
             {
                 case BinaryOperator.Add: opString = "+"; break;
-                case BinaryOperator.And: opString = "&&"; break;
+                case BinaryOperator.And: opString = "AND"; break;
                 case BinaryOperator.Contains: opString = "~"; break;
-                case BinaryOperator.Div: opString = "/"; break;
+                case BinaryOperator.Div: opString = "DIV"; break;
                 case BinaryOperator.DoesNotContain: opString = "!~"; break;
                 case BinaryOperator.Equals: opString = "="; break;
                 case BinaryOperator.GreaterThan: opString = ">"; break;
@@ -47,11 +47,11 @@ namespace MainCore.CQL.SyntaxTree
                 case BinaryOperator.Is: opString = "IS"; break;
                 case BinaryOperator.LessThan: opString = "<"; break;
                 case BinaryOperator.LessThanEquals: opString = "<="; break;
-                case BinaryOperator.Mod: opString = "%"; break;
+                case BinaryOperator.Mod: opString = "MOD"; break;
                 case BinaryOperator.Mul: opString = "*"; break;
                 case BinaryOperator.NotEquals: opString = "!="; break;
                 case BinaryOperator.NotIn: opString = "NOT IN"; break;
-                case BinaryOperator.Or: opString = "||"; break;
+                case BinaryOperator.Or: opString = "OR"; break;
                 case BinaryOperator.Sub: opString = "-"; break;
                 default: throw new InvalidOperationException("Unhandled operator: "+Operator);
             }
