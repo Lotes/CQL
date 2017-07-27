@@ -41,8 +41,11 @@ namespace MainCore.CQL.AutoCompletion
             for (var index = 0; index < CQLLexer.DefaultVocabulary.MaxTokenType; index++)
             {
                 var name = CQLLexer.DefaultVocabulary.GetDisplayName(index);
-                if (name != null && !name.Contains("LITERAL"))
-                    suggestionsByTokenType[index] = new[] { new Token(name, "") };
+                if (name == null || name.Contains("LITERAL"))
+                    continue;
+                if (name.StartsWith("'") && name.EndsWith("'"))
+                    name = name.Substring(1, name.Length - 2);
+                suggestionsByTokenType[index] = new[] { new Token(name, "") };
             }
         }
 
@@ -51,11 +54,11 @@ namespace MainCore.CQL.AutoCompletion
             var collector = new HashSet<Suggestion>();
             var charStream = new AntlrInputStream(code);
             var lexer = new CQLLexer(charStream);
-            Process(atn.states[0], new MyTokenStream(lexer.ToList()), collector, new ParserStack());
+            Process(atn.states[0], new MyTokenStream(lexer.ToList()), collector, new ParserStack(), new HashSet<int>());
             return collector;
         }
 
-        private void Process(ATNState state, MyTokenStream tokens, ICollection<Suggestion> collector, ParserStack parserStack)
+        private void Process(ATNState state, MyTokenStream tokens, ICollection<Suggestion> collector, ParserStack parserStack, HashSet<int> alreadyPassed)
         {
             var atCaret = tokens.AtCaret();
             var stackRes = parserStack.Process(state);
@@ -66,10 +69,14 @@ namespace MainCore.CQL.AutoCompletion
 
             foreach (var it in state.Transitions)
             {
-                var desc = state.StateNumber.ToString(); // describe(ruleNames, vocabulary, state, it)
                 if (it.IsEpsilon)
                 {
-                    Process(it.target, tokens, collector, stackRes.Item2);
+                    var stateNo = it.target.StateNumber;
+                    if (!alreadyPassed.Contains(stateNo))
+                    {
+                        Process(it.target, tokens, collector, stackRes.Item2, alreadyPassed);
+                        alreadyPassed.Add(stateNo);
+                    }
                 }
                 else if (it is AtomTransition)
                 {
@@ -86,7 +93,7 @@ namespace MainCore.CQL.AutoCompletion
                     {
                         if (nextToken.Type == atomTransition.label)
                         {
-                            Process(it.target, tokens.Move(), collector, stackRes.Item2);
+                            Process(it.target, tokens.Move(), collector, stackRes.Item2, new HashSet<int>());
                         }
                     }
                 }
@@ -107,7 +114,7 @@ namespace MainCore.CQL.AutoCompletion
                         {
                             if (nextToken.Type == sym)
                             {
-                                Process(it.target, tokens.Move(), collector, stackRes.Item2);
+                                Process(it.target, tokens.Move(), collector, stackRes.Item2, new HashSet<int>());
                             }
                         }
                     }
@@ -129,12 +136,13 @@ namespace MainCore.CQL.AutoCompletion
                         .OrderBy(n => n.Name)
                         .ToArray();
                     var type = lookupSuggestionByRuleId[ruleId];
+                    var length = token.Type < 0 ? 0 : token.Text.Length;
                     if (type == SuggestionType.Function)
                         foreach (var nameable in nameables.OfType<IFunction>())
-                            collector.Add(new Suggestion(type, token.Column, token.Text.Length, nameable.Name + "("+string.Join(", ", nameable.Parameters.Select(p => p.Name))+")", nameable.Usage));
+                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name + "("+string.Join(", ", nameable.Parameters.Select(p => p.Name))+")", nameable.Usage));
                     else
                         foreach(var nameable in nameables)
-                            collector.Add(new Suggestion(type, token.Column, token.Text.Length, nameable.Name, nameable.Usage));
+                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name, nameable.Usage));
                     break;
                 default:
                     if(suggestionsByTokenType.ContainsKey(currentTokenType))

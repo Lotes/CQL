@@ -1,4 +1,5 @@
-﻿using ICSharpCode.AvalonEdit.Document;
+﻿using ICSharpCode.AvalonEdit.CodeCompletion;
+using ICSharpCode.AvalonEdit.Document;
 using ICSharpCode.AvalonEdit.Highlighting;
 using ICSharpCode.AvalonEdit.Highlighting.Xshd;
 using MainCore.CQL.Contexts;
@@ -6,6 +7,7 @@ using MainCore.CQL.Contexts.Implementation;
 using MainCore.CQL.ErrorHandling;
 using MainCore.CQL.TypeSystem.Implementation;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -23,6 +25,7 @@ namespace MainCore.CQL.WPF
         private TextMarkerService textMarkerService;
         private ToolTip toolTip;
         private IContext context;
+        private CompletionWindow completionWindow;
 
         public TextBox()
         {
@@ -41,7 +44,49 @@ namespace MainCore.CQL.WPF
             contextBuilder.BeginFunction<int>("hollu2", "lach lach lach").Parameter<int>("alpha", "plopp").End((a) => 3);
             context = contextBuilder.Build();
 
+            textEditor.TextArea.TextEntered += TextArea_TextEntered;
+            textEditor.TextArea.PreviewKeyDown += TextArea_PreviewKeyDown;
+
             textEditor_TextChanged(this, null);
+        }
+
+        private void TextArea_PreviewKeyDown(object sender, KeyEventArgs e)
+        {
+            if(e.Key == Key.Return || e.Key == Key.Enter)
+            {
+                if (completionWindow != null)
+                {
+                    // Whenever a non-letter is typed while the completion window is open,
+                    // insert the currently selected element.
+                    completionWindow.CompletionList.RequestInsertion(e);
+                }
+                e.Handled = true;
+            }
+            if (completionWindow == null && e.Key == Key.Space && e.KeyboardDevice.Modifiers == ModifierKeys.Control)
+            {
+                OpenCompletionWindow();
+                e.Handled = true;
+            }
+        }
+
+        private void TextArea_TextEntered(object sender, TextCompositionEventArgs e)
+        {
+            OpenCompletionWindow();
+        }
+
+        private void OpenCompletionWindow()
+        {
+            // Open code completion after the user has pressed dot:
+            completionWindow = new CompletionWindow(textEditor.TextArea);
+            IList<ICompletionData> data = completionWindow.CompletionList.CompletionData;
+            var suggestions = Queries.AutoComplete(textEditor.Text.Substring(0, textEditor.TextArea.Caret.Column - 1), context);
+            foreach (var suggestion in suggestions)
+                data.Add(new CompletionData(suggestion));
+            completionWindow.Show();
+            completionWindow.Closed += delegate
+            {
+                completionWindow = null;
+            };
         }
 
         private void SetupErrorVisualization()
@@ -149,21 +194,6 @@ namespace MainCore.CQL.WPF
                 textEditor.SyntaxHighlighting = HighlightingLoader.Load(reader, HighlightingManager.Instance);
         }
 
-        private void textEditor_PreviewKeyDown(object sender, KeyEventArgs e)
-        {
-            if(e.Key == Key.Return || e.Key == Key.Enter)
-            {
-                e.Handled = true;
-            }
-
-            var suggestions = Queries.AutoComplete(textEditor.Text.Substring(0, textEditor.TextArea.Caret.Column - 1), context);
-            popupSuggestions.IsOpen = suggestions.Any();
-            listBoxSuggestions.ItemsSource = suggestions;
-
-            var offset = textEditor.TextArea.TextView.GetVisualPosition(textEditor.TextArea.Caret.Position, ICSharpCode.AvalonEdit.Rendering.VisualYPosition.LineBottom);
-            popupSuggestions.HorizontalOffset = offset.X;
-        }
-
         private void textEditor_TextChanged(object sender, EventArgs e)
         {
             if (textMarkerService == null)
@@ -181,7 +211,6 @@ namespace MainCore.CQL.WPF
 
         private void textEditor_LostFocus(object sender, RoutedEventArgs e)
         {
-            popupSuggestions.IsOpen = false;
         }
     }
 }
