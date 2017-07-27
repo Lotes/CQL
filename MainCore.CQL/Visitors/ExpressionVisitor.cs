@@ -222,7 +222,7 @@ namespace MainCore.CQL.Visitors
         }
         public override IExpression VisitBool([NotNull] CQLParser.BoolContext context)
         {
-            var value = Convert.ToBoolean(context.value.Text);
+            var value = Convert.ToBoolean(nameVisitor.Visit(context.value));
             return new BooleanLiteralExpression(context, value);
         }
         public override IExpression VisitDecimal([NotNull] CQLParser.DecimalContext context)

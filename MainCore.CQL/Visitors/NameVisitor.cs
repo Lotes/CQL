@@ -23,5 +23,15 @@ namespace MainCore.CQL.Visitors
         {
             return context.name.Text;
         }
+
+        public override string VisitTrue([NotNull] CQLParser.TrueContext context)
+        {
+            return context.value.Text;
+        }
+
+        public override string VisitFalse([NotNull] CQLParser.FalseContext context)
+        {
+            return context.value.Text;
+        }
     }
 }

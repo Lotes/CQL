@@ -90,22 +90,21 @@ parameterList
 constant
     : value=STRING_LITERAL  #string
     | value=DECIMAL_LITERAL #decimal
-    | value=NULL_LITERAL    #null
-    | value=EMPTY_LITERAL   #empty
-    | value=BOOLEAN_LITERAL #bool
+    | value=nullLiteral    #null
+    | value=emptyLiteral   #empty
+    | value=booleanLiteral  #bool
     ;
+
+booleanLiteral
+    : value=TRUE #true
+    | value=FALSE #false
+    ;
+nullLiteral: NULL;
+emptyLiteral: EMPTY;
 
 /*
  * Lexer Rules
  */
-BOOLEAN_LITERAL
-    : TRUE
-    | FALSE
-    ;
-
-NULL_LITERAL: NULL;
-EMPTY_LITERAL: EMPTY;
-
 TRUE: T R U E;
 FALSE: F A L S E;
 EMPTY: E M P T Y;
