@@ -101,5 +101,17 @@ namespace MainCore.CQL.Tests
         {
             Queries.ParseSemantically("a.b.c IS NULL", context);
         }
+
+        [TestMethod]
+        public void IsVariableInSet_SuccessTest()
+        {
+            Queries.ParseSemantically("a.b.c in [1]", context);
+        }
+
+        [TestMethod]
+        public void IsVariableInUnunifiedSet_SuccessTest()
+        {
+            Queries.ParseSemantically("a.b.c in [1.0, 2]", context);
+        }
     }
 }

@@ -60,9 +60,10 @@ namespace Main
         private void Update()
         {
             FilteredSubjects.Clear();
-            foreach (var subject in database)
-                if (Query.Evaluate<Subject>(subject))
-                    FilteredSubjects.Add(subject);
+            if(Query != null)
+                foreach (var subject in database)
+                    if (Query.Evaluate<Subject>(subject))
+                        FilteredSubjects.Add(subject);
         }
 
         public IContext Context { get; }

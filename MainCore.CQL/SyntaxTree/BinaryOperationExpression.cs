@@ -5,6 +5,7 @@ using MainCore.CQL.ErrorHandling;
 using MainCore.CQL.TypeSystem;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace MainCore.CQL.SyntaxTree
 {
@@ -81,8 +82,29 @@ namespace MainCore.CQL.SyntaxTree
                         Type elementType;
                         if (!rightExpression.IfArrayTryGetElementType(out elementType))
                             throw new LocateableException(ParserContext, "The 'in' operator requires an array expression for the right operand.");
-                        if(elementType != needleType)
-                            throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand.");
+                        if(needleType != elementType)
+                        {
+                            var chain = context.TypeSystem.GetImplicitlyCastChain(needleType, elementType);
+                            var newLeft = chain.ApplyCast(leftExpression, context);
+                            if (newLeft != null)
+                            {
+                                leftExpression = newLeft;
+                                needleType = elementType;
+                            }
+                            else
+                            {
+                                chain = context.TypeSystem.GetImplicitlyCastChain(elementType, needleType);
+                                var array = rightExpression as ArrayExpression;
+                                var newArray = new ArrayExpression(rightExpression.ParserContext, array.Elements.Select(exp => chain.ApplyCast(exp, context)));
+                                if (newArray.Elements.All(e => e != null))
+                                {
+                                    rightExpression = newArray;
+                                    elementType = needleType;
+                                }
+                                else
+                                    throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand. At least these types must be convertible in each other.");
+                            }
+                        }
                         Type haystackType = typeof(IEnumerable<>).MakeGenericType(elementType);
                         var equalsOperator = Operator == BinaryOperator.In ? BinaryOperator.Equals : BinaryOperator.NotEquals;
                         var equals = context.TypeSystem.GetBinaryOperation(equalsOperator, needleType, elementType);

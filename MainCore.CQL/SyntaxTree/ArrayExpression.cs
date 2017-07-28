@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Antlr4.Runtime;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.ErrorHandling;
+using MainCore.CQL.TypeSystem;
 
 namespace MainCore.CQL.SyntaxTree
 {
@@ -41,7 +42,13 @@ namespace MainCore.CQL.SyntaxTree
 
         public ArrayExpression Validate(IContext context)
         {
-            Elements = Elements.Select(e => e.Validate(context)).ToArray();
+            var elements = Elements.Select(e => e.Validate(context)).ToArray();
+            //Attention! The array has at least one element.
+            ElementType = Elements.First().SemanticType;
+            for(var index=1; index<elements.Length; index++)
+                if(elements[index].SemanticType != ElementType)
+                    ElementType = context.AlignTypes(ref elements[index-1], ref elements[index], () => new LocateableException(ParserContext, "Could not unify type of this array!"));
+            Elements = elements;
             ElementType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
             SemanticType = ElementType.MakeArrayType();
             return this;
