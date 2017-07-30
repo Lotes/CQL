@@ -171,7 +171,7 @@ fragment Z : ('Z'|'z') ;
 
 /* Strings */
 STRING_LITERAL: '"' CHAR_SEQUENCE '"';
-fragment CHAR_SEQUENCE: CHAR+;
+fragment CHAR_SEQUENCE: CHAR*;
 fragment CHAR
     :   ~["\\\r\n\t]
     |   ESCAPE_SEQUENCE

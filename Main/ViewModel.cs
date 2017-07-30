@@ -35,6 +35,7 @@ namespace Main
             new Subject("Michael", 32, 14),
             new Subject("Frank", 33, 14),
             new Subject("Nico", 34, 4),
+            new Subject(null, -1, 0),
             new Subject("Felix", 35, 3),
             new Subject("Nick", 36, 2),
             new Subject("Kai", 37, 1),
