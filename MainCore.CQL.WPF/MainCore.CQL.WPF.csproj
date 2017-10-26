@@ -61,6 +61,7 @@
     <Compile Include="Composer\ComposerBox.xaml.cs">
       <DependentUpon>ComposerBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Composer\QueryPart.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF.Composer"
              mc:Ignorable="d" 
+             BorderThickness="1"
+             BorderBrush="Black" 
+             Padding="4"
              d:DesignHeight="300" d:DesignWidth="300">
-    
     <ItemsControl ItemsSource="{Binding QueryParts}">
         <ItemsControl.ItemsPanel>
             <ItemsPanelTemplate>

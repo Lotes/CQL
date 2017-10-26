@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Media;
 
-namespace MainCore.CQL.WPF
+namespace MainCore.CQL.WPF.Textual
 {
     public class TextMarkerService : IBackgroundRenderer, IVisualLineTransformer
     {
