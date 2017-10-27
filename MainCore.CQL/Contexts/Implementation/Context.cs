@@ -15,6 +15,11 @@ namespace MainCore.CQL.Contexts.Implementation
             TypeSystem = typeSystem;
             this.@namespace = @namespace;
         }
+
+        public IEnumerable<Constant> Constants { get { return @namespace.Values.OfType<Constant>(); } }
+        public IEnumerable<Field> Fields { get { return @namespace.Values.OfType<Field>(); } }
+        public IEnumerable<AbstractFunction> Functions { get { return @namespace.Values.OfType<AbstractFunction>(); } }
+
         public ITypeSystem TypeSystem { get; private set; }
 
         public INameable Get(string name)

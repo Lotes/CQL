@@ -31,7 +31,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
                 AddCoercionRule<bool, int>(CoercionKind.Explicit, @bool => @bool ? 1 : 0);
                 AddCoercionRule<bool, double>(CoercionKind.Explicit, @bool => @bool ? 1.0 : 0.0);
                 typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
-                AddContainsRule<string, string>((haystack, needle) => haystack.IndexOf(needle) > -1);
+                AddContainsRule<string, string>((haystack, needle) => haystack != null && needle != null && haystack.IndexOf(needle) > -1);
             }
         }
 

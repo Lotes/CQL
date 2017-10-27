@@ -11,11 +11,13 @@ namespace MainCore.CQL.Contexts
         public string Name { get; private set; }
         public string Usage { get; private set; }
         public readonly Type FieldType;
-        public readonly Func<object> Getter;
-        public Constant(string name, string usage, Type fieldType, Func<object> getter)
+        public readonly Type HostType;
+        public readonly Func<object, object> Getter;
+        public Constant(string name, string usage, Type hostType, Type fieldType, Func<object, object> getter)
         {
             Name = name;
             Usage = usage;
+            HostType = hostType;
             FieldType = fieldType;
             Getter = getter;
         }

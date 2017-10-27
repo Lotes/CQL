@@ -57,8 +57,8 @@ namespace MainCore.CQL.SyntaxTree
             else if (nameable is Constant)
             {
                 var constant = nameable as Constant;
-                hostType = typeof(object);
-                getter = a => constant.Getter();
+                hostType = constant.HostType;
+                getter = a => constant.Getter(a);
                 isNull = a => false;
                 SemanticType = constant.FieldType;
             }

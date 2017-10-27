@@ -95,14 +95,21 @@ namespace MainCore.CQL.SyntaxTree
                             {
                                 chain = context.TypeSystem.GetImplicitlyCastChain(elementType, needleType);
                                 var array = rightExpression as ArrayExpression;
-                                var newArray = new ArrayExpression(rightExpression.ParserContext, array.Elements.Select(exp => chain.ApplyCast(exp, context)));
-                                if (newArray.Elements.All(e => e != null))
+                                if (array == null)
                                 {
-                                    rightExpression = newArray;
-                                    elementType = needleType;
+                                    throw new LocateableException(ParserContext, "The 'in' operator requires that the right operand to be a list of the left operand's type.");
                                 }
                                 else
-                                    throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand. At least these types must be convertible in each other.");
+                                {
+                                    var newArray = new ArrayExpression(rightExpression.ParserContext, array.Elements.Select(exp => chain.ApplyCast(exp, context)));
+                                    if (newArray.Elements.All(e => e != null))
+                                    {
+                                        rightExpression = newArray;
+                                        elementType = needleType;
+                                    }
+                                    else
+                                        throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand. At least these types must be convertible in each other.");
+                                }
                             }
                         }
                         Type haystackType = typeof(IEnumerable<>).MakeGenericType(elementType);

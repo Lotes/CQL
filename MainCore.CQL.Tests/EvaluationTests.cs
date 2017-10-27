@@ -3,6 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using MainCore.CQL.TypeSystem.Implementation;
 using MainCore.CQL.Contexts.Implementation;
 using MainCore.CQL.Contexts;
+using MainCore.CQL.ErrorHandling;
 
 namespace MainCore.CQL.Tests
 {
@@ -66,11 +67,24 @@ namespace MainCore.CQL.Tests
             Assert.IsTrue(Queries.Evaluate("owner IS NULL", ticketThree, context) == true);
         }
 
-        /*[TestMethod]
+        [TestMethod]
         public void CheckConcatOwnerNull()
         {
             Assert.IsFalse(Queries.Evaluate("(owner+\"abc\") IS NULL", ticketOne, context) == true);
             Assert.IsTrue(Queries.Evaluate("(owner+\"abc\") IS NULL", ticketThree, context) == true);
-        }*/
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(LocateableException))]
+        public void CheckBuggyIn()
+        {
+            Queries.Evaluate("owner IN owner", ticketOne, context);
+        }
+
+        [TestMethod]
+        public void CheckBuggyContains()
+        {
+            Queries.Evaluate("owner ~ owner", ticketThree, context);
+        }
     }
 }

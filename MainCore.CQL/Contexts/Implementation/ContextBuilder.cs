@@ -25,9 +25,9 @@ namespace MainCore.CQL.Contexts.Implementation
             @namespace.Add(NormalizeName(nameable.Name), nameable);
         }
 
-        public void AddConstant<TField>(string name, string usage, Func<TField> getter)
+        public void AddConstant<THost, TField>(string name, string usage, Func<THost, TField> getter)
         {
-            AddToNamespace(new Constant(name, usage, typeof(TField), () => getter()));
+            AddToNamespace(new Constant(name, usage, typeof(THost), typeof(TField), a => (object)getter((THost)a)));
             Debug.WriteLine($"- added constant '{name}: {typeof(TField).Name}'");
         }
 
