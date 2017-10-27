@@ -75,24 +75,6 @@ namespace MainCore.CQL.WPF
             } finally { isUpdatingText = false; }
         }
 
-        private static void PropertyChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var component = (TextBox)d;
-            var text = ((Query)e.NewValue).ToString();
-            if (component != null && component.textEditor != null)
-                component.InitializeText(text);
-            else
-            {
-                Action<object, RoutedEventArgs> listener = null;
-                listener = (sender, ev) =>
-                {
-                    component.InitializeText(text);
-                    component.Loaded -= new RoutedEventHandler(listener);
-                };
-                component.Loaded += new RoutedEventHandler(listener);
-            }
-        }
-
         private static void queryChangedCallback(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (TextBox)d;
