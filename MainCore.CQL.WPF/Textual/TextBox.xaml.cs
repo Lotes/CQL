@@ -16,7 +16,7 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Xml;
 
-namespace MainCore.CQL.WPF
+namespace MainCore.CQL.WPF.Textual
 {
     public partial class TextBox : UserControl
     {

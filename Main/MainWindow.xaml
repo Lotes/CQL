@@ -3,13 +3,15 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:cqlWpf="clr-namespace:MainCore.CQL.WPF;assembly=MainCore.CQL.WPF"
+        xmlns:cqlWpfTxt="clr-namespace:MainCore.CQL.WPF.Textual;assembly=MainCore.CQL.WPF"
+        xmlns:cqlWpfCmp="clr-namespace:MainCore.CQL.WPF.Composer;assembly=MainCore.CQL.WPF"
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
         Title="MainWindow" Height="350" Width="525">
     <Grid Height="322" Margin="0,0,0.4,0" VerticalAlignment="Top">
-        <cqlWpf:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
-        <ListView x:Name="listView" Margin="10,38,10,10" ItemsSource="{Binding FilteredSubjects}">
+        <cqlWpfTxt:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <cqlWpfCmp:ComposerBox Margin="10,38,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
+        <ListView x:Name="listView" Margin="10,66,10,10" ItemsSource="{Binding FilteredSubjects}">
             <ListView.View>
                 <GridView>
                     <GridViewColumn Header="Name" DisplayMemberBinding="{Binding Name}"/>
