@@ -1,9 +1,12 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Main", "Main\Main.csproj", "{8D68478C-1A27-4293-BFBF-9BB3C63B54F7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12} = {1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}
+	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainCore.CQL", "MainCore.CQL\MainCore.CQL.csproj", "{E07E2313-AA23-4498-AFEC-28E2B7C6FD33}"
 EndProject

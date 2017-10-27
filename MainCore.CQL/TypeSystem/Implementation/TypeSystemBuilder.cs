@@ -38,7 +38,7 @@ namespace MainCore.CQL.TypeSystem.Implementation
         public void AddType<TType>(string name, string usage)
         {
             typeSystem.AddType<TType>(name, usage);
-            AddEqualsRule<TType>((a, b) => a.Equals(b));
+            AddEqualsRule<TType>((a, b) => a != null && b != null && a.Equals(b));
             if (typeof(IComparable).IsAssignableFrom(typeof(TType)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);
             if(typeof(TType).IsNumeric())

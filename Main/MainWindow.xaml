@@ -7,7 +7,7 @@
         xmlns:cqlWpfCmp="clr-namespace:MainCore.CQL.WPF.Composer;assembly=MainCore.CQL.WPF"
         xmlns:local="clr-namespace:Main"
         mc:Ignorable="d"
-        Title="MainWindow" Height="350" Width="525">
+        Title="MainWindow" Height="400" Width="600">
     <Grid Height="322" Margin="0,0,0.4,0" VerticalAlignment="Top">
         <cqlWpfTxt:TextBox Margin="10,10,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>
         <cqlWpfCmp:ComposerBox Margin="10,38,10,0" Height="28" VerticalAlignment="Top" Context="{Binding Context}" Query="{Binding Query,Mode=TwoWay,UpdateSourceTrigger=PropertyChanged}"/>

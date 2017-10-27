@@ -4,16 +4,79 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF.Composer"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              mc:Ignorable="d" 
              BorderThickness="1"
              BorderBrush="Black" 
-             Padding="4"
-             d:DesignHeight="300" d:DesignWidth="300">
-    <ItemsControl ItemsSource="{Binding QueryParts}">
-        <ItemsControl.ItemsPanel>
-            <ItemsPanelTemplate>
-                <WrapPanel/>
-            </ItemsPanelTemplate>
-        </ItemsControl.ItemsPanel>
-    </ItemsControl>
+             Padding="1"
+             x:Name="self"
+             d:DesignHeight="28" d:DesignWidth="100">
+    <Grid DataContext="{Binding Path=., ElementName=self}">
+        <TextBlock Text="Please initialize Context and Query!" Foreground="Red">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="Uninitialized">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <TextBlock Text="Can not display query. It is too complex!" Foreground="Green">
+            <TextBlock.Style>
+                <Style TargetType="TextBlock">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="CanNotDisplay">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </TextBlock.Style>
+        </TextBlock>
+        <ItemsControl ItemsSource="{Binding QueryParts}">
+            <ItemsControl.Resources>
+                <Style x:Key="FlatComboBox" TargetType="{x:Type ComboBox}">
+                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
+                    <Setter Property="VerticalAlignment" Value="Top"/>
+                    <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
+                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
+                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+                    <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
+                    <Setter Property="TextElement.Foreground" Value="Black"/>
+                    <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
+                    <Setter Property="BorderBrush" Value="Silver"/>
+                    <Setter Property="BorderThickness" Value="1" />
+                    <Setter Property="Background" Value="White" />
+                </Style>
+                <DataTemplate DataType="{x:Type local:BooleanLiteralPart}">
+                    <local:FilterBox IsNegated="{Binding Negate, Mode=TwoWay}" DeleteCommand="{Binding DeleteCommand, Mode=OneTime}">
+                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10" Style="{StaticResource ResourceKey=FlatComboBox}">
+                            <ComboBox.Items>
+                                <sys:Boolean>False</sys:Boolean>
+                                <sys:Boolean>True</sys:Boolean>
+                            </ComboBox.Items>
+                        </ComboBox>
+                    </local:FilterBox>
+                </DataTemplate>
+            </ItemsControl.Resources>
+            <ItemsControl.Style>
+                <Style TargetType="ItemsControl">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding Status}" Value="Ok">
+                            <Setter Property="Visibility" Value="Visible"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                    <Setter Property="Visibility" Value="Collapsed"/>
+                </Style>
+            </ItemsControl.Style>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+        </ItemsControl>
+    </Grid>
 </UserControl>
