@@ -54,11 +54,21 @@
                 <DataTemplate DataType="{x:Type local:QueryPart}">
                     <local:FilterBox IsLast="{Binding IsLast}" IsNegated="{Binding Negate, Mode=TwoWay}" AddCommand="{Binding AddCommand, Mode=OneTime}" DeleteCommand="{Binding DeleteCommand, Mode=OneTime}">
                         <Grid>
-                            <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10" Style="{StaticResource ResourceKey=FlatComboBox}">
+                            <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10">
                                 <ComboBox.Items>
                                     <sys:Boolean>False</sys:Boolean>
                                     <sys:Boolean>True</sys:Boolean>
                                 </ComboBox.Items>
+                                <ComboBox.Style>
+                                    <Style TargetType="ComboBox" BasedOn="{StaticResource FlatComboBox}">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </ComboBox.Style>
                             </ComboBox>
                         </Grid>
                     </local:FilterBox>

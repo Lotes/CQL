@@ -129,10 +129,20 @@ namespace MainCore.CQL.WPF.Composer
             BinaryOperator.NotIn
         };
 
+        private IExpression Uncast(IExpression expression)
+        {
+            while (expression is CastExpression && ((CastExpression)expression).Kind == TypeSystem.CoercionKind.Implicit)
+                expression = ((CastExpression)expression).Expression;
+            return expression;
+        }
+
         private bool TryMakePart(IExpression expression, out QueryPart part)
         {
             //ATTENTION! Theses lines ignore the type system and assume a "normal" usage of boolean operations.
             part = null;
+
+            //uncast first
+            expression = Uncast(expression);
 
             //maybe get negation
             var not = expression as UnaryOperationExpression;
@@ -142,6 +152,9 @@ namespace MainCore.CQL.WPF.Composer
                 negate = true;
                 expression = not.Expression;
             }
+
+            //maybe still casting? So uncast
+            expression = Uncast(expression);
 
             //field comparsion?
             var comparsion = expression as BinaryOperationExpression;

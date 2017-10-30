@@ -9,6 +9,8 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows;
+using System.Windows.Controls;
 
 namespace MainCore.CQL.WPF.Composer
 {
@@ -16,8 +18,7 @@ namespace MainCore.CQL.WPF.Composer
     {
         BooleanLiteral,
         BooleanConstant,
-        FieldComparsion,
-        New
+        FieldComparsion
     }
 
     public enum QueryValueType
@@ -39,19 +40,19 @@ namespace MainCore.CQL.WPF.Composer
     {
         public static QueryPart NewEditor()
         {
-            return new QueryPart(false, QueryPartType.New, null, null, null, null);
+            return new QueryPart(false, QueryPartType.FieldComparsion, null, null, null, null);
         }
         public static QueryPart NewBooleanLiteral(bool negate, bool value)
         {
-            return new QueryPart(negate, QueryPartType.BooleanLiteral, null, null, QueryValueType.BooleanLiteral, value);
+            return new QueryPart(negate, QueryPartType.BooleanLiteral, null, null, QueryValueType.BooleanLiteral, value) { state = QueryPartState.ReadyToUse };
         }
         public static QueryPart NewComparsion(bool negate, string name, BinaryOperator op, QueryValueType valueType, object value)
         {
-            return new QueryPart(negate, QueryPartType.FieldComparsion, name, op, valueType, value);
+            return new QueryPart(negate, QueryPartType.FieldComparsion, name, op, valueType, value) { state = QueryPartState.ReadyToUse };
         }
         public static QueryPart NewConstant(bool negate, string name)
         {
-            return new QueryPart(negate, QueryPartType.BooleanConstant, name, null, null, null);
+            return new QueryPart(negate, QueryPartType.BooleanConstant, name, null, null, null) { state = QueryPartState.ReadyToUse };
         }
 
         private bool negate;
@@ -87,6 +88,34 @@ namespace MainCore.CQL.WPF.Composer
         public RelayCommand AddCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
 
+        public QueryPartState State
+        {
+            get
+            {
+                return state;
+            }
+
+            private set
+            {
+                state = value;
+                RaisePropertyChanged(() => State);
+            }
+        }
+
+        public QueryPartType Type
+        {
+            get
+            {
+                return type;
+            }
+
+            private set
+            {
+                type = value;
+                RaisePropertyChanged(() => Type);
+            }
+        }
+
         protected void RaiseChanged()
         {
             Changed?.Invoke(this, new EventArgs());
@@ -97,7 +126,6 @@ namespace MainCore.CQL.WPF.Composer
                 expression = new UnaryOperationExpression(null, UnaryOperator.Not, expression);
             return expression;
         }
-
 
         public IExpression ToExpression()
         {
