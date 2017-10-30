@@ -5,29 +5,87 @@ using MainCore.CQL.SyntaxTree;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
 namespace MainCore.CQL.WPF.Composer
 {
-    public abstract class QueryPart
+    public enum QueryPartType
     {
-        private bool negate;
-        public QueryPart(bool negate)
+        BooleanLiteral,
+        BooleanConstant,
+        FieldComparsion,
+        New
+    }
+
+    public enum QueryValueType
+    {
+        BooleanLiteral,
+        DecimalLiteral,
+        StringLiteral,
+        Variable
+    }
+
+    public enum QueryPartState
+    {
+        Editing,
+        HasErrors,
+        ReadyToUse
+    }
+
+    public class QueryPart: ViewModelBase
+    {
+        public static QueryPart NewEditor()
         {
+            return new QueryPart(false, QueryPartType.New, null, null, null, null);
+        }
+        public static QueryPart NewBooleanLiteral(bool negate, bool value)
+        {
+            return new QueryPart(negate, QueryPartType.BooleanLiteral, null, null, QueryValueType.BooleanLiteral, value);
+        }
+        public static QueryPart NewComparsion(bool negate, string name, BinaryOperator op, QueryValueType valueType, object value)
+        {
+            return new QueryPart(negate, QueryPartType.FieldComparsion, name, op, valueType, value);
+        }
+        public static QueryPart NewConstant(bool negate, string name)
+        {
+            return new QueryPart(negate, QueryPartType.BooleanConstant, name, null, null, null);
+        }
+
+        private bool negate;
+        private bool last;
+        private QueryPartState state;
+        private QueryPartType type;
+        private object value;
+
+        private QueryPart(bool negate, QueryPartType type, string name, BinaryOperator? op, QueryValueType? valueType, object value)
+        {
+            this.type = type;
+            this.Operator = op ?? BinaryOperator.Add; //egal für type != QueryType.FieldComparsion
+            this.value = value;
+            this.ValueType = valueType ?? QueryValueType.Variable; //egal
+            state = QueryPartState.Editing;
             this.negate = negate;
+            this.last = false;
+            AddCommand = new RelayCommand(() => Added?.Invoke(this, new EventArgs()));
             DeleteCommand = new RelayCommand(() => Deleted?.Invoke(this, new EventArgs()));
         }
 
-        public bool Negate
-        {
-            get { return negate; }
-            set { negate = value; RaiseChanged(); }
-        }
+        public string Name { get; private set; }
+        public BinaryOperator Operator { get; private set; }
+        public QueryValueType ValueType { get; private set; }
+        public object Value { get { return value; } set { this.value = value; RaiseChanged(); } }
 
+        public bool Negate { get { return negate; } set { negate = value; RaiseChanged(); } }
+        public bool IsLast { get { return last; } set { last = value; RaisePropertyChanged(() => IsLast); } }
+
+        public event EventHandler Added;
         public event EventHandler Deleted;
         public event EventHandler Changed;
+        public RelayCommand AddCommand { get; private set; }
+        public RelayCommand DeleteCommand { get; private set; }
 
         protected void RaiseChanged()
         {
@@ -40,87 +98,30 @@ namespace MainCore.CQL.WPF.Composer
             return expression;
         }
 
-        public abstract IExpression ToExpression();
-        public RelayCommand DeleteCommand { get; private set; }
-    }
 
-    public class FieldQueryPart : QueryPart
-    {
-        public FieldQueryPart(bool negate, Field field, BinaryOperator booleanOperator, QueryValue value)
-            : base(negate)
+        public IExpression ToExpression()
         {
-            Field = field;
-            BooleanOperator = booleanOperator;
-            Value = value;
+            if(state == QueryPartState.Editing)
+                return new BooleanLiteralExpression(null, true);
+            switch (type)
+            {
+                case QueryPartType.BooleanLiteral: return MayNegate(new BooleanLiteralExpression(null, (bool)Value));
+                case QueryPartType.BooleanConstant: return MayNegate(new MultiIdExpression(null, Name));
+                case QueryPartType.FieldComparsion: return MayNegate(new BinaryOperationExpression(null, Operator, new MultiIdExpression(null, Name), ValueToExpression()));
+            }
+            return new BooleanLiteralExpression(null, false);
         }
 
-        public Field Field { get; private set; }
-        public BinaryOperator BooleanOperator { get; private set; }
-        public QueryValue Value { get; private set; }
-
-        public override IExpression ToExpression()
+        public IExpression ValueToExpression()
         {
-            throw new NotImplementedException();
+            switch (ValueType)
+            {
+                case QueryValueType.BooleanLiteral: return new BooleanLiteralExpression(null, (bool)Value);
+                case QueryValueType.DecimalLiteral: return new DecimalLiteralExpression(null, (double)Value);
+                case QueryValueType.StringLiteral: return new StringLiteralExpression(null, (string)Value);
+                case QueryValueType.Variable: return new MultiIdExpression(null, (string)Value);
+            }
+            throw new InvalidOperationException("Unknown type!");
         }
-    }
-
-    public class BooleanConstantPart : QueryPart
-    {
-        public BooleanConstantPart(bool negate, Constant constant)
-            : base(negate)
-        {
-            Constant = constant;
-        }
-
-        public Constant Constant { get; private set; }
-
-        public override IExpression ToExpression()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class BooleanFunctionInvocationPart : QueryPart
-    {
-        public BooleanFunctionInvocationPart(bool negate, AbstractFunction function, ObservableCollection<QueryValue> parameters)
-            : base(negate)
-        {
-            Function = function;
-            Parameters = parameters;
-        }
-
-        public AbstractFunction Function { get; private set; }
-        public ObservableCollection<QueryValue> Parameters { get; private set; }
-
-        public override IExpression ToExpression()
-        {
-            throw new NotImplementedException();
-        }
-    }
-
-    public class BooleanLiteralPart : QueryPart
-    {
-        private bool value;
-        //Yeah... pretty lame... i know
-        public BooleanLiteralPart(bool negate, bool value)
-            : base(negate)
-        {
-            this.value = value;
-        }
-
-        public bool Value
-        {
-            get { return this.value; }
-            set { this.value = value; RaiseChanged(); }
-        }
-
-        public override IExpression ToExpression()
-        {
-            return MayNegate(new BooleanLiteralExpression(null, value));
-        }
-    }
-
-    public class QueryValue
-    {
     }
 }

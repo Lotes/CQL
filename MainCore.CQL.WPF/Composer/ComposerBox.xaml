@@ -51,14 +51,16 @@
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="Background" Value="White" />
                 </Style>
-                <DataTemplate DataType="{x:Type local:BooleanLiteralPart}">
-                    <local:FilterBox IsNegated="{Binding Negate, Mode=TwoWay}" DeleteCommand="{Binding DeleteCommand, Mode=OneTime}">
-                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10" Style="{StaticResource ResourceKey=FlatComboBox}">
-                            <ComboBox.Items>
-                                <sys:Boolean>False</sys:Boolean>
-                                <sys:Boolean>True</sys:Boolean>
-                            </ComboBox.Items>
-                        </ComboBox>
+                <DataTemplate DataType="{x:Type local:QueryPart}">
+                    <local:FilterBox IsLast="{Binding IsLast}" IsNegated="{Binding Negate, Mode=TwoWay}" AddCommand="{Binding AddCommand, Mode=OneTime}" DeleteCommand="{Binding DeleteCommand, Mode=OneTime}">
+                        <Grid>
+                            <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10" Style="{StaticResource ResourceKey=FlatComboBox}">
+                                <ComboBox.Items>
+                                    <sys:Boolean>False</sys:Boolean>
+                                    <sys:Boolean>True</sys:Boolean>
+                                </ComboBox.Items>
+                            </ComboBox>
+                        </Grid>
                     </local:FilterBox>
                 </DataTemplate>
             </ItemsControl.Resources>

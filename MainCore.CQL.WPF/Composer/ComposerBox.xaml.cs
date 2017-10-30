@@ -97,6 +97,7 @@ namespace MainCore.CQL.WPF.Composer
                     parts.Add(part);
                     part.Changed += OnChange;
                     part.Deleted += OnDelete;
+                    part.Added += OnAdd;
                 }
                 else
                 {
@@ -109,6 +110,8 @@ namespace MainCore.CQL.WPF.Composer
             QueryParts.Clear();
             foreach(var prt in parts)
                 QueryParts.Add(prt);
+            if(QueryParts.Any())
+                QueryParts.Last().IsLast = true;
         }
 
         private static readonly IEnumerable<BinaryOperator> ComparsionOperators = new[] 
@@ -145,10 +148,11 @@ namespace MainCore.CQL.WPF.Composer
             if(comparsion != null && ComparsionOperators.Contains(comparsion.Operator))
             {
                 var multiId = comparsion.LeftExpression as MultiIdExpression;
-                QueryValue value;
-                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out value))
+                object value = null;
+                QueryValueType valueType = QueryValueType.Variable;
+                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out valueType, out value))
                     return false;
-                part = new FieldQueryPart(negate, (Field)Context.Get(multiId.Name), comparsion.Operator, value);
+                part = QueryPart.NewComparsion(negate, multiId.Name, comparsion.Operator, valueType, value);
                 return true;
             }
 
@@ -159,25 +163,7 @@ namespace MainCore.CQL.WPF.Composer
                 var constant = (Constant)Context.Get(constantQuery.Name);
                 if (constant.FieldType != typeof(bool))
                     return false;
-                part = new BooleanConstantPart(negate, constant);
-                return true;
-            }
-
-            //function invokation?
-            var functionCall = expression as FunctionCallExpression;
-            if (functionCall != null && Context.Get(functionCall.Name) is AbstractFunction)
-            {
-                var function = (AbstractFunction)Context.Get(functionCall.Name);
-                var values = new ObservableCollection<QueryValue>();
-                if (function.Arity != functionCall.Parameters.Count() || function.ResultType != typeof(bool) || functionCall.Parameters.Any(ex =>
-                    {
-                        QueryValue value;
-                        var result = !TryMakeValue(ex, out value);
-                        values.Add(value);
-                        return result;
-                    }))
-                    return false;
-                part = new BooleanFunctionInvocationPart(negate, function, values);
+                part = QueryPart.NewConstant(negate, constantQuery.Name);
                 return true;
             }
 
@@ -185,22 +171,79 @@ namespace MainCore.CQL.WPF.Composer
             var booleanLiteral = expression as BooleanLiteralExpression;
             if (booleanLiteral != null)
             {
-                part = new BooleanLiteralPart(negate, booleanLiteral.Value);
+                part = QueryPart.NewBooleanLiteral(negate, booleanLiteral.Value);
                 return true;
             }
 
             return false;
         }
 
-        private bool TryMakeValue(IExpression rightExpression, out QueryValue value)
+        private bool TryMakeValue(IExpression expression, out QueryValueType valueType, out object value)
         {
+            valueType = QueryValueType.Variable;
             value = null;
+
+            var variableExpression = expression as MultiIdExpression;
+            if (variableExpression != null)
+            {
+                var nameable = Context.Get(variableExpression.Name);
+                if (nameable != null && (nameable is Constant || nameable is Field))
+                {
+                    valueType = QueryValueType.Variable;
+                    value = variableExpression.Name;
+                    return true;
+                }
+                return false;
+            }
+
+            var booleanLiteralExpression = expression as BooleanLiteralExpression;
+            if(booleanLiteralExpression != null)
+            {
+                valueType = QueryValueType.BooleanLiteral;
+                value = booleanLiteralExpression.Value;
+                return true;
+            }
+
+            var stringLiteralExpression = expression as StringLiteralExpression;
+            if (stringLiteralExpression != null)
+            {
+                valueType = QueryValueType.StringLiteral;
+                value = stringLiteralExpression.Value;
+                return true;
+            }
+
+            var decimalLiteralExpression = expression as DecimalLiteralExpression;
+            if (decimalLiteralExpression != null)
+            {
+                valueType = QueryValueType.DecimalLiteral;
+                value = decimalLiteralExpression.Value;
+                return true;
+            }
+
+            var signedExpression = expression as UnaryOperationExpression;
+            if (signedExpression != null)
+            {
+                var innerLiteralExpression = signedExpression.Expression as DecimalLiteralExpression;
+                if (innerLiteralExpression != null)
+                {
+                    var sign = signedExpression.Operator == UnaryOperator.Plus ? 1 : signedExpression.Operator == UnaryOperator.Minus ? -1 : 0;
+                    valueType = QueryValueType.DecimalLiteral;
+                    value = sign * innerLiteralExpression.Value;
+                    return true;
+                }
+            }
+
             return true;
         }
 
         private void OnChange(object sender, EventArgs args)
         {
             UpdateQuery();
+        }
+
+        private void OnAdd(object sender, EventArgs args)
+        {
+            
         }
 
         private void OnDelete(object sender, EventArgs args)

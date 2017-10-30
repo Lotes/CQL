@@ -49,14 +49,32 @@ namespace MainCore.CQL.WPF.Composer
 
 
 
+        public bool IsLast
+        {
+            get { return (bool)GetValue(IsLastProperty); }
+            set { SetValue(IsLastProperty, value); }
+        }
+        public static readonly DependencyProperty IsLastProperty =
+            DependencyProperty.Register("IsLast", typeof(bool), typeof(FilterBox), new PropertyMetadata(false));
+
+
+
+        public RelayCommand AddCommand
+        {
+            get { return (RelayCommand)GetValue(AddCommandProperty); }
+            set { SetValue(AddCommandProperty, value); }
+        }
+        public static readonly DependencyProperty AddCommandProperty =
+            DependencyProperty.Register("AddCommand", typeof(RelayCommand), typeof(FilterBox), new PropertyMetadata(null));
+
+
+
 
         public RelayCommand DeleteCommand
         {
             get { return (RelayCommand)GetValue(DeleteCommandProperty); }
             set { SetValue(DeleteCommandProperty, value); }
         }
-
-        // Using a DependencyProperty as the backing store for DeleteCommand.  This enables animation, styling, binding, etc...
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(RelayCommand), typeof(FilterBox), new PropertyMetadata(null));
     }
