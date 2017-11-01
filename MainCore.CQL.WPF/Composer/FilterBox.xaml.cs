@@ -89,13 +89,13 @@ namespace MainCore.CQL.WPF.Composer
 
 
 
-        public QueryPartState State
+        public FilterBoxState State
         {
-            get { return (QueryPartState)GetValue(StateProperty); }
+            get { return (FilterBoxState)GetValue(StateProperty); }
             set { SetValue(StateProperty, value); }
         }
         public static readonly DependencyProperty StateProperty =
-            DependencyProperty.Register("State", typeof(QueryPartState), typeof(FilterBox), new PropertyMetadata(QueryPartState.ReadyToUse));
+            DependencyProperty.Register("State", typeof(FilterBoxState), typeof(FilterBox), new PropertyMetadata(FilterBoxState.ReadyToUse));
 
 
 
@@ -112,7 +112,7 @@ namespace MainCore.CQL.WPF.Composer
 
         private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
-            State = QueryPartState.Editing;
+            State = FilterBoxState.Editing;
         }
 
         private void AddButton_Click(object sender, RoutedEventArgs e)

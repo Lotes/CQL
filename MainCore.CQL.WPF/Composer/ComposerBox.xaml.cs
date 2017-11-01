@@ -49,10 +49,10 @@ namespace MainCore.CQL.WPF.Composer
             get { return (ComposerStatus)GetValue(StatusProperty.DependencyProperty); }
             private set { SetValue(StatusProperty, value); }
         }
-        public ObservableCollection<QueryPart> QueryParts
+        public ObservableCollection<FilterBoxViewModel> Filters
         {
-            get { return (ObservableCollection<QueryPart>)GetValue(QueryPartsProperty); }
-            set { SetValue(QueryPartsProperty, value); }
+            get { return (ObservableCollection<FilterBoxViewModel>)GetValue(FiltersProperty); }
+            set { SetValue(FiltersProperty, value); }
         }
 
         public static readonly DependencyProperty ContextProperty =
@@ -61,8 +61,8 @@ namespace MainCore.CQL.WPF.Composer
             DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyPropertyKey StatusProperty =
             DependencyProperty.RegisterReadOnly("Status", typeof(ComposerStatus), typeof(ComposerBox), new PropertyMetadata(ComposerStatus.Uninitialized));
-        public static readonly DependencyProperty QueryPartsProperty =
-            DependencyProperty.Register("QueryParts", typeof(ObservableCollection<QueryPart>), typeof(ComposerBox), new PropertyMetadata(new ObservableCollection<QueryPart>()));
+        public static readonly DependencyProperty FiltersProperty =
+            DependencyProperty.Register("Filters", typeof(ObservableCollection<FilterBoxViewModel>), typeof(ComposerBox), new PropertyMetadata(new ObservableCollection<FilterBoxViewModel>()));
 
         private static void changedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -79,14 +79,14 @@ namespace MainCore.CQL.WPF.Composer
 
         private void TrySplitQuery()
         {
-            var parts = new List<QueryPart>();
+            var parts = new List<FilterBoxViewModel>();
             var stack = new Stack<IExpression>();
             stack.Push(Query.Expression);
             while (stack.Any())
             {
                 var top = stack.Pop();
                 var and = top as BinaryOperationExpression;
-                QueryPart part;
+                FilterBoxViewModel part;
                 if (and != null && and.Operator == BinaryOperator.And)
                 {
                     stack.Push(and.RightExpression);
@@ -105,14 +105,14 @@ namespace MainCore.CQL.WPF.Composer
             }
             Status = ComposerStatus.Ok;
 
-            QueryParts.Clear();
+            Filters.Clear();
             foreach(var prt in parts)
-                QueryParts.Add(prt);
-            if(QueryParts.Any())
-                QueryParts.Last().IsLast = true;
+                Filters.Add(prt);
+            if(Filters.Any())
+                Filters.Last().IsLast = true;
         }
 
-        private void BindPartToEvents(QueryPart part)
+        private void BindPartToEvents(FilterBoxViewModel part)
         {
             part.Changed += OnChange;
             part.Deleted += OnDelete;
@@ -141,7 +141,7 @@ namespace MainCore.CQL.WPF.Composer
             return expression;
         }
 
-        private bool TryMakePart(IExpression expression, out QueryPart part)
+        private bool TryMakePart(IExpression expression, out FilterBoxViewModel part)
         {
             //ATTENTION! Theses lines ignore the type system and assume a "normal" usage of boolean operations.
             part = null;
@@ -167,10 +167,11 @@ namespace MainCore.CQL.WPF.Composer
             {
                 var multiId = comparsion.LeftExpression as MultiIdExpression;
                 object value = null;
-                QueryValueType valueType = QueryValueType.Variable;
-                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out valueType, out value))
+                ComparsionValueViewModel comValue = null;
+                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out comValue))
                     return false;
-                part = QueryPart.NewComparsion(Context, negate, multiId.Name, comparsion.Operator, valueType, value);
+                var field = Context.Get(multiId.Name) as Field;
+                part = FilterBoxViewModel.NewComparsion(Context, negate, field, comparsion.Operator, comValue);
                 return true;
             }
 
@@ -181,7 +182,7 @@ namespace MainCore.CQL.WPF.Composer
                 var constant = (Constant)Context.Get(constantQuery.Name);
                 if (constant.FieldType != typeof(bool))
                     return false;
-                part = QueryPart.NewBooleanConstant(Context, negate, constantQuery.Name);
+                part = FilterBoxViewModel.NewBooleanConstant(Context, negate, constant);
                 return true;
             }
 
@@ -189,27 +190,33 @@ namespace MainCore.CQL.WPF.Composer
             var booleanLiteral = expression as BooleanLiteralExpression;
             if (booleanLiteral != null)
             {
-                part = QueryPart.NewBooleanLiteral(Context, negate, booleanLiteral.Value);
+                part = FilterBoxViewModel.NewBooleanLiteral(Context, negate, booleanLiteral.Value);
                 return true;
             }
 
             return false;
         }
 
-        private bool TryMakeValue(IExpression expression, out QueryValueType valueType, out object value)
+        private bool TryMakeValue(IExpression expression, out ComparsionValueViewModel value)
         {
-            valueType = QueryValueType.Variable;
             value = null;
 
             var variableExpression = expression as MultiIdExpression;
             if (variableExpression != null)
             {
                 var nameable = Context.Get(variableExpression.Name);
-                if (nameable != null && (nameable is Constant || nameable is Field))
+                if (nameable != null)
                 {
-                    valueType = QueryValueType.Variable;
-                    value = variableExpression.Name;
-                    return true;
+                    if (nameable is Field)
+                    {
+                        value = new VariableValueViewModel(nameable as Field);
+                        return true;
+                    }
+                    else if (nameable is Constant)
+                    {
+                        value = new ConstantValueViewModel(nameable as Constant);
+                        return true;
+                    }
                 }
                 return false;
             }
@@ -217,24 +224,21 @@ namespace MainCore.CQL.WPF.Composer
             var booleanLiteralExpression = expression as BooleanLiteralExpression;
             if(booleanLiteralExpression != null)
             {
-                valueType = QueryValueType.BooleanLiteral;
-                value = booleanLiteralExpression.Value;
+                value = new BooleanLiteralValueViewModel(booleanLiteralExpression.Value);
                 return true;
             }
 
             var stringLiteralExpression = expression as StringLiteralExpression;
             if (stringLiteralExpression != null)
             {
-                valueType = QueryValueType.StringLiteral;
-                value = stringLiteralExpression.Value;
+                value = new StringLiteralValueViewModel(stringLiteralExpression.Value);
                 return true;
             }
 
             var decimalLiteralExpression = expression as DecimalLiteralExpression;
             if (decimalLiteralExpression != null)
             {
-                valueType = QueryValueType.DecimalLiteral;
-                value = decimalLiteralExpression.Value;
+                value = new DecimalLiteralValueViewModel(decimalLiteralExpression.Value);
                 return true;
             }
 
@@ -245,8 +249,7 @@ namespace MainCore.CQL.WPF.Composer
                 if (innerLiteralExpression != null)
                 {
                     var sign = signedExpression.Operator == UnaryOperator.Plus ? 1 : signedExpression.Operator == UnaryOperator.Minus ? -1 : 0;
-                    valueType = QueryValueType.DecimalLiteral;
-                    value = sign * innerLiteralExpression.Value;
+                    value = new DecimalLiteralValueViewModel(sign * innerLiteralExpression.Value);
                     return true;
                 }
             }
@@ -261,29 +264,25 @@ namespace MainCore.CQL.WPF.Composer
 
         private void OnAdd(object sender, Suggestion suggestion)
         {
-            QueryParts.Last().IsLast = false;
-            var last = QueryPart.NewEditor(Context);
-
-
-
-
+            Filters.Last().IsLast = false;
+            var last = FilterBoxViewModel.NewEditor(Context, suggestion);
             BindPartToEvents(last);
             last.IsLast = true;
-            QueryParts.Add(last);
+            Filters.Add(last);
         }
 
         private void OnDelete(object sender, EventArgs args)
         {
-            var part = (QueryPart)sender;
-            if (QueryParts.Count > 1)
-                QueryParts.Remove(part);
-            QueryParts.Last().IsLast = true;
+            var part = (FilterBoxViewModel)sender;
+            if (Filters.Count > 1)
+                Filters.Remove(part);
+            Filters.Last().IsLast = true;
             UpdateQuery();
         }
 
         private void UpdateQuery()
         {
-            var expression = QueryParts.Select(p => p.ToExpression()).Aggregate((lhs, rhs) => new BinaryOperationExpression(null, BinaryOperator.And, lhs, rhs));
+            var expression = Filters.Select(p => p.ToExpression()).Aggregate((lhs, rhs) => new BinaryOperationExpression(null, BinaryOperator.And, lhs, rhs));
             isUpdating = true;
             try
             {

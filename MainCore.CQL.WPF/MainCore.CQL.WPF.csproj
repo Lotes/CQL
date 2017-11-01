@@ -80,13 +80,12 @@
     <Compile Include="Composer\FilterBox.xaml.cs">
       <DependentUpon>FilterBox.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Composer\FilterBoxViewModel.cs" />
     <Compile Include="Composer\QueryPart.cs" />
     <Compile Include="Composer\QueryPartSelectorPopup.xaml.cs">
       <DependentUpon>QueryPartSelectorPopup.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Composer\QueryPartState.cs" />
-    <Compile Include="Composer\QueryPartType.cs" />
-    <Compile Include="Composer\QueryValueType.cs" />
+    <Compile Include="Composer\FilterBoxState.cs" />
     <Compile Include="Composer\Suggestion.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>

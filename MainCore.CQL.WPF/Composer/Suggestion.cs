@@ -12,7 +12,7 @@ namespace MainCore.CQL.WPF.Composer
 {
     public class Suggestion
     {
-        private static Dictionary<QueryPartType, ImageSource> icons;
+        private static Dictionary<Type, ImageSource> icons;
         private static ImageSource Convert(Bitmap bitmap)
         {
             MemoryStream ms = new MemoryStream();
@@ -27,25 +27,23 @@ namespace MainCore.CQL.WPF.Composer
 
         static Suggestion()
         {
-            icons = new Dictionary<QueryPartType, ImageSource>();
-            icons[QueryPartType.BooleanConstant] = Convert(Properties.Resources.variable);
-            icons[QueryPartType.BooleanLiteral] = Convert(Properties.Resources.token);
-            icons[QueryPartType.FieldComparsion] = Convert(Properties.Resources.variable);
+            icons = new Dictionary<Type, ImageSource>();
+            icons[typeof(BooleanConstantViewModel)] = Convert(Properties.Resources.variable);
+            icons[typeof(BooleanLiteralViewModel)] = Convert(Properties.Resources.token);
+            icons[typeof(FieldComparsionViewModel)] = Convert(Properties.Resources.variable);
         }
 
-        public Suggestion(QueryPartType partType, string name, string usage, object value)
+        public Suggestion(string name, string usage, QueryPartViewModel part)
         {
-            PartType = partType;
-            Name = name;
-            Value = value;
-            Image = icons[partType];
+            Part = part;
+            Image = icons[part.GetType()];
             Usage = usage;
+            Name = name;
         }
 
-        public QueryPartType PartType { get; private set; }
         public ImageSource Image { get; private set; }
         public string Name { get; private set; }
         public string Usage { get; private set; }
-        public object Value { get; private set; }
+        public QueryPartViewModel Part { get; private set; }
     }
 }

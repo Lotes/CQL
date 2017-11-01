@@ -1,135 +1,161 @@
 ﻿using GalaSoft.MvvmLight;
-using GalaSoft.MvvmLight.Command;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.SyntaxTree;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 
 namespace MainCore.CQL.WPF.Composer
-{ 
-    public class QueryPart: ViewModelBase
+{
+    public abstract class QueryPartViewModel: ViewModelBase
     {
-        public static QueryPart NewEditor(IContext context)
-        {
-            return new QueryPart(context, false, QueryPartType.FieldComparsion, null, null, null, null);
-        }
-        public static QueryPart NewBooleanLiteral(IContext context, bool negate, bool value)
-        {
-            return new QueryPart(context, negate, QueryPartType.BooleanLiteral, null, null, QueryValueType.BooleanLiteral, value) { state = QueryPartState.ReadyToUse };
-        }
-        public static QueryPart NewComparsion(IContext context, bool negate, string name, BinaryOperator op, QueryValueType valueType, object value)
-        {
-            return new QueryPart(context, negate, QueryPartType.FieldComparsion, name, op, valueType, value) { state = QueryPartState.ReadyToUse };
-        }
-        public static QueryPart NewBooleanConstant(IContext context, bool negate, string name)
-        {
-            return new QueryPart(context, negate, QueryPartType.BooleanConstant, name, null, null, null) { state = QueryPartState.ReadyToUse };
-        }
+        public abstract IExpression ToExpression();
+        public abstract FilterBoxState Validate(IContext context);
+    }
 
-        private bool negate;
-        private bool last;
-        private QueryPartState state;
-        private QueryPartType type;
-
-        private QueryPart(IContext context, bool negate, QueryPartType type, string name, BinaryOperator? op, QueryValueType? valueType, object value)
+    public class FieldComparsionViewModel : QueryPartViewModel
+    {
+        private Field field;
+        private IContext context;
+        private BinaryOperator op;
+        private ComparsionValueViewModel value;
+        public FieldComparsionViewModel(IContext context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
-            this.Context = context;
-            this.type = type;
-            state = QueryPartState.Editing;
-            this.negate = negate;
-            this.last = false;
-            AddCommand = new RelayCommand<Suggestion>(suggestion => Added?.Invoke(this, suggestion));
-            DeleteCommand = new RelayCommand(() => Deleted?.Invoke(this, new EventArgs()));
-            DoneCommand = new RelayCommand(() => State = Validate());
+            this.context = context;
+            this.field = field;
         }
 
-        private QueryPartState Validate()
+        public Field Field { get { return field; } }
+        public BinaryOperator Operator { get { return op; } set { op = value; RaisePropertyChanged(() => Operator); } }
+        public ComparsionValueViewModel Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+
+        public override IExpression ToExpression()
         {
-            return QueryPartState.HasErrors;
+            return new BinaryOperationExpression(null, op,
+                new MultiIdExpression(null, field.Name),
+                value.ToExpression());
         }
 
-        public IContext Context { get; private set; }
-
-        public bool Negate { get { return negate; } set { negate = value; RaiseChanged(); } }
-        public bool IsLast { get { return last; } set { last = value; RaisePropertyChanged(() => IsLast); } }
-
-        public event EventHandler<Suggestion> Added;
-        public event EventHandler Deleted;
-        public event EventHandler Changed;
-        public RelayCommand<Suggestion> AddCommand { get; private set; }
-        public RelayCommand DeleteCommand { get; private set; }
-        public RelayCommand DoneCommand { get; private set; }
-
-        public QueryPartState State
+        public override FilterBoxState Validate(IContext context)
         {
-            get
+            return FilterBoxState.ReadyToUse; //TODO
+        }
+    }
+    public class BooleanConstantViewModel : QueryPartViewModel
+    {
+        private Constant constant;
+
+        public BooleanConstantViewModel(Constant constant)
+        {
+            if (constant.FieldType != typeof(bool))
+                throw new ArgumentException("Constant must be a bool type!");
+            this.constant = constant;
+        }
+
+        public Constant Constant
+        {
+            get { return constant; }
+            private set { constant = value; RaisePropertyChanged(() => Constant); }
+        }
+
+        public override IExpression ToExpression()
+        {
+            return new MultiIdExpression(null, constant.Name);
+        }
+
+        public override FilterBoxState Validate(IContext context)
+        {
+            return context.Get(constant.Name) == constant && constant.FieldType == typeof(bool)
+                ? FilterBoxState.ReadyToUse
+                : FilterBoxState.HasErrors;
+        }
+    }
+    public class BooleanLiteralViewModel : QueryPartViewModel
+    {
+        private bool value;
+
+        public BooleanLiteralViewModel(bool value)
+        {
+            this.value = value;
+        }
+
+        public bool Value
+        {
+            get { return value; }
+            set
             {
-                return state;
-            }
-
-            private set
-            {
-                state = value;
-                RaisePropertyChanged(() => State);
+                this.value = value;
+                RaisePropertyChanged(() => Value);
             }
         }
 
-        public QueryPartType Type
+        public override IExpression ToExpression()
         {
-            get
-            {
-                return type;
-            }
-
-            private set
-            {
-                type = value;
-                RaisePropertyChanged(() => Type);
-            }
+            return new BooleanLiteralExpression(null, value);
         }
 
-        protected void RaiseChanged()
+        public override FilterBoxState Validate(IContext context)
         {
-            Changed?.Invoke(this, new EventArgs());
+            return FilterBoxState.ReadyToUse;
         }
-        protected IExpression MayNegate(IExpression expression)
-        {
-            if (negate)
-                expression = new UnaryOperationExpression(null, UnaryOperator.Not, expression);
-            return expression;
-        }
+    }
 
-        public IExpression ToExpression()
-        {
-            //if(state == QueryPartState.Editing)
-                return new BooleanLiteralExpression(null, true);
-            /*switch (type)
-            {
-                case QueryPartType.BooleanLiteral: return MayNegate(new BooleanLiteralExpression(null, (bool)Value));
-                case QueryPartType.BooleanConstant: return MayNegate(new MultiIdExpression(null, Name));
-                case QueryPartType.FieldComparsion: return MayNegate(new BinaryOperationExpression(null, Operator, new MultiIdExpression(null, Name), ValueToExpression()));
-            }
-            return new BooleanLiteralExpression(null, false);*/
-        }
+    public abstract class ComparsionValueViewModel: ViewModelBase
+    {
+        public abstract IExpression ToExpression();
+    }
 
-        public IExpression ValueToExpression()
+    public class BooleanLiteralValueViewModel : ComparsionValueViewModel
+    {
+        private bool value;
+        public BooleanLiteralValueViewModel(bool value)
         {
-            return new BooleanLiteralExpression(null, true);
-            /*switch (ValueType)
-            {
-                case QueryValueType.BooleanLiteral: return new BooleanLiteralExpression(null, (bool)Value);
-                case QueryValueType.DecimalLiteral: return new DecimalLiteralExpression(null, (double)Value);
-                case QueryValueType.StringLiteral: return new StringLiteralExpression(null, (string)Value);
-                case QueryValueType.Variable: return new MultiIdExpression(null, (string)Value);
-            }
-            throw new InvalidOperationException("Unknown type!");*/
+            this.value = value;
+        }
+        public bool Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+        public override IExpression ToExpression()
+        {
+            return new BooleanLiteralExpression(null, value);
+        }
+    }
+
+    public class DecimalLiteralValueViewModel : ComparsionValueViewModel
+    {
+        private double value;
+        public DecimalLiteralValueViewModel(double value) { this.value = value; }
+        public double Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+        public override IExpression ToExpression()
+        {
+            return new DecimalLiteralExpression(null, value);
+        }
+    }
+    public class StringLiteralValueViewModel : ComparsionValueViewModel
+    {
+        private string value;
+        public StringLiteralValueViewModel(string value) { this.value = value; }
+        public string Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+        public override IExpression ToExpression()
+        {
+            return new StringLiteralExpression(null, value);
+        }
+    }
+
+    public class VariableValueViewModel : ComparsionValueViewModel
+    {
+        public VariableValueViewModel(Field field) { }
+        public override IExpression ToExpression()
+        {
+            return null;
+        }
+    }
+    public class ConstantValueViewModel : ComparsionValueViewModel
+    {
+        public ConstantValueViewModel(Constant constant) { }
+        public override IExpression ToExpression()
+        {
+            return null;
         }
     }
 }

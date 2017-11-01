@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 
 namespace MainCore.CQL.WPF.Composer
 {
-    public enum QueryPartType
+    public enum FilterBoxState
     {
-        BooleanLiteral,
-        BooleanConstant,
-        FieldComparsion
+        Editing,
+        HasErrors,
+        ReadyToUse
     }
 }

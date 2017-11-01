@@ -38,7 +38,7 @@
                 </Style>
             </TextBlock.Style>
         </TextBlock>
-        <ItemsControl ItemsSource="{Binding QueryParts}">
+        <ItemsControl ItemsSource="{Binding Filters}">
             <ItemsControl.Resources>
                 <Style x:Key="FlatComboBox" TargetType="{x:Type ComboBox}">
                     <Setter Property="HorizontalAlignment" Value="Stretch"/>
@@ -53,10 +53,10 @@
                     <Setter Property="BorderThickness" Value="1" />
                     <Setter Property="Background" Value="White" />
                 </Style>
-                <DataTemplate DataType="{x:Type local:QueryPart}">
+                <DataTemplate DataType="{x:Type local:FilterBoxViewModel}">
                     <local:FilterBox 
                         Context="{Binding Context}"
-                        State="{Binding State, Mode=TwoWay}"
+                        State="{Binding FilterState, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
                         IsLast="{Binding IsLast}" 
                         IsNegated="{Binding Negate, Mode=TwoWay}" 
                         AddCommand="{Binding AddCommand, Mode=OneTime}" 
@@ -64,62 +64,51 @@
                         DoneCommand="{Binding DoneCommand, Mode=OneTime}"
                         >
                         <Grid>
-                            <Grid> <!-- EDITING VIEW -->
-                                <Grid.Style>
-                                    <Style TargetType="Grid">
+                            <ContentPresenter Content="{Binding QueryPart}">
+                                <!-- EDITING VIEW -->
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type local:BooleanLiteralViewModel}">
+                                        <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10">
+                                            <ComboBox.Items>
+                                                <sys:Boolean>False</sys:Boolean>
+                                                <sys:Boolean>True</sys:Boolean>
+                                            </ComboBox.Items>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                                <ContentPresenter.Style>
+                                    <Style TargetType="ContentPresenter">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding State}" Value="Editing">
+                                            <DataTrigger Binding="{Binding State, RelativeSource={RelativeSource AncestorType={x:Type local:FilterBox}}}" Value="Editing">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </Grid.Style>
-                                <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10">
-                                    <ComboBox.Items>
-                                        <sys:Boolean>False</sys:Boolean>
-                                        <sys:Boolean>True</sys:Boolean>
-                                    </ComboBox.Items>
-                                    <ComboBox.Style>
-                                        <Style TargetType="ComboBox" BasedOn="{StaticResource FlatComboBox}">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </ComboBox.Style>
-                                </ComboBox>
-                            </Grid>
+                                </ContentPresenter.Style>
+                            </ContentPresenter>
 
-                            <Grid> <!-- SHOW VIEW -->
-                                <Grid.Style>
-                                    <Style TargetType="Grid">
-                                        <Setter Property="Visibility" Value="Collapsed"/>
+                            <ContentPresenter Content="{Binding QueryPart}">
+                                <!-- SHOW VIEW -->
+                                <ContentPresenter.Resources>
+                                    <DataTemplate DataType="{x:Type local:BooleanLiteralViewModel}">
+                                        <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                    </DataTemplate>
+                                </ContentPresenter.Resources>
+                                <ContentPresenter.Style>
+                                    <Style TargetType="ContentPresenter">
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding State}" Value="HasErrors">
+                                            <DataTrigger Binding="{Binding State, RelativeSource={RelativeSource AncestorType={x:Type local:FilterBox}}}" Value="HasErrors">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
-                                            <DataTrigger Binding="{Binding State}" Value="ReadyToUse">
+                                            <DataTrigger Binding="{Binding State, RelativeSource={RelativeSource AncestorType={x:Type local:FilterBox}}}" Value="ReadyToUse">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
+                                        <Setter Property="Visibility" Value="Collapsed"/>
                                     </Style>
-                                </Grid.Style>
-                                <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2">
-                                    <TextBlock.Style>
-                                        <Style TargetType="TextBlock">
-                                            <Setter Property="Visibility" Value="Collapsed"/>
-                                            <Style.Triggers>
-                                                <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
-                                                    <Setter Property="Visibility" Value="Visible"/>
-                                                </DataTrigger>
-                                            </Style.Triggers>
-                                        </Style>
-                                    </TextBlock.Style>
-                                </TextBlock>
-                            </Grid>
+                                </ContentPresenter.Style>
+                            </ContentPresenter>
                         </Grid>
                     </local:FilterBox>
                 </DataTemplate>

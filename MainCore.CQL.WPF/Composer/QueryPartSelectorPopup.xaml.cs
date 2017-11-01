@@ -94,8 +94,8 @@ namespace MainCore.CQL.WPF.Composer
                 .Concat(Context.Constants.Where(c => c.FieldType == typeof(bool)).Select(ConstantToSuggestion))
                 .Concat(new[]
                 {
-                    new Suggestion(QueryPartType.BooleanLiteral, "True", "Tautology, everything will be accepted.", true),
-                    new Suggestion(QueryPartType.BooleanLiteral, "False", "Contradiction, everything will be rejected.", false)
+                    new Suggestion("True", "Tautology, everything will be accepted.", new BooleanLiteralViewModel(true)),
+                    new Suggestion("False", "Contradiction, everything will be rejected.", new BooleanLiteralViewModel(false))
                 })
                 .OrderBy(s => s.Name))
                 Suggestions.Add(suggestion);
@@ -104,12 +104,12 @@ namespace MainCore.CQL.WPF.Composer
 
         private Suggestion ConstantToSuggestion(Constant constant)
         {
-            return new Suggestion(QueryPartType.BooleanConstant, constant.Name, constant.Usage, constant);
+            return new Suggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(constant));
         }
 
         private Suggestion FieldToSuggestion(Field field)
         {
-            return new Suggestion(QueryPartType.BooleanConstant, field.Name, field.Usage, field);
+            return new Suggestion(field.Name, field.Usage, new FieldComparsionViewModel(Context, field));
         }
 
         private void ApplyFilter()
