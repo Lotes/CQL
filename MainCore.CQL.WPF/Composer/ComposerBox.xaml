@@ -5,6 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF.Composer"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              mc:Ignorable="d" 
              BorderThickness="1"
              BorderBrush="Black" 
@@ -52,24 +54,72 @@
                     <Setter Property="Background" Value="White" />
                 </Style>
                 <DataTemplate DataType="{x:Type local:QueryPart}">
-                    <local:FilterBox IsLast="{Binding IsLast}" IsNegated="{Binding Negate, Mode=TwoWay}" AddCommand="{Binding AddCommand, Mode=OneTime}" DeleteCommand="{Binding DeleteCommand, Mode=OneTime}">
+                    <local:FilterBox 
+                        Context="{Binding Context}"
+                        State="{Binding State, Mode=TwoWay}"
+                        IsLast="{Binding IsLast}" 
+                        IsNegated="{Binding Negate, Mode=TwoWay}" 
+                        AddCommand="{Binding AddCommand, Mode=OneTime}" 
+                        DeleteCommand="{Binding DeleteCommand, Mode=OneTime}"
+                        DoneCommand="{Binding DoneCommand, Mode=OneTime}"
+                        >
                         <Grid>
-                            <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10">
-                                <ComboBox.Items>
-                                    <sys:Boolean>False</sys:Boolean>
-                                    <sys:Boolean>True</sys:Boolean>
-                                </ComboBox.Items>
-                                <ComboBox.Style>
-                                    <Style TargetType="ComboBox" BasedOn="{StaticResource FlatComboBox}">
+                            <Grid> <!-- EDITING VIEW -->
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
                                         <Setter Property="Visibility" Value="Collapsed"/>
                                         <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
+                                            <DataTrigger Binding="{Binding State}" Value="Editing">
                                                 <Setter Property="Visibility" Value="Visible"/>
                                             </DataTrigger>
                                         </Style.Triggers>
                                     </Style>
-                                </ComboBox.Style>
-                            </ComboBox>
+                                </Grid.Style>
+                                <ComboBox SelectedValue="{Binding Value, Mode=TwoWay}" FontSize="10">
+                                    <ComboBox.Items>
+                                        <sys:Boolean>False</sys:Boolean>
+                                        <sys:Boolean>True</sys:Boolean>
+                                    </ComboBox.Items>
+                                    <ComboBox.Style>
+                                        <Style TargetType="ComboBox" BasedOn="{StaticResource FlatComboBox}">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </ComboBox.Style>
+                                </ComboBox>
+                            </Grid>
+
+                            <Grid> <!-- SHOW VIEW -->
+                                <Grid.Style>
+                                    <Style TargetType="Grid">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding State}" Value="HasErrors">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                            <DataTrigger Binding="{Binding State}" Value="ReadyToUse">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Grid.Style>
+                                <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2">
+                                    <TextBlock.Style>
+                                        <Style TargetType="TextBlock">
+                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Type}" Value="BooleanLiteral">
+                                                    <Setter Property="Visibility" Value="Visible"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </TextBlock.Style>
+                                </TextBlock>
+                            </Grid>
                         </Grid>
                     </local:FilterBox>
                 </DataTemplate>

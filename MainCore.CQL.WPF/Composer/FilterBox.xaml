@@ -4,12 +4,30 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF.Composer"
+             xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
+             xmlns:command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
              mc:Ignorable="d" 
 			 Name="me"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <VisualBrush x:Key="hatchedWhite" TileMode="Tile" Viewport="0,0,15,15" ViewportUnits="Absolute" Viewbox="0,0,15,15" ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Grid Background="#eeeeee">
+                    <Path Data="M 0 15 L 15 0" Stroke="#FFFFFF" StrokeThickness="6"/>
+                </Grid>
+            </VisualBrush.Visual>
+        </VisualBrush>
+        <VisualBrush x:Key="hatchedRed" TileMode="Tile" Viewport="0,0,15,15" ViewportUnits="Absolute" Viewbox="0,0,15,15" ViewboxUnits="Absolute">
+            <VisualBrush.Visual>
+                <Grid Background="#FFdddd">
+                    <Path Data="M 0 15 L 15 0" Stroke="#FFFFFF" StrokeThickness="6"/>
+                </Grid>
+            </VisualBrush.Visual>
+        </VisualBrush>
+    </UserControl.Resources>
     <DockPanel>
         <Button DockPanel.Dock="Right" Content="+" Foreground="Green" FontSize="12" FontWeight="Bold" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" 
-                Command="{Binding AddCommand, ElementName=me}">
+                Click="AddButton_Click">
             <Button.Style>
                 <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
                     <Setter Property="Visibility" Value="Collapsed"/>
@@ -21,7 +39,22 @@
                 </Style>
             </Button.Style>
         </Button>
-        <Border BorderThickness="1" BorderBrush="#808080" Padding="2">
+        <Border BorderThickness="1" Padding="2" MouseLeftButtonDown="Border_MouseLeftButtonDown">
+            <Border.Style>
+                <Style TargetType="Border">
+                    <Setter Property="BorderBrush" Value="#808080"/>
+                    <Setter Property="Background" Value="White"/>
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding State, ElementName=me}" Value="Editing">
+                            <Setter Property="Background" Value="{StaticResource hatchedWhite}"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding State, ElementName=me}" Value="HasErrors">
+                            <Setter Property="Background" Value="{StaticResource hatchedRed}"/>
+                            <Setter Property="BorderBrush" Value="Red"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
             <DockPanel VerticalAlignment="Center">
                 <CheckBox DockPanel.Dock="Left" IsChecked="{Binding ElementName=me, Path=IsNegated, Mode=TwoWay}" FontSize="10">
                     <CheckBox.Style>
@@ -49,9 +82,23 @@
                         </Style>
                     </CheckBox.Style>
                 </CheckBox>
-                <Button DockPanel.Dock="Right" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Command="{Binding DeleteCommand, ElementName=me}">
-                    <TextBlock Padding="0">x</TextBlock>
-                </Button>
+                <StackPanel DockPanel.Dock="Right" Orientation="Horizontal">
+                    <Button Padding="0" FontSize="8" Content="OK" Command="{Binding DoneCommand, ElementName=me}">
+                        <Button.Style>
+                            <Style TargetType="Button" BasedOn="{StaticResource {x:Static ToolBar.ButtonStyleKey}}">
+                                <Setter Property="Visibility" Value="Collapsed"/>
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding State, ElementName=me}" Value="Editing">
+                                        <Setter Property="Visibility" Value="Visible"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </Button.Style>
+                    </Button>
+                    <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Command="{Binding DeleteCommand, ElementName=me}">
+                        <TextBlock Padding="0">x</TextBlock>
+                    </Button>
+                </StackPanel>
                 <ContentPresenter Content="{Binding ActualContent, ElementName=me}"/>
             </DockPanel>
         </Border>

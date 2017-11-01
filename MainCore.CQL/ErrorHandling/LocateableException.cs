@@ -13,7 +13,7 @@ namespace MainCore.CQL.ErrorHandling
         public readonly int Length;
 
         public LocateableException(ParserRuleContext parserContext, string message, Exception innerException = null)
-            : this(parserContext.Start.StartIndex, parserContext.Stop.StopIndex, message, innerException)
+            : this(parserContext != null ? parserContext.Start.StartIndex : 0, parserContext != null ? parserContext.Stop.StopIndex : 0, message, innerException)
         {
 
         }

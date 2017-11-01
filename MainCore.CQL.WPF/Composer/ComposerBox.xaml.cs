@@ -95,9 +95,7 @@ namespace MainCore.CQL.WPF.Composer
                 else if (TryMakePart(top, out part))
                 {
                     parts.Add(part);
-                    part.Changed += OnChange;
-                    part.Deleted += OnDelete;
-                    part.Added += OnAdd;
+                    BindPartToEvents(part);
                 }
                 else
                 {
@@ -112,6 +110,13 @@ namespace MainCore.CQL.WPF.Composer
                 QueryParts.Add(prt);
             if(QueryParts.Any())
                 QueryParts.Last().IsLast = true;
+        }
+
+        private void BindPartToEvents(QueryPart part)
+        {
+            part.Changed += OnChange;
+            part.Deleted += OnDelete;
+            part.Added += OnAdd;
         }
 
         private static readonly IEnumerable<BinaryOperator> ComparsionOperators = new[] 
@@ -165,7 +170,7 @@ namespace MainCore.CQL.WPF.Composer
                 QueryValueType valueType = QueryValueType.Variable;
                 if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out valueType, out value))
                     return false;
-                part = QueryPart.NewComparsion(negate, multiId.Name, comparsion.Operator, valueType, value);
+                part = QueryPart.NewComparsion(Context, negate, multiId.Name, comparsion.Operator, valueType, value);
                 return true;
             }
 
@@ -176,7 +181,7 @@ namespace MainCore.CQL.WPF.Composer
                 var constant = (Constant)Context.Get(constantQuery.Name);
                 if (constant.FieldType != typeof(bool))
                     return false;
-                part = QueryPart.NewConstant(negate, constantQuery.Name);
+                part = QueryPart.NewBooleanConstant(Context, negate, constantQuery.Name);
                 return true;
             }
 
@@ -184,7 +189,7 @@ namespace MainCore.CQL.WPF.Composer
             var booleanLiteral = expression as BooleanLiteralExpression;
             if (booleanLiteral != null)
             {
-                part = QueryPart.NewBooleanLiteral(negate, booleanLiteral.Value);
+                part = QueryPart.NewBooleanLiteral(Context, negate, booleanLiteral.Value);
                 return true;
             }
 
@@ -254,9 +259,17 @@ namespace MainCore.CQL.WPF.Composer
             UpdateQuery();
         }
 
-        private void OnAdd(object sender, EventArgs args)
+        private void OnAdd(object sender, Suggestion suggestion)
         {
-            
+            QueryParts.Last().IsLast = false;
+            var last = QueryPart.NewEditor(Context);
+
+
+
+
+            BindPartToEvents(last);
+            last.IsLast = true;
+            QueryParts.Add(last);
         }
 
         private void OnDelete(object sender, EventArgs args)
@@ -264,6 +277,7 @@ namespace MainCore.CQL.WPF.Composer
             var part = (QueryPart)sender;
             if (QueryParts.Count > 1)
                 QueryParts.Remove(part);
+            QueryParts.Last().IsLast = true;
             UpdateQuery();
         }
 

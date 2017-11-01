@@ -1,4 +1,5 @@
 ﻿using GalaSoft.MvvmLight.Command;
+using MainCore.CQL.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -28,8 +29,6 @@ namespace MainCore.CQL.WPF.Composer
             InitializeComponent();
         }
 
-
-
         public object ActualContent
         {
             get { return (object)GetValue(ActualContentProperty); }
@@ -49,6 +48,16 @@ namespace MainCore.CQL.WPF.Composer
 
 
 
+        public IContext Context
+        {
+            get { return (Contexts.IContext)GetValue(ContextProperty); }
+            set { SetValue(ContextProperty, value); }
+        }
+        public static readonly DependencyProperty ContextProperty =
+            DependencyProperty.Register("Context", typeof(IContext), typeof(FilterBox), new PropertyMetadata(null));
+
+
+
         public bool IsLast
         {
             get { return (bool)GetValue(IsLastProperty); }
@@ -59,13 +68,13 @@ namespace MainCore.CQL.WPF.Composer
 
 
 
-        public RelayCommand AddCommand
+        public RelayCommand<Suggestion> AddCommand
         {
-            get { return (RelayCommand)GetValue(AddCommandProperty); }
+            get { return (RelayCommand<Suggestion>)GetValue(AddCommandProperty); }
             set { SetValue(AddCommandProperty, value); }
         }
         public static readonly DependencyProperty AddCommandProperty =
-            DependencyProperty.Register("AddCommand", typeof(RelayCommand), typeof(FilterBox), new PropertyMetadata(null));
+            DependencyProperty.Register("AddCommand", typeof(RelayCommand<Suggestion>), typeof(FilterBox), new PropertyMetadata(null));
 
 
 
@@ -77,5 +86,51 @@ namespace MainCore.CQL.WPF.Composer
         }
         public static readonly DependencyProperty DeleteCommandProperty =
             DependencyProperty.Register("DeleteCommand", typeof(RelayCommand), typeof(FilterBox), new PropertyMetadata(null));
+
+
+
+        public QueryPartState State
+        {
+            get { return (QueryPartState)GetValue(StateProperty); }
+            set { SetValue(StateProperty, value); }
+        }
+        public static readonly DependencyProperty StateProperty =
+            DependencyProperty.Register("State", typeof(QueryPartState), typeof(FilterBox), new PropertyMetadata(QueryPartState.ReadyToUse));
+
+
+
+        public RelayCommand DoneCommand
+        {
+            get { return (RelayCommand)GetValue(DoneCommandProperty); }
+            set { SetValue(DoneCommandProperty, value); }
+        }
+        public static readonly DependencyProperty DoneCommandProperty =
+            DependencyProperty.Register("DoneCommand", typeof(RelayCommand), typeof(FilterBox), new PropertyMetadata(null));
+
+
+
+
+        private void Border_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
+        {
+            State = QueryPartState.Editing;
+        }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (Context == null)
+                return;
+            var popup = new QueryPartSelectorPopup();
+            popup.StaysOpen = false;
+            popup.Context = Context;
+            popup.PlacementTarget = sender as UIElement;
+            popup.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+            popup.IsOpen = true;
+            popup.SuggestionSelected += Popup_SuggestionSelected;
+        }
+
+        private void Popup_SuggestionSelected(object sender, Suggestion suggestion)
+        {
+            AddCommand?.Execute(suggestion);
+        }
     }
 }

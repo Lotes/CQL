@@ -81,6 +81,13 @@
       <DependentUpon>FilterBox.xaml</DependentUpon>
     </Compile>
     <Compile Include="Composer\QueryPart.cs" />
+    <Compile Include="Composer\QueryPartSelectorPopup.xaml.cs">
+      <DependentUpon>QueryPartSelectorPopup.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Composer\QueryPartState.cs" />
+    <Compile Include="Composer\QueryPartType.cs" />
+    <Compile Include="Composer\QueryValueType.cs" />
+    <Compile Include="Composer\Suggestion.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -103,6 +110,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Composer\FilterBox.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Composer\QueryPartSelectorPopup.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
