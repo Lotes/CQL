@@ -35,14 +35,6 @@ namespace MainCore.CQL.WPF
         public static readonly DependencyProperty IsSimpleProperty =
             DependencyProperty.Register("IsSimple", typeof(bool), typeof(Editor), new PropertyMetadata(true));
 
-        public bool IsSimplifyable
-        {
-            get { return (bool)GetValue(IsSimplifyablePropertyKey.DependencyProperty); }
-            private set { SetValue(IsSimplifyablePropertyKey, value); }
-        }
-        public static readonly DependencyPropertyKey IsSimplifyablePropertyKey =
-            DependencyProperty.RegisterReadOnly("IsSimplifyable", typeof(bool), typeof(Editor), new PropertyMetadata(true));
-
         public IContext Context
         {
             get { return (IContext)GetValue(ContextProperty); }

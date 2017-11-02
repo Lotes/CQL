@@ -9,14 +9,20 @@
              mc:Ignorable="d" 
              Name="me"
              d:DesignHeight="300" d:DesignWidth="300">
+    <UserControl.Resources>
+        <composer:ComposerStatusToBooleanConverter x:Key="composerStatusConverter"/>
+    </UserControl.Resources>
     <DockPanel>
-        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSimple, ElementName=me}" IsEnabled="{Binding IsSimplifyable, ElementName=me}" Padding="4">
+        <CheckBox DockPanel.Dock="Left" 
+                  IsChecked="{Binding IsSimple, ElementName=me}" 
+                  IsEnabled="{Binding Status, ElementName=composer, Mode=OneWay, Converter={StaticResource composerStatusConverter}}" 
+                  Padding="4">
             <CheckBox.Style>
                 <Style TargetType="{x:Type CheckBox}">
                     <Setter Property="Template">
                         <Setter.Value>
                             <ControlTemplate TargetType="{x:Type CheckBox}">
-                                <TextBlock VerticalAlignment="Center" x:Name="text" Margin="0,0,4,0" Foreground="Gray"/>
+                                <TextBlock VerticalAlignment="Center" x:Name="text" Margin="0,0,4,0" Foreground="#4040ee"/>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
                                         <Setter TargetName="text" Property="Text" Value="&#x21AA; Freehand"/>
@@ -27,6 +33,9 @@
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="text" Property="Foreground" Value="#ff8080"/>
                                     </Trigger>
+                                    <Trigger Property="IsEnabled" Value="False">
+                                        <Setter TargetName="text" Property="Foreground" Value="Silver"/>
+                                    </Trigger>
                                 </ControlTemplate.Triggers>
                             </ControlTemplate>
                         </Setter.Value>
@@ -35,7 +44,7 @@
             </CheckBox.Style>
         </CheckBox>
         <Grid>
-            <composer:ComposerBox Context="{Binding Context, ElementName=me}" Query="{Binding Query, ElementName=me, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+            <composer:ComposerBox x:Name="composer" Context="{Binding Context, ElementName=me}" Query="{Binding Query, ElementName=me, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
                 <composer:ComposerBox.Style>
                     <Style TargetType="composer:ComposerBox">
                         <Setter Property="Visibility" Value="Collapsed"/>

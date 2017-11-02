@@ -20,13 +20,6 @@ namespace MainCore.CQL.WPF.Composer
 {
     public partial class ComposerBox : UserControl
     {
-        public enum ComposerStatus
-        {
-            Uninitialized,
-            CanNotDisplay,
-            Ok
-        }
-
         private bool isUpdating = false;
 
         public ComposerBox()
