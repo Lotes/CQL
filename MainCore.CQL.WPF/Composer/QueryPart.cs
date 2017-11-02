@@ -8,6 +8,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Data;
+using System.Globalization;
+using GalaSoft.MvvmLight.CommandWpf;
+using System.Windows.Input;
 
 namespace MainCore.CQL.WPF.Composer
 {
@@ -15,6 +19,8 @@ namespace MainCore.CQL.WPF.Composer
     {
         public abstract IExpression ToExpression();
         public abstract FilterBoxState Validate(IContext context);
+        public event EventHandler ReadyModeRequested;
+        protected void RequestReadyMode() { ReadyModeRequested?.Invoke(this, new EventArgs()); }
     }
 
     public enum FieldComparsionState
@@ -35,6 +41,11 @@ namespace MainCore.CQL.WPF.Composer
         private Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>> binaryOperations = new Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>>();
         public FieldComparsionViewModel(IContext context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
+            this.KeyDownCommand = new RelayCommand<KeyEventArgs>(args => 
+            {
+                if (args.Key == Key.Return || args.Key == Key.Enter)
+                    RequestReadyMode();
+            });
             this.context = context;
             this.field = field;
             this.op = op;
@@ -50,11 +61,12 @@ namespace MainCore.CQL.WPF.Composer
             UpdateField();
         }
 
+        public RelayCommand<KeyEventArgs> KeyDownCommand { get;  private set; }
+
         private void ComputePossibleStates()
         {
             PossibleFields = new ObservableCollection<Field>();
             PossibleOperators = new ObservableCollection<BinaryOperator>();
-            PossibleValues = new ObservableCollection<ComparsionValueViewModel>();
             
             var typeSystem = context.TypeSystem;
             var operations = typeSystem.GetBinaryOperations().Where(o => o.ResultType == typeof(bool));
@@ -81,16 +93,17 @@ namespace MainCore.CQL.WPF.Composer
 
         public ObservableCollection<Field> PossibleFields { get; private set; }
         public ObservableCollection<BinaryOperator> PossibleOperators { get; private set; }
-        public ObservableCollection<ComparsionValueViewModel> PossibleValues { get; private set; }
 
         private void UpdateField()
         {
             PossibleFields.Clear();
             PossibleOperators.Clear();
-            PossibleValues.Clear();
 
             foreach (var field in context.Fields)
                 PossibleFields.Add(field);
+
+            if (Field != null)
+                State = FieldComparsionState.Phase2_OperatorMissing;
 
             UpdateOperator();
         }
@@ -98,26 +111,50 @@ namespace MainCore.CQL.WPF.Composer
         private void UpdateOperator()
         {
             PossibleOperators.Clear();
-            PossibleValues.Clear();
 
             var lhsType = Field.FieldType;
             Dictionary<Type, HashSet<BinaryOperation>> ops;
             if (binaryOperations.TryGetValue(lhsType, out ops))
                 foreach (var op in ops.Values.SelectMany(bos => bos).Select(bo => bo.Operator).Distinct())
                     PossibleOperators.Add(op);
-            if (PossibleOperators.Contains(BinaryOperator.Equals))
-                Operator = BinaryOperator.Equals;
-            else if(PossibleOperators.Any())
-                Operator = PossibleOperators.First();
+            if(Operator == null || !Operator.HasValue)
+            {
+                if (PossibleOperators.Contains(BinaryOperator.Equals))
+                    Operator = BinaryOperator.Equals;
+                else if (PossibleOperators.Any())
+                    Operator = PossibleOperators.First();
+            }
+
+            if (State == FieldComparsionState.Phase2_OperatorMissing && Operator != null && Operator.HasValue)
+                State = FieldComparsionState.Phase3_ValueMissing;
 
             UpdateValue();
         }
 
         private void UpdateValue()
         {
-            PossibleValues.Clear();
+            if(Field != null && Operator != null)
+            {
+                Dictionary<Type, HashSet<BinaryOperation>> byRhs;
+                if(binaryOperations.TryGetValue(Field.FieldType, out byRhs))
+                {
+                    foreach (var rhs in byRhs.Keys.ToArray())
+                        if (!byRhs[rhs].Any(operation => operation.Operator == Operator))
+                            byRhs.Remove(rhs);
+                    var possibleValues = new List<ComparsionValueViewModel>();
+                    if (byRhs.Keys.Contains(typeof(bool)))
+                        possibleValues.Add(new BooleanLiteralValueViewModel(true));
+                    if (byRhs.Keys.Contains(typeof(double)))
+                        possibleValues.Add(new DecimalLiteralValueViewModel(0));
+                    if (byRhs.Keys.Contains(typeof(string)))
+                        possibleValues.Add(new StringLiteralValueViewModel(""));
+                    if (Value == null && possibleValues.Any())
+                        Value = possibleValues.First();
+                }
+            }
 
-
+            if (State == FieldComparsionState.Phase3_ValueMissing && Value != null)
+                State = FieldComparsionState.ReadyToUse;
         }
 
         public override IExpression ToExpression()
@@ -150,7 +187,7 @@ namespace MainCore.CQL.WPF.Composer
         public Constant Constant
         {
             get { return constant; }
-            set { constant = value; RaisePropertyChanged(() => Constant); }
+            set { constant = value; RaisePropertyChanged(() => Constant); RequestReadyMode(); }
         }
 
         public IEnumerable<Constant> Constants
@@ -191,6 +228,7 @@ namespace MainCore.CQL.WPF.Composer
             {
                 this.value = value;
                 RaisePropertyChanged(() => Value);
+                RequestReadyMode();
             }
         }
 
@@ -207,6 +245,9 @@ namespace MainCore.CQL.WPF.Composer
 
     public abstract class ComparsionValueViewModel: ViewModelBase
     {
+        protected abstract string GetText();
+        public string Text { get { return GetText(); } }
+        public abstract Type PreferredType { get; }
         public abstract IExpression ToExpression();
     }
 
@@ -217,48 +258,100 @@ namespace MainCore.CQL.WPF.Composer
         {
             this.value = value;
         }
-        public bool Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+
+        public override Type PreferredType
+        {
+            get
+            {
+                return typeof(bool);
+            }
+        }
+
+        public bool Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); RaisePropertyChanged(() => Text); } }
         public override IExpression ToExpression()
         {
             return new BooleanLiteralExpression(null, value);
         }
-    }
 
+        protected override string GetText()
+        {
+            return value ? "True" : "False";
+        }
+    }
     public class DecimalLiteralValueViewModel : ComparsionValueViewModel
     {
         private double value;
         public DecimalLiteralValueViewModel(double value) { this.value = value; }
-        public double Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+        public double Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); RaisePropertyChanged(() => Text); } }
         public override IExpression ToExpression()
         {
             return new DecimalLiteralExpression(null, value);
+        }
+
+        protected override string GetText()
+        {
+            return value.ToString();
+        }
+
+        public override Type PreferredType
+        {
+            get
+            {
+                return typeof(double);
+            }
         }
     }
     public class StringLiteralValueViewModel : ComparsionValueViewModel
     {
         private string value;
         public StringLiteralValueViewModel(string value) { this.value = value; }
-        public string Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+        public string Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); RaisePropertyChanged(() => Text); } }
         public override IExpression ToExpression()
         {
             return new StringLiteralExpression(null, value);
         }
-    }
 
-    public class VariableValueViewModel : ComparsionValueViewModel
-    {
-        public VariableValueViewModel(Field field) { }
-        public override IExpression ToExpression()
+        protected override string GetText()
         {
-            return null;
+            return "\""+value.Escape()+"\"";
+        }
+
+        public override Type PreferredType
+        {
+            get
+            {
+                return typeof(string);
+            }
         }
     }
-    public class ConstantValueViewModel : ComparsionValueViewModel
+
+    [ValueConversion(typeof(ComparsionValueViewModel), typeof(string))]
+    public class ComparsionValueConverter : IValueConverter
     {
-        public ConstantValueViewModel(Constant constant) { }
-        public override IExpression ToExpression()
+        public object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            return null;
+            if (value is StringLiteralValueViewModel)
+                return (value as StringLiteralValueViewModel).Value;
+            if (value is DecimalLiteralValueViewModel)
+                return (value as DecimalLiteralValueViewModel).Value.ToString();
+            if (value is StringLiteralValueViewModel)
+                return (value as BooleanLiteralValueViewModel).Value.ToString();
+            return "";
+        }
+
+        public object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
+        {
+            var str = value as string;
+            var type = parameter as Type;
+            bool boolResult;
+            if (type == typeof(bool) && bool.TryParse(str, out boolResult))
+                return new BooleanLiteralValueViewModel(boolResult);
+            double decimalResult;
+            if (type == typeof(double) && double.TryParse(str, out decimalResult))
+                return new DecimalLiteralValueViewModel(decimalResult);
+            if(type == typeof(string))
+                return new StringLiteralValueViewModel(str);
+            throw new InvalidOperationException("Something is wrong here...");
         }
     }
 }

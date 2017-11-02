@@ -11,6 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace MainCore.CQL.WPF.Composer
 { 
@@ -47,6 +48,7 @@ namespace MainCore.CQL.WPF.Composer
             this.Context = context;
             this.queryPart = queryPart;
             queryPart.PropertyChanged += (sender, args) => RaiseChanged();
+            queryPart.ReadyModeRequested += (sender, args) => Validate();
             state = FilterBoxState.Editing;
             this.negate = negate;
             this.last = false;
@@ -93,7 +95,11 @@ namespace MainCore.CQL.WPF.Composer
         protected IExpression MayNegate(IExpression expression)
         {
             if (negate)
+            {
+                if (expression is BinaryOperationExpression)
+                    expression = new ParenthesisExpression(null, expression);
                 expression = new UnaryOperationExpression(null, UnaryOperator.Not, expression);
+            }
             return expression;
         }
 

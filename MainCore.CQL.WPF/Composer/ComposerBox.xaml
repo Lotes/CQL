@@ -41,9 +41,10 @@
         </TextBlock>
         <ItemsControl ItemsSource="{Binding Filters}">
             <ItemsControl.Resources>
+                <local:ComparsionValueConverter x:Key="valueConverter"/>
                 <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
                 <DataTemplate DataType="{x:Type syntax:BinaryOperator}">
-                    <TextBlock FontSize="10">
+                    <TextBlock FontSize="10" Padding="2">
                         <TextBlock.Style>
                             <Style TargetType="TextBlock">
                                 <Style.Triggers>
@@ -163,9 +164,17 @@
                                                     </Style>
                                                 </ComboBox.Style>
                                             </ComboBox>
-                                            <ComboBox FontSize="10" ItemsSource="{Binding PossibleValues}" SelectedItem="{Binding Value, Mode=TwoWay}">
-                                                <ComboBox.Style>
-                                                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+                                            <TextBox FontSize="10" MinWidth="20" AcceptsReturn="False">
+                                                <i:Interaction.Triggers>
+                                                    <i:EventTrigger EventName="KeyDown" >
+                                                        <command:EventToCommand PassEventArgsToCommand="True" Command="{Binding KeyDownCommand}"/>
+                                                    </i:EventTrigger>
+                                                </i:Interaction.Triggers>
+                                                <TextBox.Text>
+                                                    <Binding Path="Value.Value" Mode="TwoWay" UpdateSourceTrigger="PropertyChanged"/>
+                                                </TextBox.Text>
+                                                <TextBox.Style>
+                                                    <Style TargetType="TextBox">
                                                         <Setter Property="IsEnabled" Value="True"/>
                                                         <Style.Triggers>
                                                             <DataTrigger Binding="{Binding State}" Value="Phase1_FieldMissing">
@@ -176,8 +185,8 @@
                                                             </DataTrigger>
                                                         </Style.Triggers>
                                                     </Style>
-                                                </ComboBox.Style>
-                                            </ComboBox>
+                                                </TextBox.Style>
+                                            </TextBox>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ContentPresenter.Resources>
@@ -206,7 +215,7 @@
                                         <StackPanel Orientation="Horizontal" ToolTip="{Binding Field.Usage}">
                                             <TextBlock Text="{Binding Field.Name, Mode=OneWay}" FontSize="10" Padding="2"/>
                                             <ContentPresenter Content="{Binding Operator, Mode=OneWay}"/>
-                                            <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                            <TextBlock Text="{Binding Value.Text, Mode=OneWay}" FontSize="10" Padding="2"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ContentPresenter.Resources>

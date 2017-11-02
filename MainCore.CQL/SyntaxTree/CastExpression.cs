@@ -48,7 +48,7 @@ namespace MainCore.CQL.SyntaxTree
 
         public override string ToString()
         {
-            return $"({CastTypeName})"+Expression.ToString();
+            return (Kind==CoercionKind.Explicit ? $"({CastTypeName})" : "")+Expression.ToString();
         }
 
         public CastExpression Validate(IContext context)

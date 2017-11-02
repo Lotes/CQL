@@ -1,4 +1,5 @@
-﻿using MainCore.CQL.Contexts;
+﻿using GalaSoft.MvvmLight.CommandWpf;
+using MainCore.CQL.Contexts;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;

@@ -95,8 +95,8 @@
                             </Style>
                         </Button.Style>
                     </Button>
-                    <Button Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Command="{Binding DeleteCommand, ElementName=me}">
-                        <TextBlock Padding="0">x</TextBlock>
+                    <Button Foreground="Gray" Style="{StaticResource {x:Static ToolBar.ButtonStyleKey}}" Padding="0" Command="{Binding DeleteCommand, ElementName=me}">
+                        <TextBlock Padding="0">&#xd7;</TextBlock>
                     </Button>
                 </StackPanel>
                 <ContentPresenter Content="{Binding ActualContent, ElementName=me}"/>

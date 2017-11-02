@@ -165,9 +165,9 @@ namespace MainCore.CQL.WPF.Composer
             var comparsion = expression as BinaryOperationExpression;
             if(comparsion != null && ComparsionOperators.Contains(comparsion.Operator))
             {
-                var multiId = comparsion.LeftExpression as MultiIdExpression;
+                var multiId = Uncast(comparsion.LeftExpression) as MultiIdExpression;
                 ComparsionValueViewModel comValue = null;
-                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out comValue))
+                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
                     return false;
                 var field = Context.Get(multiId.Name) as Field;
                 part = FilterBoxViewModel.NewComparsion(Context, negate, field, comparsion.Operator, comValue);
@@ -199,26 +199,6 @@ namespace MainCore.CQL.WPF.Composer
         private bool TryMakeValue(IExpression expression, out ComparsionValueViewModel value)
         {
             value = null;
-
-            var variableExpression = expression as MultiIdExpression;
-            if (variableExpression != null)
-            {
-                var nameable = Context.Get(variableExpression.Name);
-                if (nameable != null)
-                {
-                    if (nameable is Field)
-                    {
-                        value = new VariableValueViewModel(nameable as Field);
-                        return true;
-                    }
-                    else if (nameable is Constant)
-                    {
-                        value = new ConstantValueViewModel(nameable as Constant);
-                        return true;
-                    }
-                }
-                return false;
-            }
 
             var booleanLiteralExpression = expression as BooleanLiteralExpression;
             if(booleanLiteralExpression != null)
@@ -253,7 +233,7 @@ namespace MainCore.CQL.WPF.Composer
                 }
             }
 
-            return true;
+            return false;
         }
 
         private void OnChange(object sender, EventArgs args)
@@ -282,14 +262,15 @@ namespace MainCore.CQL.WPF.Composer
 
         private void UpdateQuery()
         {
-            var expression = Filters.Select(p => p.ToExpression()).Aggregate((lhs, rhs) => new BinaryOperationExpression(null, BinaryOperator.And, lhs, rhs));
             isUpdating = true;
             try
             {
+                var expression = Filters.Where(p => p.FilterState == FilterBoxState.ReadyToUse).Select(p => p.ToExpression()).Aggregate((lhs, rhs) => new BinaryOperationExpression(null, BinaryOperator.And, lhs, rhs));
                 var query = new Query(null, expression);
                 query.Validate(Context);
                 Query = query;
             }
+            catch { }
             finally { isUpdating = false; }
         }
     }
