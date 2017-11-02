@@ -51,8 +51,8 @@ namespace MainCore.CQL.WPF.Composer
         }
         public ObservableCollection<FilterBoxViewModel> Filters
         {
-            get { return (ObservableCollection<FilterBoxViewModel>)GetValue(FiltersProperty); }
-            set { SetValue(FiltersProperty, value); }
+            get { return (ObservableCollection<FilterBoxViewModel>)GetValue(FiltersProperty.DependencyProperty); }
+            private set { SetValue(FiltersProperty, value); }
         }
 
         public static readonly DependencyProperty ContextProperty =
@@ -61,8 +61,8 @@ namespace MainCore.CQL.WPF.Composer
             DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyPropertyKey StatusProperty =
             DependencyProperty.RegisterReadOnly("Status", typeof(ComposerStatus), typeof(ComposerBox), new PropertyMetadata(ComposerStatus.Uninitialized));
-        public static readonly DependencyProperty FiltersProperty =
-            DependencyProperty.Register("Filters", typeof(ObservableCollection<FilterBoxViewModel>), typeof(ComposerBox), new PropertyMetadata(new ObservableCollection<FilterBoxViewModel>()));
+        public static readonly DependencyPropertyKey FiltersProperty =
+            DependencyProperty.RegisterReadOnly("Filters", typeof(ObservableCollection<FilterBoxViewModel>), typeof(ComposerBox), new PropertyMetadata(new ObservableCollection<FilterBoxViewModel>()));
 
         private static void changedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
@@ -166,7 +166,6 @@ namespace MainCore.CQL.WPF.Composer
             if(comparsion != null && ComparsionOperators.Contains(comparsion.Operator))
             {
                 var multiId = comparsion.LeftExpression as MultiIdExpression;
-                object value = null;
                 ComparsionValueViewModel comValue = null;
                 if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(comparsion.RightExpression, out comValue))
                     return false;
@@ -269,6 +268,7 @@ namespace MainCore.CQL.WPF.Composer
             BindPartToEvents(last);
             last.IsLast = true;
             Filters.Add(last);
+            UpdateQuery();
         }
 
         private void OnDelete(object sender, EventArgs args)

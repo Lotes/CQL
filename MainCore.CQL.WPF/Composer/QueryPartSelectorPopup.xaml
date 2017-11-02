@@ -10,7 +10,7 @@
     <Border BorderBrush="Black" Background="White" Padding="8" BorderThickness="1">
         <StackPanel Orientation="Vertical">
             <TextBox x:Name="textBoxSearch" FontWeight="Normal" MinWidth="200" Margin="0,0,0,8" Text="{Binding FilterText, ElementName=me, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}" PreviewKeyDown="textBoxSearch_PreviewKeyDown"/>
-            <ListBox ItemsSource="{Binding FilteredSuggestions, ElementName=me}" BorderThickness="0" SelectedIndex="{Binding SelectedIndex, ElementName=me, Mode=TwoWay}" SelectedValue="{Binding SelectedSuggestion, Mode=TwoWay, ElementName=me}" MouseDoubleClick="ListBox_MouseDoubleClick">
+            <ListBox ItemsSource="{Binding FilteredSuggestions, ElementName=me}" BorderThickness="0" SelectedIndex="{Binding SelectedIndex, ElementName=me, Mode=TwoWay}" SelectedValue="{Binding SelectedSuggestion, Mode=TwoWay, ElementName=me}" PreviewMouseLeftButtonDown="ListBox_Click">
                 <ListBox.ItemTemplate>
                     <DataTemplate>
                         <StackPanel Orientation="Horizontal">

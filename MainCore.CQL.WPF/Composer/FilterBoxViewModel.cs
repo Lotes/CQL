@@ -18,7 +18,7 @@ namespace MainCore.CQL.WPF.Composer
     {
         public static FilterBoxViewModel NewEditor(IContext context, Suggestion suggestion)
         {
-            return new FilterBoxViewModel(context, false, null);
+            return new FilterBoxViewModel(context, false, suggestion.Part);
         }
         public static FilterBoxViewModel NewBooleanLiteral(IContext context, bool negate, bool value)
         {
@@ -30,7 +30,7 @@ namespace MainCore.CQL.WPF.Composer
         }
         public static FilterBoxViewModel NewBooleanConstant(IContext context, bool negate, Constant constant)
         {
-            return new FilterBoxViewModel(context, negate, new BooleanConstantViewModel(constant)) { state = FilterBoxState.ReadyToUse };
+            return new FilterBoxViewModel(context, negate, new BooleanConstantViewModel(context, constant)) { state = FilterBoxState.ReadyToUse };
         }
 
         private bool negate;
@@ -43,12 +43,13 @@ namespace MainCore.CQL.WPF.Composer
         {
             this.Context = context;
             this.queryPart = queryPart;
+            queryPart.PropertyChanged += (sender, args) => RaiseChanged();
             state = FilterBoxState.ReadyToUse;
             this.negate = negate;
             this.last = false;
             AddCommand = new RelayCommand<Suggestion>(suggestion => Added?.Invoke(this, suggestion));
             DeleteCommand = new RelayCommand(() => Deleted?.Invoke(this, new EventArgs()));
-            DoneCommand = new RelayCommand(() => FilterState = Validate());
+            DoneCommand = new RelayCommand(() => Validate());
         }
 
         public QueryPartViewModel QueryPart { get { return queryPart; } }
@@ -74,14 +75,12 @@ namespace MainCore.CQL.WPF.Composer
             {
                 state = value;
                 RaisePropertyChanged(() => FilterState);
+                RaiseChanged();
             }
         }
-        private FilterBoxState Validate()
+        private void Validate()
         {
-            
-            var result = QueryPart.Validate(Context);
-            RaiseChanged();
-            return result;
+            FilterState = QueryPart.Validate(Context);
         }
 
         protected void RaiseChanged()

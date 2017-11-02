@@ -75,6 +75,9 @@
                                             </ComboBox.Items>
                                         </ComboBox>
                                     </DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:BooleanConstantViewModel}">
+                                        <ComboBox SelectedValue="{Binding Constant, Mode=TwoWay}" FontSize="10" ItemsSource="{Binding Constants}"/>
+                                    </DataTemplate>
                                 </ContentPresenter.Resources>
                                 <ContentPresenter.Style>
                                     <Style TargetType="ContentPresenter">
@@ -93,6 +96,9 @@
                                 <ContentPresenter.Resources>
                                     <DataTemplate DataType="{x:Type local:BooleanLiteralViewModel}">
                                         <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:BooleanConstantViewModel}">
+                                        <TextBlock Text="{Binding Constant.Name, Mode=OneWay}" FontSize="10" Padding="2"/>
                                     </DataTemplate>
                                 </ContentPresenter.Resources>
                                 <ContentPresenter.Style>

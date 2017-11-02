@@ -104,7 +104,7 @@ namespace MainCore.CQL.WPF.Composer
 
         private Suggestion ConstantToSuggestion(Constant constant)
         {
-            return new Suggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(constant));
+            return new Suggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(Context, constant));
         }
 
         private Suggestion FieldToSuggestion(Field field)
@@ -149,16 +149,16 @@ namespace MainCore.CQL.WPF.Composer
                 IsOpen = false;
         }
 
-        private void ListBox_MouseDoubleClick(object sender, MouseButtonEventArgs e)
-        {
-            if (SelectedSuggestion != null)
-                NotifySuggestionSelected();
-        }
-
         private void NotifySuggestionSelected()
         {
             SuggestionSelected?.Invoke(this, SelectedSuggestion);
             IsOpen = false;
+        }
+
+        private void ListBox_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (SelectedSuggestion != null)
+                NotifySuggestionSelected();
         }
     }
 }

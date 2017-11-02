@@ -52,7 +52,8 @@ namespace Main
             builder.AddField<Subject, string>("Name", "Name of subject", subject => subject.Name, subject => subject == null);
             builder.AddField<Subject, int>("Age", "Age of subject", subject => subject.Age, subject => false);
             builder.AddField<Subject, int>("Class", "Class of subject", subject => subject.Class, subject => false);
-            builder.AddConstant<Subject, bool>("OLD", "hahaha", subject => subject.Age > 33);
+            builder.AddConstant<Subject, bool>("IsOld", "xyz", subject => subject.Age > 33);
+            builder.AddConstant<Subject, bool>("IsExperienced", "abc", subject => subject.Class >= 10);
             Context = builder.Build();
             Update();
         }

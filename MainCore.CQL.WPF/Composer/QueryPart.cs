@@ -46,18 +46,30 @@ namespace MainCore.CQL.WPF.Composer
     public class BooleanConstantViewModel : QueryPartViewModel
     {
         private Constant constant;
+        private IContext context;
 
-        public BooleanConstantViewModel(Constant constant)
+        public BooleanConstantViewModel(IContext context, Constant constant)
         {
             if (constant.FieldType != typeof(bool))
                 throw new ArgumentException("Constant must be a bool type!");
             this.constant = constant;
+            this.context = context;
         }
 
         public Constant Constant
         {
             get { return constant; }
-            private set { constant = value; RaisePropertyChanged(() => Constant); }
+            set { constant = value; RaisePropertyChanged(() => Constant); }
+        }
+
+        public IEnumerable<Constant> Constants
+        {
+            get
+            {
+                return context.Constants
+                    .Where(c => c.FieldType == typeof(bool))
+                    .OrderBy(c => c.Name, Comparer<string>.Create((lhs, rhs) => string.Compare(lhs, rhs, StringComparison.CurrentCultureIgnoreCase))).ToArray();
+            }
         }
 
         public override IExpression ToExpression()
