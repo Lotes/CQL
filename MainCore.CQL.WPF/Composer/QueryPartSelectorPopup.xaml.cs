@@ -20,7 +20,7 @@ namespace MainCore.CQL.WPF.Composer
 {
     public partial class QueryPartSelectorPopup : Popup
     {
-        public event EventHandler<Suggestion> SuggestionSelected;
+        public event EventHandler<QueryPartSuggestion> SuggestionSelected;
 
         public QueryPartSelectorPopup()
         {
@@ -55,29 +55,29 @@ namespace MainCore.CQL.WPF.Composer
             control.ApplyFilter();
         }
 
-        public ObservableCollection<Suggestion> Suggestions
+        public ObservableCollection<QueryPartSuggestion> Suggestions
         {
-            get { return (ObservableCollection<Suggestion>)GetValue(SuggestionsProperty); }
+            get { return (ObservableCollection<QueryPartSuggestion>)GetValue(SuggestionsProperty); }
             set { SetValue(SuggestionsProperty, value); }
         }
         public static readonly DependencyProperty SuggestionsProperty =
-            DependencyProperty.Register("Suggestions", typeof(ObservableCollection<Suggestion>), typeof(QueryPartSelectorPopup), new PropertyMetadata(new ObservableCollection<Suggestion>()));
+            DependencyProperty.Register("Suggestions", typeof(ObservableCollection<QueryPartSuggestion>), typeof(QueryPartSelectorPopup), new PropertyMetadata(new ObservableCollection<QueryPartSuggestion>()));
 
-        public ObservableCollection<Suggestion> FilteredSuggestions
+        public ObservableCollection<QueryPartSuggestion> FilteredSuggestions
         {
-            get { return (ObservableCollection<Suggestion>)GetValue(FilteredSuggestionsProperty); }
+            get { return (ObservableCollection<QueryPartSuggestion>)GetValue(FilteredSuggestionsProperty); }
             set { SetValue(FilteredSuggestionsProperty, value); }
         }
         public static readonly DependencyProperty FilteredSuggestionsProperty =
-            DependencyProperty.Register("FilteredSuggestions", typeof(ObservableCollection<Suggestion>), typeof(QueryPartSelectorPopup), new PropertyMetadata(null));
+            DependencyProperty.Register("FilteredSuggestions", typeof(ObservableCollection<QueryPartSuggestion>), typeof(QueryPartSelectorPopup), new PropertyMetadata(null));
 
-        public Suggestion SelectedSuggestion
+        public QueryPartSuggestion SelectedSuggestion
         {
-            get { return (Suggestion)GetValue(SelectedSuggestionProperty); }
+            get { return (QueryPartSuggestion)GetValue(SelectedSuggestionProperty); }
             set { SetValue(SelectedSuggestionProperty, value); }
         }
         public static readonly DependencyProperty SelectedSuggestionProperty =
-            DependencyProperty.Register("SelectedSuggestion", typeof(Suggestion), typeof(QueryPartSelectorPopup), new PropertyMetadata(null));
+            DependencyProperty.Register("SelectedSuggestion", typeof(QueryPartSuggestion), typeof(QueryPartSelectorPopup), new PropertyMetadata(null));
 
         public int SelectedIndex
         {
@@ -89,34 +89,34 @@ namespace MainCore.CQL.WPF.Composer
 
         private void UpdateSuggestions()
         {
-            Suggestions = new ObservableCollection<Suggestion>();
+            Suggestions = new ObservableCollection<QueryPartSuggestion>();
             foreach (var suggestion in Context.Fields.Select(FieldToSuggestion)
                 .Concat(Context.Constants.Where(c => c.FieldType == typeof(bool)).Select(ConstantToSuggestion))
                 .Concat(new[]
                 {
-                    new Suggestion("True", "Tautology, everything will be accepted.", new BooleanLiteralViewModel(true)),
-                    new Suggestion("False", "Contradiction, everything will be rejected.", new BooleanLiteralViewModel(false))
+                    new QueryPartSuggestion("True", "Tautology, everything will be accepted.", new BooleanLiteralViewModel(true)),
+                    new QueryPartSuggestion("False", "Contradiction, everything will be rejected.", new BooleanLiteralViewModel(false))
                 })
                 .OrderBy(s => s.Name))
                 Suggestions.Add(suggestion);
             ApplyFilter();   
         }
 
-        private Suggestion ConstantToSuggestion(Constant constant)
+        private QueryPartSuggestion ConstantToSuggestion(Constant constant)
         {
-            return new Suggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(Context, constant));
+            return new QueryPartSuggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(Context, constant));
         }
 
-        private Suggestion FieldToSuggestion(Field field)
+        private QueryPartSuggestion FieldToSuggestion(Field field)
         {
-            return new Suggestion(field.Name, field.Usage, new FieldComparsionViewModel(Context, field));
+            return new QueryPartSuggestion(field.Name, field.Usage, new FieldComparsionViewModel(Context, field));
         }
 
         private void ApplyFilter()
         {
             var comparsion = StringComparison.CurrentCultureIgnoreCase;
             var comparer = Comparer<string>.Create((lhs, rhs) => string.Compare(lhs, rhs, comparsion));
-            FilteredSuggestions = new ObservableCollection<Suggestion>();
+            FilteredSuggestions = new ObservableCollection<QueryPartSuggestion>();
             foreach (var suggestion in Suggestions
                 .Where(s => s.Name.IndexOf(FilterText, comparsion) != -1)
                 .OrderBy(s => s.Name, comparer))

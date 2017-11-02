@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:MainCore.CQL.WPF.Composer"
+             xmlns:syntax="clr-namespace:MainCore.CQL.SyntaxTree;assembly=MainCore.CQL"
              xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
              xmlns:command="clr-namespace:GalaSoft.MvvmLight.Command;assembly=GalaSoft.MvvmLight.Platform"
@@ -40,19 +41,71 @@
         </TextBlock>
         <ItemsControl ItemsSource="{Binding Filters}">
             <ItemsControl.Resources>
-                <Style x:Key="FlatComboBox" TargetType="{x:Type ComboBox}">
-                    <Setter Property="HorizontalAlignment" Value="Stretch"/>
-                    <Setter Property="VerticalAlignment" Value="Top"/>
-                    <Setter Property="UIElement.SnapsToDevicePixels" Value="True"/>
-                    <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-                    <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-                    <Setter Property="ScrollViewer.CanContentScroll" Value="True"/>
-                    <Setter Property="TextElement.Foreground" Value="Black"/>
-                    <Setter Property="FrameworkElement.FocusVisualStyle" Value="{x:Null}"/>
-                    <Setter Property="BorderBrush" Value="Silver"/>
-                    <Setter Property="BorderThickness" Value="1" />
-                    <Setter Property="Background" Value="White" />
-                </Style>
+                <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}"/>
+                <DataTemplate DataType="{x:Type syntax:BinaryOperator}">
+                    <TextBlock FontSize="10">
+                        <TextBlock.Style>
+                            <Style TargetType="TextBlock">
+                                <Style.Triggers>
+                                    <DataTrigger Binding="{Binding .}" Value="Contains">
+                                        <Setter Property="Text" Value="CONTAINS"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="DoesNotContain">
+                                        <Setter Property="Text" Value="DOES NOT CONTAIN"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Is">
+                                        <Setter Property="Text" Value="IS"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="In">
+                                        <Setter Property="Text" Value="IN"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="NotIn">
+                                        <Setter Property="Text" Value="NOT IN"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Or">
+                                        <Setter Property="Text" Value="OR"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="And">
+                                        <Setter Property="Text" Value="AND"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Equals">
+                                        <Setter Property="Text" Value="="/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="NotEquals">
+                                        <Setter Property="Text" Value="!="/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="GreaterThan">
+                                        <Setter Property="Text" Value="&#62;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="GreaterThanEquals">
+                                        <Setter Property="Text" Value="&#8805;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="LessThan">
+                                        <Setter Property="Text" Value="&#x3c;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="LessThanEquals">
+                                        <Setter Property="Text" Value="&#x2264;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Add">
+                                        <Setter Property="Text" Value="+"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Sub">
+                                        <Setter Property="Text" Value="-"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Mul">
+                                        <Setter Property="Text" Value="&#xd7;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Div">
+                                        <Setter Property="Text" Value="&#xf7;"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding .}" Value="Mod">
+                                        <Setter Property="Text" Value="mod"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </TextBlock.Style>
+                    </TextBlock>
+                </DataTemplate>
                 <DataTemplate DataType="{x:Type local:FilterBoxViewModel}">
                     <local:FilterBox 
                         Context="{Binding Context}"
@@ -76,7 +129,56 @@
                                         </ComboBox>
                                     </DataTemplate>
                                     <DataTemplate DataType="{x:Type local:BooleanConstantViewModel}">
-                                        <ComboBox SelectedValue="{Binding Constant, Mode=TwoWay}" FontSize="10" ItemsSource="{Binding Constants}"/>
+                                        <ComboBox SelectedValue="{Binding Constant, Mode=TwoWay}" FontSize="10" ItemsSource="{Binding Constants}">
+                                            <ComboBox.ItemTemplate>
+                                                <DataTemplate>
+                                                    <TextBlock Text="{Binding Name}"/>
+                                                </DataTemplate>
+                                            </ComboBox.ItemTemplate>
+                                        </ComboBox>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:FieldComparsionViewModel}">
+                                        <StackPanel Orientation="Horizontal">
+                                            <ComboBox FontSize="10" ItemsSource="{Binding PossibleFields}" SelectedItem="{Binding Field, Mode=TwoWay}">
+                                                <ComboBox.Style>
+                                                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                    </Style>
+                                                </ComboBox.Style>
+                                                <ComboBox.ItemTemplate>
+                                                    <DataTemplate>
+                                                        <TextBlock Text="{Binding Name}"/>
+                                                    </DataTemplate>
+                                                </ComboBox.ItemTemplate>
+                                            </ComboBox>
+                                            <ComboBox FontSize="10" ItemsSource="{Binding PossibleOperators}" SelectedItem="{Binding Operator, Mode=TwoWay}">
+                                                <ComboBox.Style>
+                                                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding State}" Value="Phase1_FieldMissing">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ComboBox.Style>
+                                            </ComboBox>
+                                            <ComboBox FontSize="10" ItemsSource="{Binding PossibleValues}" SelectedItem="{Binding Value, Mode=TwoWay}">
+                                                <ComboBox.Style>
+                                                    <Style TargetType="ComboBox" BasedOn="{StaticResource {x:Static ToolBar.ComboBoxStyleKey}}">
+                                                        <Setter Property="IsEnabled" Value="True"/>
+                                                        <Style.Triggers>
+                                                            <DataTrigger Binding="{Binding State}" Value="Phase1_FieldMissing">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                            <DataTrigger Binding="{Binding State}" Value="Phase2_OperatorMissing">
+                                                                <Setter Property="IsEnabled" Value="False"/>
+                                                            </DataTrigger>
+                                                        </Style.Triggers>
+                                                    </Style>
+                                                </ComboBox.Style>
+                                            </ComboBox>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ContentPresenter.Resources>
                                 <ContentPresenter.Style>
@@ -98,7 +200,14 @@
                                         <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2"/>
                                     </DataTemplate>
                                     <DataTemplate DataType="{x:Type local:BooleanConstantViewModel}">
-                                        <TextBlock Text="{Binding Constant.Name, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                        <TextBlock Text="{Binding Constant.Name, Mode=OneWay}" FontSize="10" Padding="2" ToolTip="{Binding Constant.Usage}"/>
+                                    </DataTemplate>
+                                    <DataTemplate DataType="{x:Type local:FieldComparsionViewModel}">
+                                        <StackPanel Orientation="Horizontal" ToolTip="{Binding Field.Usage}">
+                                            <TextBlock Text="{Binding Field.Name, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                            <ContentPresenter Content="{Binding Operator, Mode=OneWay}"/>
+                                            <TextBlock Text="{Binding Value, Mode=OneWay}" FontSize="10" Padding="2"/>
+                                        </StackPanel>
                                     </DataTemplate>
                                 </ContentPresenter.Resources>
                                 <ContentPresenter.Style>

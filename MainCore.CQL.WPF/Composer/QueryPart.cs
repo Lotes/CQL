@@ -1,8 +1,10 @@
 ﻿using GalaSoft.MvvmLight;
 using MainCore.CQL.Contexts;
 using MainCore.CQL.SyntaxTree;
+using MainCore.CQL.TypeSystem;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -15,32 +17,121 @@ namespace MainCore.CQL.WPF.Composer
         public abstract FilterBoxState Validate(IContext context);
     }
 
+    public enum FieldComparsionState
+    {
+        Phase1_FieldMissing,
+        Phase2_OperatorMissing,
+        Phase3_ValueMissing,
+        ReadyToUse
+    }
+
     public class FieldComparsionViewModel : QueryPartViewModel
     {
+        private FieldComparsionState state;
         private Field field;
         private IContext context;
-        private BinaryOperator op;
+        private BinaryOperator? op;
         private ComparsionValueViewModel value;
+        private Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>> binaryOperations = new Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>>();
         public FieldComparsionViewModel(IContext context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
             this.context = context;
             this.field = field;
+            this.op = op;
+            this.value = value;
+            this.state = field == null
+                ? FieldComparsionState.Phase1_FieldMissing
+                : op == null
+                    ? FieldComparsionState.Phase2_OperatorMissing
+                    : value == null
+                        ? FieldComparsionState.Phase3_ValueMissing
+                        : FieldComparsionState.ReadyToUse;
+            ComputePossibleStates();
+            UpdateField();
         }
 
-        public Field Field { get { return field; } }
-        public BinaryOperator Operator { get { return op; } set { op = value; RaisePropertyChanged(() => Operator); } }
+        private void ComputePossibleStates()
+        {
+            PossibleFields = new ObservableCollection<Field>();
+            PossibleOperators = new ObservableCollection<BinaryOperator>();
+            PossibleValues = new ObservableCollection<ComparsionValueViewModel>();
+            
+            var typeSystem = context.TypeSystem;
+            var operations = typeSystem.GetBinaryOperations().Where(o => o.ResultType == typeof(bool));
+            foreach(var operation in operations)
+            {
+                var lhss = new[] { operation.LeftType }.Concat(typeSystem.GetImplicitlyCastsTo(operation.LeftType));
+                var rhss = new[] { operation.RightType }.Concat(typeSystem.GetImplicitlyCastsTo(operation.RightType));
+                foreach (var lhs in lhss)
+                    binaryOperations.GetOrLazyInsert(lhs, () => new Dictionary<Type, HashSet<BinaryOperation>>())
+                        .GetOrLazyInsert(operation.RightType, () => new HashSet<BinaryOperation>())
+                        .Add(operation);
+                foreach (var rhs in rhss)
+                    binaryOperations.GetOrLazyInsert(operation.LeftType, () => new Dictionary<Type, HashSet<BinaryOperation>>())
+                        .GetOrLazyInsert(rhs, () => new HashSet<BinaryOperation>())
+                        .Add(operation);
+            }
+        }
+
+        public FieldComparsionState State { get { return state; } set { state = value; RaisePropertyChanged(() => State); } }
+
+        public Field Field { get { return field; } set { field = value;  RaisePropertyChanged(() => Field); UpdateOperator(); } }
+        public BinaryOperator? Operator { get { return op; } set { op = value; RaisePropertyChanged(() => Operator); UpdateValue(); } }
         public ComparsionValueViewModel Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
+
+        public ObservableCollection<Field> PossibleFields { get; private set; }
+        public ObservableCollection<BinaryOperator> PossibleOperators { get; private set; }
+        public ObservableCollection<ComparsionValueViewModel> PossibleValues { get; private set; }
+
+        private void UpdateField()
+        {
+            PossibleFields.Clear();
+            PossibleOperators.Clear();
+            PossibleValues.Clear();
+
+            foreach (var field in context.Fields)
+                PossibleFields.Add(field);
+
+            UpdateOperator();
+        }
+
+        private void UpdateOperator()
+        {
+            PossibleOperators.Clear();
+            PossibleValues.Clear();
+
+            var lhsType = Field.FieldType;
+            Dictionary<Type, HashSet<BinaryOperation>> ops;
+            if (binaryOperations.TryGetValue(lhsType, out ops))
+                foreach (var op in ops.Values.SelectMany(bos => bos).Select(bo => bo.Operator).Distinct())
+                    PossibleOperators.Add(op);
+            if (PossibleOperators.Contains(BinaryOperator.Equals))
+                Operator = BinaryOperator.Equals;
+            else if(PossibleOperators.Any())
+                Operator = PossibleOperators.First();
+
+            UpdateValue();
+        }
+
+        private void UpdateValue()
+        {
+            PossibleValues.Clear();
+
+
+        }
 
         public override IExpression ToExpression()
         {
-            return new BinaryOperationExpression(null, op,
-                new MultiIdExpression(null, field.Name),
-                value.ToExpression());
+            return (field == null || op == null || !op.HasValue || value == null)
+                ? (IExpression)new BooleanLiteralExpression(null, true) 
+                : (IExpression)new BinaryOperationExpression(null, op.Value,
+                    new MultiIdExpression(null, field.Name),
+                    value.ToExpression());
         }
 
         public override FilterBoxState Validate(IContext context)
         {
-            return FilterBoxState.ReadyToUse; //TODO
+            return field == null || op == null || !op.HasValue || value == null ? FilterBoxState.HasErrors : FilterBoxState.ReadyToUse;
         }
     }
     public class BooleanConstantViewModel : QueryPartViewModel

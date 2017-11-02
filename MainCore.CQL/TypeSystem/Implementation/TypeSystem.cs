@@ -144,5 +144,18 @@ namespace MainCore.CQL.TypeSystem.Implementation
                 return matchingQTypes[0];
             throw new AmbigiousTypeException(type, matchingQTypes);
         }
+
+        public IEnumerable<BinaryOperation> GetBinaryOperations()
+        {
+            return binaryOpRules.Values.SelectMany(a => a.Values.SelectMany(b => b.Values));
+        }
+
+        public IEnumerable<Type> GetImplicitlyCastsTo(Type target)
+        {
+            IEnumerable<TaggedEdge<Type, CoercionRule>> edges = null;
+            if (implicitCoercionRules.TryGetInEdges(target, out edges))
+                return edges.Select(e => e.Source).Distinct();
+            return Enumerable.Empty<Type>();
+        }
     }
 }

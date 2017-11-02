@@ -10,7 +10,7 @@ using System.Windows.Media.Imaging;
 
 namespace MainCore.CQL.WPF.Composer
 {
-    public class Suggestion
+    public class QueryPartSuggestion
     {
         private static Dictionary<Type, ImageSource> icons;
         private static ImageSource Convert(Bitmap bitmap)
@@ -25,7 +25,7 @@ namespace MainCore.CQL.WPF.Composer
             return image;
         }
 
-        static Suggestion()
+        static QueryPartSuggestion()
         {
             icons = new Dictionary<Type, ImageSource>();
             icons[typeof(BooleanConstantViewModel)] = Convert(Properties.Resources.variable);
@@ -33,7 +33,7 @@ namespace MainCore.CQL.WPF.Composer
             icons[typeof(FieldComparsionViewModel)] = Convert(Properties.Resources.variable);
         }
 
-        public Suggestion(string name, string usage, QueryPartViewModel part)
+        public QueryPartSuggestion(string name, string usage, QueryPartViewModel part)
         {
             Part = part;
             Image = icons[part.GetType()];

@@ -16,7 +16,9 @@ namespace MainCore.CQL.TypeSystem
         QType GetTypeByNative(Type type);
         CoercionRule GetCoercionRule(Type original, Type casting);
         IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType);
+        IEnumerable<Type> GetImplicitlyCastsTo(Type target);
         BinaryOperation GetBinaryOperation(BinaryOperator op, Type left, Type right);
+        IEnumerable<BinaryOperation> GetBinaryOperations();
         UnaryOperation GetUnaryOperation(UnaryOperator op, Type operand);
         Type NullType { get; }
         Type EmptyType { get; }

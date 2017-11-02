@@ -261,7 +261,7 @@ namespace MainCore.CQL.WPF.Composer
             UpdateQuery();
         }
 
-        private void OnAdd(object sender, Suggestion suggestion)
+        private void OnAdd(object sender, QueryPartSuggestion suggestion)
         {
             Filters.Last().IsLast = false;
             var last = FilterBoxViewModel.NewEditor(Context, suggestion);

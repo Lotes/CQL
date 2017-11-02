@@ -16,9 +16,13 @@ namespace MainCore.CQL.WPF.Composer
 { 
     public class FilterBoxViewModel: ViewModelBase
     {
-        public static FilterBoxViewModel NewEditor(IContext context, Suggestion suggestion)
+        public static FilterBoxViewModel NewEditor(IContext context, QueryPartSuggestion suggestion)
         {
-            return new FilterBoxViewModel(context, false, suggestion.Part);
+            var result = new FilterBoxViewModel(context, false, suggestion.Part);
+            result.FilterState = result.QueryPart.Validate(context);
+            if (result.FilterState == FilterBoxState.HasErrors)
+                result.FilterState = FilterBoxState.Editing;
+            return result;
         }
         public static FilterBoxViewModel NewBooleanLiteral(IContext context, bool negate, bool value)
         {
@@ -38,16 +42,15 @@ namespace MainCore.CQL.WPF.Composer
         private FilterBoxState state;
         private QueryPartViewModel queryPart;
 
-
         private FilterBoxViewModel(IContext context, bool negate, QueryPartViewModel queryPart)
         {
             this.Context = context;
             this.queryPart = queryPart;
             queryPart.PropertyChanged += (sender, args) => RaiseChanged();
-            state = FilterBoxState.ReadyToUse;
+            state = FilterBoxState.Editing;
             this.negate = negate;
             this.last = false;
-            AddCommand = new RelayCommand<Suggestion>(suggestion => Added?.Invoke(this, suggestion));
+            AddCommand = new RelayCommand<QueryPartSuggestion>(suggestion => Added?.Invoke(this, suggestion));
             DeleteCommand = new RelayCommand(() => Deleted?.Invoke(this, new EventArgs()));
             DoneCommand = new RelayCommand(() => Validate());
         }
@@ -57,10 +60,10 @@ namespace MainCore.CQL.WPF.Composer
         public IContext Context { get; private set; }
         public bool Negate { get { return negate; } set { negate = value; RaiseChanged(); } }
         public bool IsLast { get { return last; } set { last = value; RaisePropertyChanged(() => IsLast); } }
-        public event EventHandler<Suggestion> Added;
+        public event EventHandler<QueryPartSuggestion> Added;
         public event EventHandler Deleted;
         public event EventHandler Changed;
-        public RelayCommand<Suggestion> AddCommand { get; private set; }
+        public RelayCommand<QueryPartSuggestion> AddCommand { get; private set; }
         public RelayCommand DeleteCommand { get; private set; }
         public RelayCommand DoneCommand { get; private set; }
 

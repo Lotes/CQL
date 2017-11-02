@@ -86,7 +86,7 @@
       <DependentUpon>QueryPartSelectorPopup.xaml</DependentUpon>
     </Compile>
     <Compile Include="Composer\FilterBoxState.cs" />
-    <Compile Include="Composer\Suggestion.cs" />
+    <Compile Include="Composer\QueryPartSuggestion.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

@@ -68,13 +68,13 @@ namespace MainCore.CQL.WPF.Composer
 
 
 
-        public RelayCommand<Suggestion> AddCommand
+        public RelayCommand<QueryPartSuggestion> AddCommand
         {
-            get { return (RelayCommand<Suggestion>)GetValue(AddCommandProperty); }
+            get { return (RelayCommand<QueryPartSuggestion>)GetValue(AddCommandProperty); }
             set { SetValue(AddCommandProperty, value); }
         }
         public static readonly DependencyProperty AddCommandProperty =
-            DependencyProperty.Register("AddCommand", typeof(RelayCommand<Suggestion>), typeof(FilterBox), new PropertyMetadata(null));
+            DependencyProperty.Register("AddCommand", typeof(RelayCommand<QueryPartSuggestion>), typeof(FilterBox), new PropertyMetadata(null));
 
 
 
@@ -128,7 +128,7 @@ namespace MainCore.CQL.WPF.Composer
             popup.SuggestionSelected += Popup_SuggestionSelected;
         }
 
-        private void Popup_SuggestionSelected(object sender, Suggestion suggestion)
+        private void Popup_SuggestionSelected(object sender, QueryPartSuggestion suggestion)
         {
             AddCommand?.Execute(suggestion);
         }
