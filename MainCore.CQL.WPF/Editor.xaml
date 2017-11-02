@@ -25,10 +25,10 @@
                                 <TextBlock VerticalAlignment="Center" x:Name="text" Margin="0,0,4,0" Foreground="#4040ee"/>
                                 <ControlTemplate.Triggers>
                                     <Trigger Property="IsChecked" Value="True">
-                                        <Setter TargetName="text" Property="Text" Value="&#x21AA; Freehand"/>
+                                        <Setter TargetName="text" Property="Text" Value="Simple &#13;&#x21AA; Freehand"/>
                                     </Trigger>
                                     <Trigger Property="IsChecked" Value="False">
-                                        <Setter TargetName="text" Property="Text" Value="&#x21AA; Simple"/>
+                                        <Setter TargetName="text" Property="Text" Value="Freehand&#13;&#x21AA; Simple"/>
                                     </Trigger>
                                     <Trigger Property="IsMouseOver" Value="True">
                                         <Setter TargetName="text" Property="Foreground" Value="#ff8080"/>
