@@ -1,0 +1,64 @@
+﻿<UserControl x:Class="MainCore.CQL.WPF.Editor"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:MainCore.CQL.WPF"
+             xmlns:composer="clr-namespace:MainCore.CQL.WPF.Composer"
+             xmlns:textual="clr-namespace:MainCore.CQL.WPF.Textual"
+             mc:Ignorable="d" 
+             Name="me"
+             d:DesignHeight="300" d:DesignWidth="300">
+    <DockPanel>
+        <CheckBox DockPanel.Dock="Left" IsChecked="{Binding IsSimple, ElementName=me}" IsEnabled="{Binding IsSimplifyable, ElementName=me}" Padding="4">
+            <CheckBox.Style>
+                <Style TargetType="{x:Type CheckBox}">
+                    <Setter Property="Template">
+                        <Setter.Value>
+                            <ControlTemplate TargetType="{x:Type CheckBox}">
+                                <TextBlock VerticalAlignment="Center" x:Name="text" Margin="0,0,4,0" Foreground="Gray"/>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsChecked" Value="True">
+                                        <Setter TargetName="text" Property="Text" Value="&#x21AA; Freehand"/>
+                                    </Trigger>
+                                    <Trigger Property="IsChecked" Value="False">
+                                        <Setter TargetName="text" Property="Text" Value="&#x21AA; Simple"/>
+                                    </Trigger>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="text" Property="Foreground" Value="#ff8080"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Setter.Value>
+                    </Setter>
+                </Style>
+            </CheckBox.Style>
+        </CheckBox>
+        <Grid>
+            <composer:ComposerBox Context="{Binding Context, ElementName=me}" Query="{Binding Query, ElementName=me, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <composer:ComposerBox.Style>
+                    <Style TargetType="composer:ComposerBox">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSimple, ElementName=me}" Value="True">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </composer:ComposerBox.Style>            
+            </composer:ComposerBox>
+            <textual:TextBox Context="{Binding Context, ElementName=me}" Query="{Binding Query, ElementName=me, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}">
+                <textual:TextBox.Style>
+                    <Style TargetType="textual:TextBox">
+                        <Setter Property="Visibility" Value="Collapsed"/>
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding IsSimple, ElementName=me}" Value="False">
+                                <Setter Property="Visibility" Value="Visible"/>
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </textual:TextBox.Style>
+            </textual:TextBox>
+        </Grid>
+    </DockPanel>
+</UserControl>
