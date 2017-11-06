@@ -1,0 +1,191 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<SyntaxDefinition 
+	name="CQL" 
+	xmlns="http://icsharpcode.net/sharpdevelop/syntaxdefinition/2008">
+  <Color name="String" foreground="Blue" />
+
+  <!-- This is the main ruleset. -->
+  <RuleSet>
+    <Span color="String">
+      <Begin>"</Begin>
+      <End>"</End>
+      <RuleSet>
+        <!-- nested span for escape sequences -->
+        <Span begin="\\" end="." />
+      </RuleSet>
+    </Span>
+
+    <!-- code generator: http://rextester.com/YRVZM38234 -->
+    <Keywords foreground="Green">
+      <Word>true</Word>
+      <Word>truE</Word>
+      <Word>trUe</Word>
+      <Word>trUE</Word>
+      <Word>tRue</Word>
+      <Word>tRuE</Word>
+      <Word>tRUe</Word>
+      <Word>tRUE</Word>
+      <Word>True</Word>
+      <Word>TruE</Word>
+      <Word>TrUe</Word>
+      <Word>TrUE</Word>
+      <Word>TRue</Word>
+      <Word>TRuE</Word>
+      <Word>TRUe</Word>
+      <Word>TRUE</Word>
+      <Word>false</Word>
+      <Word>falsE</Word>
+      <Word>falSe</Word>
+      <Word>falSE</Word>
+      <Word>faLse</Word>
+      <Word>faLsE</Word>
+      <Word>faLSe</Word>
+      <Word>faLSE</Word>
+      <Word>fAlse</Word>
+      <Word>fAlsE</Word>
+      <Word>fAlSe</Word>
+      <Word>fAlSE</Word>
+      <Word>fALse</Word>
+      <Word>fALsE</Word>
+      <Word>fALSe</Word>
+      <Word>fALSE</Word>
+      <Word>False</Word>
+      <Word>FalsE</Word>
+      <Word>FalSe</Word>
+      <Word>FalSE</Word>
+      <Word>FaLse</Word>
+      <Word>FaLsE</Word>
+      <Word>FaLSe</Word>
+      <Word>FaLSE</Word>
+      <Word>FAlse</Word>
+      <Word>FAlsE</Word>
+      <Word>FAlSe</Word>
+      <Word>FAlSE</Word>
+      <Word>FALse</Word>
+      <Word>FALsE</Word>
+      <Word>FALSe</Word>
+      <Word>FALSE</Word>
+      <Word>null</Word>
+      <Word>nulL</Word>
+      <Word>nuLl</Word>
+      <Word>nuLL</Word>
+      <Word>nUll</Word>
+      <Word>nUlL</Word>
+      <Word>nULl</Word>
+      <Word>nULL</Word>
+      <Word>Null</Word>
+      <Word>NulL</Word>
+      <Word>NuLl</Word>
+      <Word>NuLL</Word>
+      <Word>NUll</Word>
+      <Word>NUlL</Word>
+      <Word>NULl</Word>
+      <Word>NULL</Word>
+      <Word>empty</Word>
+      <Word>emptY</Word>
+      <Word>empTy</Word>
+      <Word>empTY</Word>
+      <Word>emPty</Word>
+      <Word>emPtY</Word>
+      <Word>emPTy</Word>
+      <Word>emPTY</Word>
+      <Word>eMpty</Word>
+      <Word>eMptY</Word>
+      <Word>eMpTy</Word>
+      <Word>eMpTY</Word>
+      <Word>eMPty</Word>
+      <Word>eMPtY</Word>
+      <Word>eMPTy</Word>
+      <Word>eMPTY</Word>
+      <Word>Empty</Word>
+      <Word>EmptY</Word>
+      <Word>EmpTy</Word>
+      <Word>EmpTY</Word>
+      <Word>EmPty</Word>
+      <Word>EmPtY</Word>
+      <Word>EmPTy</Word>
+      <Word>EmPTY</Word>
+      <Word>EMpty</Word>
+      <Word>EMptY</Word>
+      <Word>EMpTy</Word>
+      <Word>EMpTY</Word>
+      <Word>EMPty</Word>
+      <Word>EMPtY</Word>
+      <Word>EMPTy</Word>
+      <Word>EMPTY</Word>
+    </Keywords>
+    <Keywords fontWeight="bold" foreground="Fuchsia">
+      <Word>in</Word>
+      <Word>iN</Word>
+      <Word>In</Word>
+      <Word>IN</Word>
+      <Word>is</Word>
+      <Word>iS</Word>
+      <Word>Is</Word>
+      <Word>IS</Word>
+      <Word>div</Word>
+      <Word>diV</Word>
+      <Word>dIv</Word>
+      <Word>dIV</Word>
+      <Word>Div</Word>
+      <Word>DiV</Word>
+      <Word>DIv</Word>
+      <Word>DIV</Word>
+      <Word>mul</Word>
+      <Word>muL</Word>
+      <Word>mUl</Word>
+      <Word>mUL</Word>
+      <Word>Mul</Word>
+      <Word>MuL</Word>
+      <Word>MUl</Word>
+      <Word>MUL</Word>
+      <Word>mod</Word>
+      <Word>moD</Word>
+      <Word>mOd</Word>
+      <Word>mOD</Word>
+      <Word>Mod</Word>
+      <Word>MoD</Word>
+      <Word>MOd</Word>
+      <Word>MOD</Word>
+      <Word>not</Word>
+      <Word>noT</Word>
+      <Word>nOt</Word>
+      <Word>nOT</Word>
+      <Word>Not</Word>
+      <Word>NoT</Word>
+      <Word>NOt</Word>
+      <Word>NOT</Word>
+      <Word>or</Word>
+      <Word>oR</Word>
+      <Word>Or</Word>
+      <Word>OR</Word>
+      <Word>and</Word>
+      <Word>anD</Word>
+      <Word>aNd</Word>
+      <Word>aND</Word>
+      <Word>And</Word>
+      <Word>AnD</Word>
+      <Word>ANd</Word>
+      <Word>AND</Word>
+    </Keywords>
+
+    <!-- Digits -->
+    <Rule foreground="Orange">
+      \b
+      (    \d+(\.[0-9]+)?   #number with optional floating point
+      |    \.[0-9]+         #or just starting with floating point
+      )
+      ([eE][+-]?[0-9]+)? # optional exponent
+    </Rule>
+
+    <!-- Identifier -->
+    <Rule foreground="Red">
+      (/|\.|->|\#|\$)?([a-zA-Z_][a-zA-Z_0-9]*)
+      (
+        (/|\.|->|\#|\$)
+        ([a-zA-Z_][a-zA-Z_0-9]*)
+      )*
+      (/|\.|->|\#|\$)?
+    </Rule>
+  </RuleSet>
+</SyntaxDefinition>
