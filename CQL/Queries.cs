@@ -42,7 +42,7 @@ namespace CQL
             }
         }
 
-        public static Query ParseSemantically(string text, IContext context, IErrorListener errorListener = null)
+        public static Query Parse(string text, IContext context, IErrorListener errorListener = null)
         {
             try
             {
@@ -70,7 +70,7 @@ namespace CQL
         {
             try
             { 
-                var query = ParseSemantically(text, context, errorListener);
+                var query = Parse(text, context, errorListener);
                 return query.Evaluate(subject);
             }
             catch (LocateableException ex)

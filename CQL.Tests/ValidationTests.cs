@@ -29,89 +29,89 @@ namespace CQL.Tests
         [ExpectedException(typeof(LocateableException))]
         public void ExplicitCast_FailMissingCoercionRuleTest()
         {
-            Queries.ParseSemantically("1 = (integer)1.2", context);
+            Queries.Parse("1 = (integer)1.2", context);
         }
 
         [TestMethod]
         public void ImplicitCoercion_SuccessTest()
         {
-            Queries.ParseSemantically("1 = 1.0", context);
+            Queries.Parse("1 = 1.0", context);
         }
 
         [TestMethod]
         public void MultiId_SuccessTest()
         {
-            Queries.ParseSemantically("a.b.c = 1.0", context);
+            Queries.Parse("a.b.c = 1.0", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
         public void MultiIdFail_UnknownIdTest()
         {
-            Queries.ParseSemantically("a.b = 1", context);
+            Queries.Parse("a.b = 1", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
         public void MultiIdFail_NotBooleanTest()
         {
-            Queries.ParseSemantically("a.b.c", context);
+            Queries.Parse("a.b.c", context);
         }
 
         [TestMethod]
         public void UnaryOpConstant_SuccessTest()
         {
-            Queries.ParseSemantically("not true", context);
+            Queries.Parse("not true", context);
         }
 
         [TestMethod]
         public void StringConcat_SuccessTest()
         {
-            Queries.ParseSemantically("\"a\"+\"b\" = \"ab\"", context);
+            Queries.Parse("\"a\"+\"b\" = \"ab\"", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
         public void Conditional_FailNoCommonTypeTest()
         {
-            Queries.ParseSemantically("true ? 123 : \"hallo\"", context);
+            Queries.Parse("true ? 123 : \"hallo\"", context);
         }
 
         [TestMethod]
         public void Conditional_SuccessTest()
         {
-            Queries.ParseSemantically("(true ? 123 : a.b.c) = 1", context);
+            Queries.Parse("(true ? 123 : a.b.c) = 1", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
         public void IsEmpty_FailNoArrayTypeTest()
         {
-            Queries.ParseSemantically("true IS EMPTY", context);
+            Queries.Parse("true IS EMPTY", context);
         }
 
         [TestMethod]
         public void IsEmpty_SuccessTest()
         {
-            Queries.ParseSemantically("[a.b.c] IS EMPTY", context);
+            Queries.Parse("[a.b.c] IS EMPTY", context);
         }
 
         [TestMethod]
         public void IsNull_SuccessTest()
         {
-            Queries.ParseSemantically("a.b.c IS NULL", context);
+            Queries.Parse("a.b.c IS NULL", context);
         }
 
         [TestMethod]
         public void IsVariableInSet_SuccessTest()
         {
-            Queries.ParseSemantically("a.b.c in [1]", context);
+            Queries.Parse("a.b.c in [1]", context);
         }
 
         [TestMethod]
         public void IsVariableInUnunifiedSet_SuccessTest()
         {
-            Queries.ParseSemantically("a.b.c in [1.0, 2]", context);
+            Queries.Parse("a.b.c in [1.0, 2]", context);
         }
     }
 }

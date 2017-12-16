@@ -96,7 +96,7 @@ namespace CQL.WPF.Expression
             var errorListener = new ErrorListener();
             errorListener.ErrorDetected += ErrorDetectedErrorListener_ErrorDetected;
             isUpdatingText = true;
-            Query = Queries.ParseSemantically(textEditor.Text, InternalContext, errorListener);
+            Query = Queries.Parse(textEditor.Text, InternalContext, errorListener);
             isUpdatingText = false;
         }
 
