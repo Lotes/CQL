@@ -1,7 +1,7 @@
 Configurable Query Language (CQL)
 =================================
 
-TODO IMAGE
+![Example](example.png)
 
 What is the problem?
 --------------------
@@ -26,14 +26,7 @@ The two components, provided here, are
 Quickstart
 ----------
 
-First, install the `CQL` nuget package:
-```
-> nuget install CQL
-
-or
-
-> Install-Package CQL
-```
+First, installation... TODO
 
 Second, let me shortly explain the concepts. You actually need to provide three objects:
 

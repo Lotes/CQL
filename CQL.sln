@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.24720.0
+# Visual Studio Express 14 for Windows Desktop
+VisualStudioVersion = 14.0.25420.1
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQL.Demo", "CQL.Demo\CQL.Demo.csproj", "{8D68478C-1A27-4293-BFBF-9BB3C63B54F7}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -13,6 +13,14 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQL.Tests", "CQL.Tests\CQL.Tests.csproj", "{1D669631-D619-42F9-962E-CB4CC4A31616}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQL.WPF", "CQL.WPF\CQL.WPF.csproj", "{1DEC8C20-F9E0-4B6E-BAAB-26847204CB12}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60EA63E8-6B25-4AB6-9049-E0AB8A324F73}"
+	ProjectSection(SolutionItems) = preProject
+		DOCUMENTATION.md = DOCUMENTATION.md
+		LICENSE.md = LICENSE.md
+		README.md = README.md
+		TODO.md = TODO.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
