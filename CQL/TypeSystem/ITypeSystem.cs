@@ -9,11 +9,11 @@ namespace CQL.TypeSystem
 {
     public interface ITypeSystem
     {
-        IEnumerable<QType> Types { get; }
-        QType GetTypeByName(string name);
-        IEnumerable<QType> GetTypesByPrefix(string prefix);
+        IEnumerable<IType> Types { get; }
+        IType GetTypeByName(string name);
+        IEnumerable<IType> GetTypesByPrefix(string prefix);
         // can throw exception
-        QType GetTypeByNative(Type type);
+        IType GetTypeByNative(Type type);
         CoercionRule GetCoercionRule(Type original, Type casting);
         IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType);
         IEnumerable<Type> GetImplicitlyCastsTo(Type target);

@@ -53,7 +53,7 @@ namespace CQL.SyntaxTree
 
         public CastExpression Validate(IContext context)
         {
-            var type = context.TypeSystem.GetTypeByName(CastTypeName)?.ActualType;
+            var type = context.TypeSystem.GetTypeByName(CastTypeName)?.CSharpType;
             if (type == null)
                 throw new LocateableException(Location, $"There is no type {CastTypeName}!");
             Expression = Expression.Validate(context);

@@ -13,18 +13,18 @@ namespace CQL.TypeSystem.Implementation
         public class Null { }
         public class Empty { }
 
-        private Dictionary<string, QType> types = new Dictionary<string, QType>();
-        private Dictionary<BinaryOperator, Dictionary<Type, Dictionary<Type, BinaryOperation>>> binaryOpRules = new Dictionary<BinaryOperator, Dictionary<Type, Dictionary<Type, BinaryOperation>>>();
-        private Dictionary<UnaryOperator, Dictionary<Type, UnaryOperation>> unaryOpRules = new Dictionary<UnaryOperator, Dictionary<Type, UnaryOperation>>();
-        private BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>> allCoercionRules = new BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>>();
-        private BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>> implicitCoercionRules = new BidirectionalGraph<Type, TaggedEdge<Type, CoercionRule>>();
+        private Dictionary<string, IType> types = new Dictionary<string, IType>();
+        private Dictionary<BinaryOperator, Dictionary<System.Type, Dictionary<System.Type, BinaryOperation>>> binaryOpRules = new Dictionary<BinaryOperator, Dictionary<System.Type, Dictionary<System.Type, BinaryOperation>>>();
+        private Dictionary<UnaryOperator, Dictionary<System.Type, UnaryOperation>> unaryOpRules = new Dictionary<UnaryOperator, Dictionary<System.Type, UnaryOperation>>();
+        private BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>> allCoercionRules = new BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>>();
+        private BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>> implicitCoercionRules = new BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>>();
 
         public void AddType<TType>(string name, string usage)
         {
-            if (types.Values.Any(t => t.ActualType == typeof(TType)))
+            if (types.Values.Any(t => t.CSharpType == typeof(TType)))
                 throw new InvalidOperationException("Type is already registered!");
             Debug.WriteLine($"- added type '{name}'");
-            types.Add(name.ToLower(), new QType(name, usage, typeof(TType)));
+            types.Add(name.ToLower(), new Type(name, usage, typeof(TType)));
         }
 
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)
@@ -34,16 +34,16 @@ namespace CQL.TypeSystem.Implementation
             if (GetTypeByNative(original) == null) throw new UnknownTypeException(original);
             if (GetTypeByNative(casting) == null) throw new UnknownTypeException(casting);
             var rule = new CoercionRule(kind, original, casting, a => cast((TOriginalType)a));
-            TaggedEdge<Type, CoercionRule> existingEdge;
+            TaggedEdge<System.Type, CoercionRule> existingEdge;
             if (allCoercionRules.TryGetEdge(original, casting, out existingEdge))
                 throw new InvalidOperationException("Such a rule does already exist!");
-            var edge = new TaggedEdge<Type, CoercionRule>(original, casting, rule);
+            var edge = new TaggedEdge<System.Type, CoercionRule>(original, casting, rule);
             if(kind == CoercionKind.Implicit)
             {
                 implicitCoercionRules.AddVertex(original);
                 implicitCoercionRules.AddVertex(casting);
                 implicitCoercionRules.AddEdge(edge);
-                IDictionary<Type, int> components;
+                IDictionary<System.Type, int> components;
                 if(implicitCoercionRules.StronglyConnectedComponents(out components) != implicitCoercionRules.Vertices.Count())
                 {
                     implicitCoercionRules.RemoveEdge(edge);
@@ -66,8 +66,8 @@ namespace CQL.TypeSystem.Implementation
             if (GetTypeByNative(result) == null) throw new UnknownTypeException(result);
             if (GetBinaryOperation(op, left, right) != null)
                 throw new InvalidOperationException("Such a rule already exists!");
-            binaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<Type, Dictionary<Type, BinaryOperation>>())
-                .GetValueOrInsertedLazyDefault(left, () => new Dictionary<Type, BinaryOperation>())
+            binaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<System.Type, Dictionary<System.Type, BinaryOperation>>())
+                .GetValueOrInsertedLazyDefault(left, () => new Dictionary<System.Type, BinaryOperation>())
                 [right] = new BinaryOperation(left, right, result, op, (a, b) => aggregate((TLeft)a, (TRight)b));
             Debug.WriteLine($"- added binary operation '{op}: {left.Name} x {right.Name} -> {result.Name}'");
         }
@@ -80,64 +80,64 @@ namespace CQL.TypeSystem.Implementation
             if (GetTypeByNative(result) == null) throw new UnknownTypeException(result);
             if (GetUnaryOperation(op, operand) != null)
                 throw new InvalidOperationException("Such a rule already exists!");
-            unaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<Type, UnaryOperation>())
+            unaryOpRules.GetValueOrInsertedLazyDefault(op, () => new Dictionary<System.Type, UnaryOperation>())
                 [operand] = new UnaryOperation(operand, result, op, (a) => func((TOperand)a));
             Debug.WriteLine($"- added unary operation '{op}: {operand.Name} -> {result.Name}'");
         }
 
-        public BinaryOperation GetBinaryOperation(BinaryOperator op, Type left, Type right)
+        public BinaryOperation GetBinaryOperation(BinaryOperator op, System.Type left, System.Type right)
         {
             if (binaryOpRules.ContainsKey(op) && binaryOpRules[op].ContainsKey(left) && binaryOpRules[op][left].ContainsKey(right))
                 return binaryOpRules[op][left][right];
             return null;
         }
 
-        public UnaryOperation GetUnaryOperation(UnaryOperator op, Type operand)
+        public UnaryOperation GetUnaryOperation(UnaryOperator op, System.Type operand)
         {
             if (unaryOpRules.ContainsKey(op) && unaryOpRules[op].ContainsKey(operand))
                 return unaryOpRules[op][operand];
             return null;
         }
 
-        public IEnumerable<QType> Types { get { return types.Values; } }
+        public IEnumerable<IType> Types { get { return types.Values; } }
 
-        public Type NullType { get { return typeof(Null); } }
-        public Type EmptyType { get { return typeof(Empty); } }
+        public System.Type NullType { get { return typeof(Null); } }
+        public System.Type EmptyType { get { return typeof(Empty); } }
          
 
-        public CoercionRule GetCoercionRule(Type original, Type casting)
+        public CoercionRule GetCoercionRule(System.Type original, System.Type casting)
         {
-            TaggedEdge<Type, CoercionRule> edge;
+            TaggedEdge<System.Type, CoercionRule> edge;
             if (allCoercionRules.TryGetEdge(original, casting, out edge))
                 return edge.Tag;
             return null;
         }
 
-        public QType GetTypeByName(string name)
+        public IType GetTypeByName(string name)
         {
-            QType type;
+            IType type;
             if (types.TryGetValue(name.ToLower(), out type))
                 return type;
             return null;
         }
 
-        public IEnumerable<QType> GetTypesByPrefix(string prefix)
+        public IEnumerable<IType> GetTypesByPrefix(string prefix)
         {
             prefix = prefix.ToLower();
             return types.Where(kv => kv.Key.StartsWith(prefix)).Select(kv => kv.Value).ToArray();
         }
 
-        public IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType)
+        public IEnumerable<CoercionRule> GetImplicitlyCastChain(System.Type original, System.Type destinationType)
         {
-            IEnumerable<TaggedEdge<Type, CoercionRule>> result;
+            IEnumerable<TaggedEdge<System.Type, CoercionRule>> result;
             if (implicitCoercionRules.ContainsVertex(original) && implicitCoercionRules.ShortestPathsDijkstra(t => 1, original)(destinationType, out result))
                 return result.Select(e => e.Tag).ToArray();
             return Enumerable.Empty<CoercionRule>();
         }
 
-        public QType GetTypeByNative(Type type)
+        public IType GetTypeByNative(System.Type type)
         {
-            var matchingQTypes = types.Values.Where(q => q.ActualType.IsAssignableFrom(type)).ToArray();
+            var matchingQTypes = types.Values.Where(q => q.CSharpType.IsAssignableFrom(type)).ToArray();
             if (matchingQTypes.Length == 0)
                 return null;
             if (matchingQTypes.Length == 1)
@@ -150,12 +150,12 @@ namespace CQL.TypeSystem.Implementation
             return binaryOpRules.Values.SelectMany(a => a.Values.SelectMany(b => b.Values));
         }
 
-        public IEnumerable<Type> GetImplicitlyCastsTo(Type target)
+        public IEnumerable<System.Type> GetImplicitlyCastsTo(System.Type target)
         {
-            IEnumerable<TaggedEdge<Type, CoercionRule>> edges = null;
+            IEnumerable<TaggedEdge<System.Type, CoercionRule>> edges = null;
             if (implicitCoercionRules.TryGetInEdges(target, out edges))
                 return edges.Select(e => e.Source).Distinct();
-            return Enumerable.Empty<Type>();
+            return Enumerable.Empty<System.Type>();
         }
     }
 }

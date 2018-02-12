@@ -91,6 +91,7 @@
     <Compile Include="AutoCompletion\Token.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\Field.cs" />
@@ -103,7 +104,7 @@
     <Compile Include="TypeSystem\Implementation\TypeSystem.cs" />
     <Compile Include="TypeSystem\Implementation\TypeSystemBuilder.cs" />
     <Compile Include="TypeSystem\ITypeSystemBuilder.cs" />
-    <Compile Include="TypeSystem\QType.cs" />
+    <Compile Include="TypeSystem\IType.cs" />
     <Compile Include="TypeSystem\TypeSystemExtensions.cs" />
     <Compile Include="TypeSystem\UnaryOperation.cs" />
     <Compile Include="DictionaryExtensions.cs" />

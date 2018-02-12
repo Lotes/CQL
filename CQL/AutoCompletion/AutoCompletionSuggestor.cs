@@ -18,7 +18,7 @@ namespace CQL.AutoCompletion
         private IContext context;
         private Dictionary<int, Func<INameable, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<INameable, bool>>()
         {
-            { CQLParser.RULE_typeName, symbol => symbol is QType },
+            { CQLParser.RULE_typeName, symbol => symbol is IType },
             { CQLParser.RULE_member, symbol => symbol is IFunction || symbol is Field || symbol is Constant}
         };
         private Dictionary<int, SuggestionType> lookupSuggestionByRuleId = new Dictionary<int, SuggestionType>()

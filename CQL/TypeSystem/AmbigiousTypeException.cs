@@ -9,8 +9,8 @@ namespace CQL.TypeSystem
     public class AmbigiousTypeException: Exception
     {
         public readonly Type GivenType;
-        public readonly IEnumerable<QType> KnownTypes;
-        public AmbigiousTypeException(Type type, IEnumerable<QType> knownTypes) : base("Multiple type choices are possible for the requested type.")
+        public readonly IEnumerable<IType> KnownTypes;
+        public AmbigiousTypeException(Type type, IEnumerable<IType> knownTypes) : base("Multiple type choices are possible for the requested type.")
         {
             GivenType = type;
             KnownTypes = knownTypes.ToArray();
