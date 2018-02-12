@@ -20,7 +20,7 @@ namespace CQL.Visitors
         public override Query VisitQuery([NotNull] CQLParser.QueryContext context)
         {
             var expression = expressionVisitor.Visit(context.expr);
-            return new Query(context, expression);
+            return new Query((ParserLocation)context, expression);
         }
     }
 }

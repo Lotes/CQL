@@ -11,8 +11,8 @@ namespace CQL.SyntaxTree
 {
     public class NullExpression: IExpression<NullExpression>
     {
-        public NullExpression(ParserRuleContext context) { ParserContext = context; }
-        public ParserRuleContext ParserContext { get; private set; }
+        public NullExpression(IParserLocation context) { Location = context; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 

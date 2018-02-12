@@ -18,13 +18,13 @@ namespace CQL.SyntaxTree
         /// </summary>
         /// <param name="context"></param>
         /// <param name="expression">not null</param>
-        public Query(ParserRuleContext context, IExpression expression)
+        public Query(IParserLocation context, IExpression expression)
         {
-            ParserContext = context;
+            Location = context;
             Expression = expression;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
@@ -43,7 +43,7 @@ namespace CQL.SyntaxTree
         {
             Expression = Expression.Validate(context);
             if (Expression.SemanticType != typeof(bool))
-                throw new LocateableException(Expression.ParserContext, "Query expression type must be boolean!");
+                throw new LocateableException(Expression.Location, "Query expression type must be boolean!");
             return this;
         }
 

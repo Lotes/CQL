@@ -14,15 +14,15 @@ namespace CQL.SyntaxTree
     {
         public IEnumerable<IExpression> Elements { get; private set; }
 
-        public ArrayExpression(ParserRuleContext context, IEnumerable<IExpression> elements)
+        public ArrayExpression(IParserLocation context, IEnumerable<IExpression> elements)
         {
             Elements = elements.ToArray();
-            ParserContext = context;
+            Location = context;
             SemanticType = null;
             ElementType = null;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type ElementType { get; private set; }
         public Type SemanticType { get; private set; }
@@ -47,7 +47,7 @@ namespace CQL.SyntaxTree
             ElementType = Elements.First().SemanticType;
             for(var index=1; index<elements.Length; index++)
                 if(elements[index].SemanticType != ElementType)
-                    ElementType = context.AlignTypes(ref elements[index-1], ref elements[index], () => new LocateableException(ParserContext, "Could not unify type of this array!"));
+                    ElementType = context.AlignTypes(ref elements[index-1], ref elements[index], () => new LocateableException(Location, "Could not unify type of this array!"));
             Elements = elements;
             ElementType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
             SemanticType = ElementType.MakeArrayType();

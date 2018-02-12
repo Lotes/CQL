@@ -13,13 +13,13 @@ namespace CQL.SyntaxTree
     {
         public readonly bool Value;
 
-        public BooleanLiteralExpression(ParserRuleContext context, bool value)
+        public BooleanLiteralExpression(IParserLocation context, bool value)
         {
             Value = value;
-            ParserContext = context;
+            Location = context;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get { return typeof(bool); } }
 

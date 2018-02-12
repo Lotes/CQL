@@ -9,14 +9,14 @@ namespace CQL.SyntaxTree
     {
         public IExpression Expression { get; private set; }
 
-        public ParenthesisExpression(ParserRuleContext context, IExpression expression)
+        public ParenthesisExpression(IParserLocation context, IExpression expression)
         {
             Expression = expression;
-            ParserContext = context;
+            Location = context;
             SemanticType = null;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 

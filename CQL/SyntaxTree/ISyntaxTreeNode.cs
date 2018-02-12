@@ -6,7 +6,7 @@ namespace CQL.SyntaxTree
 {
     public interface ISyntaxTreeNode
     {
-        ParserRuleContext ParserContext { get; }
+        IParserLocation Location { get; }
         bool StructurallyEquals(ISyntaxTreeNode node);
     }
     public interface ISyntaxTreeNode<TSelf>: ISyntaxTreeNode

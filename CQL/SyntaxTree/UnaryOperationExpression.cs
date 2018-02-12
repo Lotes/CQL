@@ -16,14 +16,14 @@ namespace CQL.SyntaxTree
         public readonly UnaryOperator Operator;
         private UnaryOperation operation;
 
-        public UnaryOperationExpression(ParserRuleContext context, UnaryOperator @operator, IExpression expression)
+        public UnaryOperationExpression(IParserLocation context, UnaryOperator @operator, IExpression expression)
         {
             Expression = expression;
             Operator = @operator;
-            ParserContext = context;
+            Location = context;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 
@@ -55,7 +55,7 @@ namespace CQL.SyntaxTree
             operation = context.TypeSystem.GetUnaryOperation(Operator, Expression.SemanticType);
             if (operation == null)
             {
-                throw new LocateableException(ParserContext, "Unary operation not supported for that type of operand!");
+                throw new LocateableException(Location, "Unary operation not supported for that type of operand!");
             }
             SemanticType = operation.ResultType;
             return this;

@@ -18,19 +18,19 @@ namespace CQL.SyntaxTree
         public readonly BinaryOperator Operator;
         private BinaryOperation operation = null;
 
-        public BinaryOperationExpression(ParserRuleContext context, BinaryOperator @operator, IExpression leftExpression, IExpression rightExpression)
+        public BinaryOperationExpression(IParserLocation context, BinaryOperator @operator, IExpression leftExpression, IExpression rightExpression)
         {
             this.leftExpression = leftExpression;
             this.rightExpression = rightExpression;
             Operator = @operator;
-            ParserContext = context;
+            Location = context;
             SemanticType = null;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
-
         public Type SemanticType { get; private set; }
 
+        public IParserLocation Location { get; private set; }
+       
         public override string ToString()
         {
             string opString;
@@ -81,7 +81,7 @@ namespace CQL.SyntaxTree
                         Type needleType = leftExpression.SemanticType;
                         Type elementType;
                         if (!rightExpression.IfArrayTryGetElementType(out elementType))
-                            throw new LocateableException(ParserContext, "The 'in' operator requires an array expression for the right operand.");
+                            throw new LocateableException(Location, "The 'in' operator requires an array expression for the right operand.");
                         if(needleType != elementType)
                         {
                             var chain = context.TypeSystem.GetImplicitlyCastChain(needleType, elementType);
@@ -97,18 +97,18 @@ namespace CQL.SyntaxTree
                                 var array = rightExpression as ArrayExpression;
                                 if (array == null)
                                 {
-                                    throw new LocateableException(ParserContext, "The 'in' operator requires that the right operand to be a list of the left operand's type.");
+                                    throw new LocateableException(Location, "The 'in' operator requires that the right operand to be a list of the left operand's type.");
                                 }
                                 else
                                 {
-                                    var newArray = new ArrayExpression(rightExpression.ParserContext, array.Elements.Select(exp => chain.ApplyCast(exp, context)));
+                                    var newArray = new ArrayExpression(rightExpression.Location, array.Elements.Select(exp => chain.ApplyCast(exp, context)));
                                     if (newArray.Elements.All(e => e != null))
                                     {
                                         rightExpression = newArray;
                                         elementType = needleType;
                                     }
                                     else
-                                        throw new LocateableException(ParserContext, "The 'in' operator requires that the left operand has the same type like the elements of the right operand. At least these types must be convertible in each other.");
+                                        throw new LocateableException(Location, "The 'in' operator requires that the left operand has the same type like the elements of the right operand. At least these types must be convertible in each other.");
                                 }
                             }
                         }
@@ -116,7 +116,7 @@ namespace CQL.SyntaxTree
                         var equalsOperator = Operator == BinaryOperator.In ? BinaryOperator.Equals : BinaryOperator.NotEquals;
                         var equals = context.TypeSystem.GetBinaryOperation(equalsOperator, needleType, elementType);
                         if (equals == null)
-                            throw new LocateableException(ParserContext, "The elements of the array are not comparable with the left operand.");
+                            throw new LocateableException(Location, "The elements of the array are not comparable with the left operand.");
                         operation = new BinaryOperation(needleType, haystackType, typeof(bool), Operator, (needle, haystack) =>
                         {
                             foreach (object element in ((IEnumerable)haystack))
@@ -141,7 +141,7 @@ namespace CQL.SyntaxTree
                         {
                             Type elementType;
                             if (!leftExpression.IfArrayTryGetElementType(out elementType))
-                                throw new LocateableException(leftExpression.ParserContext, "Left operand must be of an array type.");
+                                throw new LocateableException(leftExpression.Location, "Left operand must be of an array type.");
                             SemanticType = typeof(bool);
                             operation = new BinaryOperation(leftExpression.SemanticType, rightExpression.SemanticType, typeof(bool), Operator,
                                 (lhs, _) =>
@@ -152,18 +152,18 @@ namespace CQL.SyntaxTree
                                 });
                         }
                         else
-                            throw new LocateableException(rightExpression.ParserContext, "Right operand must be NULL or EMPTY.");
+                            throw new LocateableException(rightExpression.Location, "Right operand must be NULL or EMPTY.");
                     }
                     break;
                 default:
                     operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
                     if (operation == null)
                         context.AlignTypes(ref leftExpression, ref rightExpression,
-                            () => new LocateableException(ParserContext, "Binary operation not supported!"));
+                            () => new LocateableException(Location, "Binary operation not supported!"));
                     operation = context.TypeSystem.GetBinaryOperation(Operator, LeftExpression.SemanticType, RightExpression.SemanticType);
                     if (operation == null)
                     {
-                        throw new LocateableException(ParserContext, "Binary operation not supported!");
+                        throw new LocateableException(Location, "Binary operation not supported!");
                     }
                     SemanticType = operation.ResultType;
                     break;

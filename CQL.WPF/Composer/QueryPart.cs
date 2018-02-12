@@ -162,7 +162,7 @@ namespace CQL.WPF.Composer
             return (field == null || op == null || !op.HasValue || value == null)
                 ? (IExpression)new BooleanLiteralExpression(null, true) 
                 : (IExpression)new BinaryOperationExpression(null, op.Value,
-                    new MultiIdExpression(null, field.Name),
+                    new VariableExpression(null, field.Name),
                     value.ToExpression());
         }
 
@@ -202,7 +202,7 @@ namespace CQL.WPF.Composer
 
         public override IExpression ToExpression()
         {
-            return new MultiIdExpression(null, constant.Name);
+            return new VariableExpression(null, constant.Name);
         }
 
         public override FilterBoxState Validate(IContext context)

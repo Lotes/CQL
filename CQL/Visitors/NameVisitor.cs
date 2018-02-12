@@ -9,19 +9,13 @@ namespace CQL.Visitors
 {
     public class NameVisitor: CQLBaseVisitor<string>
     {
-        public override string VisitVariableName([NotNull] CQLParser.VariableNameContext context)
+        public override string VisitMemberName([NotNull] CQLParser.MemberNameContext context)
         {
             return context.id.Text;
         }
-
         public override string VisitTypeName([NotNull] CQLParser.TypeNameContext context)
         {
             return context.castingType.Text;
-        }
-
-        public override string VisitFunctionName([NotNull] CQLParser.FunctionNameContext context)
-        {
-            return context.name.Text;
         }
 
         public override string VisitTrue([NotNull] CQLParser.TrueContext context)
@@ -32,6 +26,11 @@ namespace CQL.Visitors
         public override string VisitFalse([NotNull] CQLParser.FalseContext context)
         {
             return context.value.Text;
+        }
+
+        public override string VisitVarExp([NotNull] CQLParser.VarExpContext context)
+        {
+            return context.var.Text;
         }
     }
 }

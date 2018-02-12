@@ -158,7 +158,7 @@ namespace CQL.WPF.Composer
             var comparsion = expression as BinaryOperationExpression;
             if(comparsion != null && ComparsionOperators.Contains(comparsion.Operator))
             {
-                var multiId = Uncast(comparsion.LeftExpression) as MultiIdExpression;
+                var multiId = Uncast(comparsion.LeftExpression) as VariableExpression;
                 ComparsionValueViewModel comValue = null;
                 if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
                     return false;
@@ -168,7 +168,7 @@ namespace CQL.WPF.Composer
             }
 
             //constant query?
-            var constantQuery = expression as MultiIdExpression;
+            var constantQuery = expression as VariableExpression;
             if (constantQuery != null && Context.Get(constantQuery.Name) is Constant)
             {
                 var constant = (Constant)Context.Get(constantQuery.Name);

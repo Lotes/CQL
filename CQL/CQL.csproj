@@ -78,14 +78,18 @@
     <Compile Include="ErrorHandling\IErrorListener.cs" />
     <Compile Include="ErrorHandling\ErrorListener.cs" />
     <Compile Include="ErrorHandling\LocateableException.cs" />
+    <Compile Include="SyntaxTree\ArrayAccessExpression.cs" />
     <Compile Include="SyntaxTree\CastExpression.cs" />
     <Compile Include="SyntaxTree\Extensions.cs" />
     <Compile Include="SyntaxTree\IdDelimiter.cs" />
     <Compile Include="SyntaxTree\IEvaluator.cs" />
     <Compile Include="SyntaxTree\IExpression.cs" />
+    <Compile Include="SyntaxTree\IParserLocation.cs" />
     <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
+    <Compile Include="SyntaxTree\MemberCallExpression.cs" />
     <Compile Include="SyntaxTree\SyntaxTreeExtensions.cs" />
     <Compile Include="AutoCompletion\Token.cs" />
+    <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
@@ -118,7 +122,6 @@
     <Compile Include="SyntaxTree\ParenthesisExpression.cs" />
     <Compile Include="SyntaxTree\Query.cs" />
     <Compile Include="SyntaxTree\StringLiteralExpression.cs" />
-    <Compile Include="SyntaxTree\MultiIdExpression.cs" />
     <Compile Include="SyntaxTree\UnaryOperationExpression.cs" />
     <Compile Include="SyntaxTree\UnaryOperator.cs" />
     <Compile Include="TypeSystem\ITypeSystem.cs" />

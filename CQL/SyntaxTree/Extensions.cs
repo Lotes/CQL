@@ -22,7 +22,7 @@ namespace CQL.SyntaxTree
             if (@this is ArrayExpression)
             {
                 elementType = ((ArrayExpression)@this).ElementType;
-                 return true;
+                return true;
             }
             else
                 return @this.SemanticType.IfEnumerableTryGetElementType(out elementType);

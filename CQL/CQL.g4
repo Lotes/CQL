@@ -56,24 +56,28 @@ specialTerm
 	| expr=factor                                  #toFactor
 	;
 factor
-    : name=functionName LPAREN params=parameterList? RPAREN  #function
-    | varName=variableName                         #multiId
+	: pe=primary chain_element*                    #complexFactor
+	;
+chain_element
+	: LPAREN params=parameterList? RPAREN          #methodCall
+	| RBRACKET elems=elementList RBRACKET          #arrayAccess
+	| sep=SEPARATOR id=member                      #memberCall
+	;
+primary
+    : var=ID                                       #varExp
     | LPAREN expr=expression RPAREN                #expr
     | NOT expr=factor                              #notFactor
     | PLUS expr=factor                             #plusFactor
     | MINUS expr=factor                            #minusFactor
     | expr=constant                                #const
     | expr=list                                    #ls
-	| LPAREN type=typeName RPAREN expr=expression #castFactor     
+	| LPAREN type=typeName RPAREN expr=expression  #castFactor     
     ;
-functionName
-	: name=MULTI_ID
-	;
-variableName
-	: id=MULTI_ID
+member
+	: id=ID #memberName
 	;
 typeName
-	: castingType=MULTI_ID
+	: castingType=ID
 	;
 list
     : LBRACE elems=elementList RBRACE     #braceElems
@@ -105,6 +109,7 @@ emptyLiteral: EMPTY;
 /*
  * Lexer Rules
  */
+THIS: T H I S;
 TRUE: T R U E;
 FALSE: F A L S E;
 EMPTY: E M P T Y;
@@ -138,9 +143,8 @@ DOES_NOT_CONTAIN: '!~';
 IS: I S;
 AS: A S;
 SLASH: '/';
-fragment ID : [a-zA-Z_][A-Za-z_0-9]*;
-fragment NX : SLASH|'.'|'->'|'#'|'$';
-MULTI_ID: (NX|) ID (NX ID)* NX?;
+ID : [a-zA-Z_][A-Za-z_0-9]*;
+SEPARATOR : SLASH|'.'|'->'|'#'|'$';
 
 fragment A : ('A'|'a') ;
 fragment B : ('B'|'b') ;

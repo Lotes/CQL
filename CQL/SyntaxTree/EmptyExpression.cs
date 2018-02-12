@@ -11,8 +11,8 @@ namespace CQL.SyntaxTree
 {
     public class EmptyExpression: IExpression<EmptyExpression>
     {
-        public EmptyExpression(ParserRuleContext context) { ParserContext = context; }
-        public ParserRuleContext ParserContext { get; private set; }
+        public EmptyExpression(IParserLocation context) { Location = context; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 

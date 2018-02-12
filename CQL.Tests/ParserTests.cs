@@ -7,7 +7,7 @@ namespace CQL.Tests
     [TestClass]
     public class ParserTests
     {
-        private static ParserRuleContext pc = new ParserRuleContext();
+        private static IParserLocation pc = new ParserLocation(0, 0);
         private void AssertQueryEquals(string actualString, Query expected)
         {
             var actual = Queries.ParseForSyntaxOnly(actualString);
@@ -29,7 +29,7 @@ namespace CQL.Tests
         [TestMethod]
         public void FunctionCallExpressionTest()
         {
-            AssertQueryEquals("max(1, 2)", new Query(pc, new FunctionCallExpression(pc, "max", new[] 
+            AssertQueryEquals("max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new VariableExpression(pc, "max"), new[] 
             {
                 new DecimalLiteralExpression(pc, 1),
                 new DecimalLiteralExpression(pc, 2)
@@ -39,7 +39,7 @@ namespace CQL.Tests
         [TestMethod]
         public void VariableExpressionTest()
         {
-            AssertQueryEquals("zwerg", new Query(pc, new MultiIdExpression(pc, "zwerg")));
+            AssertQueryEquals("zwerg", new Query(pc, new VariableExpression(pc, "zwerg")));
         }
 
         [TestMethod]
@@ -81,7 +81,7 @@ namespace CQL.Tests
         [TestMethod]
         public void MultiIdExpressionTest()
         {
-            AssertQueryEquals("a->b", new Query(pc, new MultiIdExpression(pc, "a->b")));
+            AssertQueryEquals("a->b", new Query(pc, new MemberCallExpression(pc, new VariableExpression(pc, "a"), IdDelimiter.SingleArrow, "b")));
         }
 
         [TestMethod]

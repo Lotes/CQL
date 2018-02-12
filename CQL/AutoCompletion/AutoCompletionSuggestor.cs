@@ -19,14 +19,12 @@ namespace CQL.AutoCompletion
         private Dictionary<int, Func<INameable, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<INameable, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is QType },
-            { CQLParser.RULE_functionName, symbol => symbol is IFunction },
-            { CQLParser.RULE_variableName, symbol => symbol is Field || symbol is Constant }
+            { CQLParser.RULE_member, symbol => symbol is IFunction || symbol is Field || symbol is Constant}
         };
         private Dictionary<int, SuggestionType> lookupSuggestionByRuleId = new Dictionary<int, SuggestionType>()
         {
             { CQLParser.RULE_typeName, SuggestionType.Type },
-            { CQLParser.RULE_functionName, SuggestionType.Function },
-            { CQLParser.RULE_variableName, SuggestionType.Variable }
+            { CQLParser.RULE_member, SuggestionType.Variable }
         };
         private Dictionary<int, IEnumerable<INameable>> suggestionsByTokenType;
 
@@ -128,7 +126,7 @@ namespace CQL.AutoCompletion
         {
             switch(currentTokenType)
             {
-                case CQLLexer.MULTI_ID:
+                case CQLLexer.ID:
                     var ruleId = parserStack.Top.ruleIndex;
                     var nameables = context
                         .GetByPrefix(token.Type < 0 ? "" : token.Text)

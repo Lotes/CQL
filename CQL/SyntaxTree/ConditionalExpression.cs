@@ -19,15 +19,15 @@ namespace CQL.SyntaxTree
         public IExpression Then { get { return then; } }
         public IExpression Else { get { return @else; } }
 
-        public ConditionalExpression(ParserRuleContext context, IExpression condition, IExpression then, IExpression @else)
+        public ConditionalExpression(IParserLocation context, IExpression condition, IExpression then, IExpression @else)
         {
             Condition = condition;
             this.then = then;
             this.@else = @else;
-            ParserContext = context;
+            Location = context;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 
@@ -52,11 +52,11 @@ namespace CQL.SyntaxTree
             then = then.Validate(context);
             @else = @else.Validate(context);
             if (Condition.SemanticType != typeof(bool))
-                throw new LocateableException(Condition.ParserContext, "Condition must be a boolean!");
+                throw new LocateableException(Condition.Location, "Condition must be a boolean!");
             if (Then.SemanticType != Else.SemanticType)
             {
                 SemanticType = context.AlignTypes(ref then, ref @else,
-                    () => new LocateableException(ParserContext, "In the end the Then and the Else part must have the same type (also using implicit type conversion)!"));
+                    () => new LocateableException(Location, "In the end the Then and the Else part must have the same type (also using implicit type conversion)!"));
             }
             else
             {

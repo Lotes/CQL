@@ -16,7 +16,7 @@ namespace CQL
 {
     public static class Queries
     {
-        public static readonly Query True = new Query(ParserRuleContext.EmptyContext, new BooleanLiteralExpression(ParserRuleContext.EmptyContext, true));
+        public static readonly Query True = new Query(ParserLocation.EmptyContext, new BooleanLiteralExpression(ParserLocation.EmptyContext, true));
 
         public static Query ParseForSyntaxOnly(string text, IErrorListener errorListener = null)
         {

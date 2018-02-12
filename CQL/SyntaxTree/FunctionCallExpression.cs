@@ -12,17 +12,17 @@ namespace CQL.SyntaxTree
 {
     public class FunctionCallExpression: IExpression<FunctionCallExpression>
     {
-        public readonly string Name;
+        public readonly IExpression ThisExpression;
         public IEnumerable<IExpression> Parameters { get; private set; }
         private IFunction function = null;
 
-        public FunctionCallExpression(ParserRuleContext context, string name, IEnumerable<IExpression> parameters)
+        public FunctionCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
         {
-            Name = name;
+            ThisExpression = @this;
             Parameters = parameters.ToArray();
-            ParserContext = context;
+            Location = context;
         }
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
        
@@ -31,22 +31,22 @@ namespace CQL.SyntaxTree
             var other = node as FunctionCallExpression;
             if (other == null)
                 return false;
-            return this.Name == other.Name
+            return this.ThisExpression.StructurallyEquals(other.ThisExpression)
                 && this.Parameters.StructurallyEquals(other.Parameters);
         }
 
         public override string ToString()
         {
-            return $"{Name}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
+            return $"{ThisExpression.ToString()}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
         }
 
         public FunctionCallExpression Validate(IContext context)
         {
-            function = context.Get(Name) as IFunction;
+            function = null;//TODO context.Get(Name) as IFunction;
             if (function == null)
-                throw new LocateableException(ParserContext, "Unsupported function!");
+                throw new LocateableException(Location, "Unsupported function!");
             if (function.Arity != Parameters.Count())
-                throw new LocateableException(ParserContext, $"This function expects exactly {function.Arity} parameters, not {Parameters.Count()}!");
+                throw new LocateableException(Location, $"This function expects exactly {function.Arity} parameters, not {Parameters.Count()}!");
 
             var actuals = Parameters.ToArray();
             var formals = function.Parameters.ToArray();
@@ -58,7 +58,7 @@ namespace CQL.SyntaxTree
                 {
                     var chain = context.TypeSystem.GetImplicitlyCastChain(actual.SemanticType, formal.ParameterType);
                     actuals[index] = chain.ApplyCast(actual, context, 
-                        () => new LocateableException(ParserContext, $"The {index + 1}. parameter type does not match the function signature."));
+                        () => new LocateableException(Location, $"The {index + 1}. parameter type does not match the function signature."));
                 }
             }
             this.Parameters = actuals;

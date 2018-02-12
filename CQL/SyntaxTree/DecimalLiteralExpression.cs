@@ -13,13 +13,13 @@ namespace CQL.SyntaxTree
     {
         public readonly double Value;
 
-        public DecimalLiteralExpression(ParserRuleContext context, double value)
+        public DecimalLiteralExpression(IParserLocation context, double value)
         {
             Value = value;
-            ParserContext = context;
+            Location = context;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get { return typeof(double); } }
 

@@ -1,4 +1,5 @@
 ﻿using Antlr4.Runtime;
+using CQL.SyntaxTree;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,8 +13,8 @@ namespace CQL.ErrorHandling
         public readonly int StartIndex;
         public readonly int Length;
 
-        public LocateableException(ParserRuleContext parserContext, string message, Exception innerException = null)
-            : this(parserContext != null ? parserContext.Start.StartIndex : 0, parserContext != null ? parserContext.Stop.StopIndex : 0, message, innerException)
+        public LocateableException(IParserLocation location, string message, Exception innerException = null)
+            : this(location != null ? location.StartIndex : 0, location != null ? location.StopIndex : 0, message, innerException)
         {
 
         }

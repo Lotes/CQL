@@ -17,23 +17,23 @@ namespace CQL.SyntaxTree
         public IExpression Expression { get; private set; }
         private CoercionRule rule = null;
 
-        public CastExpression(ParserRuleContext parserContext, CoercionKind kind, string castTypeName, IExpression expression)
+        public CastExpression(IParserLocation parserContext, CoercionKind kind, string castTypeName, IExpression expression)
         {
-            ParserContext = parserContext;
+            Location = parserContext;
             Kind = kind;
             CastTypeName = castTypeName;
             Expression = expression;
         }
 
         public CastExpression(CoercionRule rule, IExpression validatedExpression, IContext context)
-            : this(validatedExpression.ParserContext, CoercionKind.Implicit, rule.CastingType.Name, validatedExpression)
+            : this(validatedExpression.Location, CoercionKind.Implicit, rule.CastingType.Name, validatedExpression)
         {
             this.rule = rule;
             SemanticType = rule.CastingType;
             Expression = validatedExpression;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 
@@ -55,11 +55,11 @@ namespace CQL.SyntaxTree
         {
             var type = context.TypeSystem.GetTypeByName(CastTypeName)?.ActualType;
             if (type == null)
-                throw new LocateableException(ParserContext, $"There is no type {CastTypeName}!");
+                throw new LocateableException(Location, $"There is no type {CastTypeName}!");
             Expression = Expression.Validate(context);
             rule = context.TypeSystem.GetCoercionRule(Expression.SemanticType, type);
             if (rule == null)
-                throw new LocateableException(ParserContext, $"Can not convert type into a '{CastTypeName}'.");
+                throw new LocateableException(Location, $"Can not convert type into a '{CastTypeName}'.");
             SemanticType = type;
             return this;
         }

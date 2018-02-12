@@ -9,13 +9,13 @@ namespace CQL.SyntaxTree
     {
         public readonly string Value;
 
-        public StringLiteralExpression(ParserRuleContext context, string value)
+        public StringLiteralExpression(IParserLocation context, string value)
         {
             Value = value;
-            ParserContext = context;
+            Location = context;
         }
 
-        public ParserRuleContext ParserContext { get; private set; }
+        public IParserLocation Location { get; private set; }
 
         public Type SemanticType { get; private set; }
 
