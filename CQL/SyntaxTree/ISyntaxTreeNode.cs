@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using CQL.Contexts;
 using CQL.ErrorHandling;
+using System;
 
 namespace CQL.SyntaxTree
 {
@@ -11,6 +12,6 @@ namespace CQL.SyntaxTree
     }
     public interface ISyntaxTreeNode<TSelf>: ISyntaxTreeNode
     {
-        TSelf Validate(IScope context);
+        TSelf Validate(IContext<Type> context);
     }
 }

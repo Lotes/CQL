@@ -46,7 +46,7 @@ namespace CQL.SyntaxTree
                 && this.Else.StructurallyEquals(other.Else);
         }
 
-        public ConditionalExpression Validate(IScope context)
+        public ConditionalExpression Validate(IContext<Type> context)
         {
             Condition = Condition.Validate(context);
             then = then.Validate(context);
@@ -65,21 +65,21 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            var condition = Condition.Evaluate(subject);
+            var condition = Condition.Evaluate(context);
             if((bool)condition == true)
             {
-                return Then.Evaluate(subject);
+                return Then.Evaluate(context);
             }
             else
             {
-                return Else.Evaluate(subject);
+                return Else.Evaluate(context);
             }
         }
     }

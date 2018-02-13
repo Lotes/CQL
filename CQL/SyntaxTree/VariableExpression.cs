@@ -24,7 +24,7 @@ namespace CQL.SyntaxTree
         public string Name { get; private set; }
         public IParserLocation Location { get; private set; }
         public Type SemanticType { get; private set; }
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> subject)
         {
             if (!hostType.IsAssignableFrom(typeof(TSubject)) || isNull(subject))
                 return null;
@@ -46,13 +46,13 @@ namespace CQL.SyntaxTree
             return other.Name == this.Name;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             Validate(context);
             return this;
         }
 
-        public VariableExpression Validate(IScope context)
+        public VariableExpression Validate(IContext<Type> context)
         {
             var nameable = context.Get(FullName);
             if (nameable == null)

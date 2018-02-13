@@ -36,12 +36,12 @@ namespace CQL.SyntaxTree
                 && this.MemberName == other.MemberName;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public MemberCallExpression Validate(IScope context)
+        public MemberCallExpression Validate(IContext<Type> context)
         {
             var @this = ThisExpression.Validate(context);
             var property = @this.GetType().GetProperty(MemberName);
@@ -49,9 +49,9 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            var @this = ThisExpression.Evaluate(subject);
+            var @this = ThisExpression.Evaluate(context);
             return getter.Invoke(@this, new object[0]);
         }
 

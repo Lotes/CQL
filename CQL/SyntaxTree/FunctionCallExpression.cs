@@ -14,7 +14,6 @@ namespace CQL.SyntaxTree
     {
         public readonly IExpression ThisExpression;
         public IEnumerable<IExpression> Parameters { get; private set; }
-        private IFunction function = null;
 
         public FunctionCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
         {
@@ -40,7 +39,7 @@ namespace CQL.SyntaxTree
             return $"{ThisExpression.ToString()}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
         }
 
-        public FunctionCallExpression Validate(IScope context)
+        public FunctionCallExpression Validate(IContext<Type> context)
         {
             function = null;//TODO context.Get(Name) as IFunction;
             if (function == null)
@@ -67,14 +66,14 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            return function.Invoke(Parameters.Select(p => p.Evaluate(subject)).ToArray());
+            //TODO
         }
     }
 }

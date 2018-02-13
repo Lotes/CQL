@@ -28,7 +28,7 @@ namespace CQL.AutoCompletion
         };
         private Dictionary<int, IEnumerable<INameable>> suggestionsByTokenType;
 
-        public AutoCompletionSuggester(IScope context)
+        public AutoCompletionSuggester(IContext<object> context)
         {
             this.context = context;
             this.ruleNames = CQLParser.ruleNames;

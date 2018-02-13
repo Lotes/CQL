@@ -39,7 +39,7 @@ namespace CQL.SyntaxTree
             return Expression.ToString();
         }
 
-        public Query Validate(IScope context)
+        public Query Validate(IContext<Type> context)
         {
             Expression = Expression.Validate(context);
             if (Expression.SemanticType != typeof(bool))
@@ -47,7 +47,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public bool Evaluate<TSubject>(TSubject subject)
+        public bool Evaluate(IContext<object> subject)
         {
             return (bool)Expression.Evaluate(subject);
         }

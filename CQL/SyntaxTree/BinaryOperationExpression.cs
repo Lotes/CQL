@@ -171,15 +171,15 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            var lhs = leftExpression.Evaluate(subject);
-            var rhs = rightExpression.Evaluate(subject);
+            var lhs = leftExpression.Evaluate(context);
+            var rhs = rightExpression.Evaluate(context);
             return operation.Operation(lhs, rhs);
         }
     }

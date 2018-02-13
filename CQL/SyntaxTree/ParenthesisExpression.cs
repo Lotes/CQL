@@ -33,21 +33,21 @@ namespace CQL.SyntaxTree
             return $"({Expression.ToString()})";
         }
 
-        public ParenthesisExpression Validate(IScope context)
+        public ParenthesisExpression Validate(IContext<Type> context)
         {
             Expression = Expression.Validate(context);
             SemanticType = Expression.SemanticType;
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            return Expression.Evaluate(subject);
+            return Expression.Evaluate(context);
         }
     }
 }

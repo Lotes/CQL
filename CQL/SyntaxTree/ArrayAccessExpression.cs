@@ -48,10 +48,10 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate<TSubject>(IContext<object> context, TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            var @this = ThisExpression.Evaluate(context, subject);
-            var indices = Indices.Select(i => i.Evaluate(context, subject)).ToArray();
+            var @this = ThisExpression.Evaluate(context);
+            var indices = Indices.Select(i => i.Evaluate(context)).ToArray();
             return getter.Invoke(@this, indices);
         }
     }

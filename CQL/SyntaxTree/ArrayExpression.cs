@@ -59,9 +59,9 @@ namespace CQL.SyntaxTree
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(IContext<object> context, TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
-            return Elements.Select(elem => elem.Evaluate(context, subject)).ToArray();
+            return Elements.Select(elem => elem.Evaluate(context)).ToArray();
         }
     }
 }

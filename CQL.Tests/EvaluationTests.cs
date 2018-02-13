@@ -21,7 +21,7 @@ namespace CQL.Tests
             }
         }
 
-        public static IScope context;
+        public static IContext<object> context;
         public static Ticket ticketOne;
         public static Ticket ticketTwo;
         public static Ticket ticketThree;
@@ -30,10 +30,7 @@ namespace CQL.Tests
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            var contextBuilder = new ContextBuilder(typeSystemBuilder.Build());
-            contextBuilder.AddField<Ticket, int>("TicketId", "Number of the ticket", a => a.Id, a => a == null);
-            contextBuilder.AddField<Ticket, string>("Owner", "Owner of the ticket", a => a.Owner, a => a == null || a.Owner == null);
-            context = contextBuilder.Build();
+            var context = new Context<object>(typeSystemBuilder.Build());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);

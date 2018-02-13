@@ -11,6 +11,7 @@ using CQL.Visitors;
 using CQL.ErrorHandling;
 using CQL.Contexts;
 using CQL.AutoCompletion;
+using CQL.Contexts.Implementation;
 
 namespace CQL
 {
@@ -42,12 +43,12 @@ namespace CQL
             }
         }
 
-        public static Query Parse(string text, IScope context, IErrorListener errorListener = null)
+        public static Query Parse(string text, IContext<object> context, IErrorListener errorListener = null)
         {
             try
             {
                 var query = ParseForSyntaxOnly(text);
-                return query.Validate(context);
+                return query.Validate(context.ToValidationContext());
             }
             catch (LocateableException ex)
             {
@@ -60,18 +61,19 @@ namespace CQL
             }
         }
 
-        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IScope context)
+        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IContext<object> context)
         {
             var suggester = new AutoCompletionSuggester(context);
             return suggester.GetSuggestions(textUntilCaret);
         }
 
-        public static bool? Evaluate<TSubject>(string text, TSubject subject, IScope context, IErrorListener errorListener = null)
+        public static bool? Evaluate<TSubject>(string text, TSubject subject, IContext<object> context, IErrorListener errorListener = null)
         {
             try
             { 
                 var query = Parse(text, context, errorListener);
-                return query.Evaluate(subject);
+                context.Scope.DefineThis(subject);
+                return query.Evaluate(context);
             }
             catch (LocateableException ex)
             {

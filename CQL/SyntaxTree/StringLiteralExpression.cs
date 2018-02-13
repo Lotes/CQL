@@ -19,7 +19,7 @@ namespace CQL.SyntaxTree
 
         public Type SemanticType { get; private set; }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
             return Value;
         }
@@ -37,13 +37,13 @@ namespace CQL.SyntaxTree
             return $"\"{Value.Escape()}\"";
         }
 
-        public StringLiteralExpression Validate(IScope context)
+        public StringLiteralExpression Validate(IContext<Type> context)
         {
             SemanticType = typeof(string);
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }

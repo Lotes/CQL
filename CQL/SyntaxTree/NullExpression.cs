@@ -16,7 +16,7 @@ namespace CQL.SyntaxTree
 
         public Type SemanticType { get; private set; }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate(IContext<object> context)
         {
             return null;
         }
@@ -31,13 +31,13 @@ namespace CQL.SyntaxTree
             return "NULL";
         }
 
-        public NullExpression Validate(IScope context)
+        public NullExpression Validate(IContext<Type> context)
         {
             SemanticType = context.TypeSystem.NullType;
             return this;
         }
 
-        IExpression IExpression.Validate(IScope context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
