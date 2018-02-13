@@ -11,6 +11,6 @@ namespace CQL.SyntaxTree
     }
     public interface ISyntaxTreeNode<TSelf>: ISyntaxTreeNode
     {
-        TSelf Validate(IContext context);
+        TSelf Validate(IScope context);
     }
 }

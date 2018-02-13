@@ -49,7 +49,7 @@ namespace CQL.SyntaxTree
             return $"{opStr} {Expression.ToString()}";
         }
 
-        public UnaryOperationExpression Validate(IContext context)
+        public UnaryOperationExpression Validate(IScope context)
         {
             Expression = Expression.Validate(context);
             operation = context.TypeSystem.GetUnaryOperation(Operator, Expression.SemanticType);
@@ -61,7 +61,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }

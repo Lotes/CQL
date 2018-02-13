@@ -32,12 +32,12 @@ namespace CQL.SyntaxTree
             return this.Indices.StructurallyEquals(other.Indices);
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public ArrayAccessExpression Validate(IContext context)
+        public ArrayAccessExpression Validate(IContext<Type> context)
         {
             var thisExpression = ThisExpression.Validate(context);
             var indices = Indices.Select(i => i.Validate(context)).ToArray();
@@ -48,10 +48,10 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate<TSubject>(IContext<object> context, TSubject subject)
         {
-            var @this = ThisExpression.Evaluate(subject);
-            var indices = Indices.Select(i => i.Evaluate(subject)).ToArray();
+            var @this = ThisExpression.Evaluate(context, subject);
+            var indices = Indices.Select(i => i.Evaluate(context, subject)).ToArray();
             return getter.Invoke(@this, indices);
         }
     }

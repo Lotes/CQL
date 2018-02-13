@@ -21,7 +21,7 @@ namespace CQL.Tests
             }
         }
 
-        public static IContext context;
+        public static IScope context;
         public static Ticket ticketOne;
         public static Ticket ticketTwo;
         public static Ticket ticketThree;

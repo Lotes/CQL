@@ -31,13 +31,13 @@ namespace CQL.SyntaxTree
             return "EMPTY";
         }
 
-        public EmptyExpression Validate(IContext context)
+        public EmptyExpression Validate(IScope context)
         {
             SemanticType = context.TypeSystem.EmptyType;
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }

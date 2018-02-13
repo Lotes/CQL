@@ -1,15 +1,18 @@
 ﻿using CQL.TypeSystem;
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
 
 namespace CQL.Contexts
 {
-    public interface IContext
+    public interface IContext<TAbstraction>
     {
         ITypeSystem TypeSystem { get; }
-        INameable Get(string name);
-        IEnumerable<INameable> GetByPrefix(string prefix);
-        IEnumerable<Field> Fields { get; }
-        IEnumerable<AbstractFunction> Functions { get; }
-        IEnumerable<Constant> Constants { get; }
+        void PushScope();
+        void PopScope();
+        IScope<TAbstraction> Scope { get; }
+        Stack<TAbstraction> Stack { get; }
     }
 }

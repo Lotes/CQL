@@ -41,12 +41,12 @@ namespace CQL.SyntaxTree
             return Value.ToString();
         }
 
-        public DecimalLiteralExpression Validate(IContext context)
+        public DecimalLiteralExpression Validate(IScope context)
         {
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }

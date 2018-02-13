@@ -46,13 +46,13 @@ namespace CQL.SyntaxTree
             return other.Name == this.Name;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             Validate(context);
             return this;
         }
 
-        public VariableExpression Validate(IContext context)
+        public VariableExpression Validate(IScope context)
         {
             var nameable = context.Get(FullName);
             if (nameable == null)

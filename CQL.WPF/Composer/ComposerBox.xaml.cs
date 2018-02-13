@@ -27,9 +27,9 @@ namespace CQL.WPF.Composer
             InitializeComponent();
         }
 
-        public IContext Context
+        public IScope Context
         {
-            get { return (IContext)GetValue(ContextProperty); }
+            get { return (IScope)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public Query Query
@@ -49,7 +49,7 @@ namespace CQL.WPF.Composer
         }
 
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IContext), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
+            DependencyProperty.Register("Context", typeof(IScope), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyProperty QueryProperty =
             DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyPropertyKey StatusProperty =

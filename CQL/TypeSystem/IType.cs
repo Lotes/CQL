@@ -7,10 +7,8 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
-    public interface IType: INameable
+    public interface IType
     {
         Type CSharpType { get; }
-        void AddMethod(MethodInfo info, string name);
-        void AddProperty(PropertyInfo info, string name);
     }
 }

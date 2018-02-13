@@ -18,7 +18,7 @@ namespace CQL.WPF.Composer
     public abstract class QueryPartViewModel: ViewModelBase
     {
         public abstract IExpression ToExpression();
-        public abstract FilterBoxState Validate(IContext context);
+        public abstract FilterBoxState Validate(IScope context);
         public event EventHandler ReadyModeRequested;
         protected void RequestReadyMode() { ReadyModeRequested?.Invoke(this, new EventArgs()); }
     }
@@ -35,11 +35,11 @@ namespace CQL.WPF.Composer
     {
         private FieldComparsionState state;
         private Field field;
-        private IContext context;
+        private IScope context;
         private BinaryOperator? op;
         private ComparsionValueViewModel value;
         private Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>> binaryOperations = new Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>>();
-        public FieldComparsionViewModel(IContext context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
+        public FieldComparsionViewModel(IScope context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
             this.KeyDownCommand = new RelayCommand<KeyEventArgs>(args => 
             {
@@ -166,7 +166,7 @@ namespace CQL.WPF.Composer
                     value.ToExpression());
         }
 
-        public override FilterBoxState Validate(IContext context)
+        public override FilterBoxState Validate(IScope context)
         {
             return field == null || op == null || !op.HasValue || value == null ? FilterBoxState.HasErrors : FilterBoxState.ReadyToUse;
         }
@@ -174,9 +174,9 @@ namespace CQL.WPF.Composer
     public class BooleanConstantViewModel : QueryPartViewModel
     {
         private Constant constant;
-        private IContext context;
+        private IScope context;
 
-        public BooleanConstantViewModel(IContext context, Constant constant)
+        public BooleanConstantViewModel(IScope context, Constant constant)
         {
             if (constant.FieldType != typeof(bool))
                 throw new ArgumentException("Constant must be a bool type!");
@@ -205,7 +205,7 @@ namespace CQL.WPF.Composer
             return new VariableExpression(null, constant.Name);
         }
 
-        public override FilterBoxState Validate(IContext context)
+        public override FilterBoxState Validate(IScope context)
         {
             return context.Get(constant.Name) == constant && constant.FieldType == typeof(bool)
                 ? FilterBoxState.ReadyToUse
@@ -237,7 +237,7 @@ namespace CQL.WPF.Composer
             return new BooleanLiteralExpression(null, value);
         }
 
-        public override FilterBoxState Validate(IContext context)
+        public override FilterBoxState Validate(IScope context)
         {
             return FilterBoxState.ReadyToUse;
         }

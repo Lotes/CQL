@@ -12,7 +12,7 @@ namespace CQL.SyntaxTree
     {
         Type SemanticType { get; }
 
-        IExpression Validate(IContext context);
+        IExpression Validate(IContext<Type> context);
     }
 
     public interface IExpression<TSelf>: IExpression, ISyntaxTreeNode<TSelf>

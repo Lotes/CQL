@@ -69,7 +69,7 @@ namespace CQL.Demo
                         FilteredSubjects.Add(subject);
         }
 
-        public IContext Context { get; }
+        public IScope Context { get; }
 
         public ObservableCollection<Subject> FilteredSubjects { get; private set; }
     }

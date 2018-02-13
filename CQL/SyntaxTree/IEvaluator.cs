@@ -9,6 +9,6 @@ namespace CQL.SyntaxTree
 {
     public interface IEvaluator
     {
-        object Evaluate<TSubject>(TSubject subject);
+        object Evaluate<TSubject>(IContext<object> context, TSubject @this);
     }
 }

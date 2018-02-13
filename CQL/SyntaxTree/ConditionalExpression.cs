@@ -46,7 +46,7 @@ namespace CQL.SyntaxTree
                 && this.Else.StructurallyEquals(other.Else);
         }
 
-        public ConditionalExpression Validate(IContext context)
+        public ConditionalExpression Validate(IScope context)
         {
             Condition = Condition.Validate(context);
             then = then.Validate(context);
@@ -65,7 +65,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }

@@ -71,10 +71,10 @@
     <Compile Include="AutoCompletion\ParserStack.cs" />
     <Compile Include="AutoCompletion\Suggestion.cs" />
     <Compile Include="AutoCompletion\SuggestionType.cs" />
-    <Compile Include="Contexts\Constant.cs" />
-    <Compile Include="Contexts\Implementation\Context.cs" />
+    <Compile Include="Contexts\IContext.cs" />
+    <Compile Include="Contexts\Implementation\Scope.cs" />
+    <Compile Include="Contexts\IVariable.cs" />
     <Compile Include="HashExtensions.cs" />
-    <Compile Include="INameable.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
     <Compile Include="ErrorHandling\ErrorListener.cs" />
     <Compile Include="ErrorHandling\LocateableException.cs" />
@@ -94,11 +94,7 @@
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
-    <Compile Include="Contexts\Field.cs" />
-    <Compile Include="Contexts\Functions.cs" />
-    <Compile Include="Contexts\Implementation\ContextBuilder.cs" />
-    <Compile Include="Contexts\IContext.cs" />
-    <Compile Include="Contexts\IContextBuilder.cs" />
+    <Compile Include="Contexts\IScope.cs" />
     <Compile Include="TypeSystem\CoercionKind.cs" />
     <Compile Include="TypeSystem\CoercionRule.cs" />
     <Compile Include="TypeSystem\Implementation\TypeSystem.cs" />

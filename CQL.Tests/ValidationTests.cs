@@ -14,7 +14,7 @@ namespace CQL.Tests
     [TestClass]
     public class ValidationTests
     {
-        public static IContext context;
+        public static IScope context;
 
         [ClassInitialize]
         public static void SetupFixture(TestContext testContext)

@@ -42,7 +42,7 @@ namespace CQL
             }
         }
 
-        public static Query Parse(string text, IContext context, IErrorListener errorListener = null)
+        public static Query Parse(string text, IScope context, IErrorListener errorListener = null)
         {
             try
             {
@@ -60,13 +60,13 @@ namespace CQL
             }
         }
 
-        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IContext context)
+        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IScope context)
         {
             var suggester = new AutoCompletionSuggester(context);
             return suggester.GetSuggestions(textUntilCaret);
         }
 
-        public static bool? Evaluate<TSubject>(string text, TSubject subject, IContext context, IErrorListener errorListener = null)
+        public static bool? Evaluate<TSubject>(string text, TSubject subject, IScope context, IErrorListener errorListener = null)
         {
             try
             { 

@@ -15,7 +15,7 @@ namespace CQL.AutoCompletion
         private string[] ruleNames;
         private IVocabulary vocabulary;
         private ATN atn;
-        private IContext context;
+        private IScope context;
         private Dictionary<int, Func<INameable, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<INameable, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is IType },
@@ -28,7 +28,7 @@ namespace CQL.AutoCompletion
         };
         private Dictionary<int, IEnumerable<INameable>> suggestionsByTokenType;
 
-        public AutoCompletionSuggester(IContext context)
+        public AutoCompletionSuggester(IScope context)
         {
             this.context = context;
             this.ruleNames = CQLParser.ruleNames;

@@ -25,7 +25,7 @@ namespace CQL.SyntaxTree
             Expression = expression;
         }
 
-        public CastExpression(CoercionRule rule, IExpression validatedExpression, IContext context)
+        public CastExpression(CoercionRule rule, IExpression validatedExpression, IScope context)
             : this(validatedExpression.Location, CoercionKind.Implicit, rule.CastingType.Name, validatedExpression)
         {
             this.rule = rule;
@@ -51,7 +51,7 @@ namespace CQL.SyntaxTree
             return (Kind==CoercionKind.Explicit ? $"({CastTypeName})" : "")+Expression.ToString();
         }
 
-        public CastExpression Validate(IContext context)
+        public CastExpression Validate(IScope context)
         {
             var type = context.TypeSystem.GetTypeByName(CastTypeName)?.CSharpType;
             if (type == null)
@@ -64,7 +64,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return this.Validate(context);
         }

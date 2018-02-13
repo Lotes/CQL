@@ -37,13 +37,13 @@ namespace CQL.SyntaxTree
             return $"\"{Value.Escape()}\"";
         }
 
-        public StringLiteralExpression Validate(IContext context)
+        public StringLiteralExpression Validate(IScope context)
         {
             SemanticType = typeof(string);
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }

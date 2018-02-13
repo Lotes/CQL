@@ -40,7 +40,7 @@ namespace CQL.SyntaxTree
             return $"[{string.Join(", ", Elements.Select(e => e.ToString()))}]";
         }
 
-        public ArrayExpression Validate(IContext context)
+        public ArrayExpression Validate(IContext<Type> context)
         {
             var elements = Elements.Select(e => e.Validate(context)).ToArray();
             //Attention! The array has at least one element.
@@ -54,14 +54,14 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate<TSubject>(TSubject subject)
+        public object Evaluate<TSubject>(IContext<object> context, TSubject subject)
         {
-            return Elements.Select(elem => elem.Evaluate(subject)).ToArray();
+            return Elements.Select(elem => elem.Evaluate(context, subject)).ToArray();
         }
     }
 }

@@ -40,7 +40,7 @@ namespace CQL.SyntaxTree
             return $"{ThisExpression.ToString()}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
         }
 
-        public FunctionCallExpression Validate(IContext context)
+        public FunctionCallExpression Validate(IScope context)
         {
             function = null;//TODO context.Get(Name) as IFunction;
             if (function == null)
@@ -67,7 +67,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext context)
+        IExpression IExpression.Validate(IScope context)
         {
             return Validate(context);
         }
