@@ -41,28 +41,7 @@ namespace CQL.SyntaxTree
 
         public FunctionCallExpression Validate(IContext<Type> context)
         {
-            function = null;//TODO context.Get(Name) as IFunction;
-            if (function == null)
-                throw new LocateableException(Location, "Unsupported function!");
-            if (function.Arity != Parameters.Count())
-                throw new LocateableException(Location, $"This function expects exactly {function.Arity} parameters, not {Parameters.Count()}!");
-
-            var actuals = Parameters.ToArray();
-            var formals = function.Parameters.ToArray();
-            for (var index=0; index<function.Arity; index++)
-            {
-                var actual = actuals[index].Validate(context);
-                var formal = formals[index];
-                if (!formal.ParameterType.IsAssignableFrom(actual.SemanticType))
-                {
-                    var chain = context.TypeSystem.GetImplicitlyCastChain(actual.SemanticType, formal.ParameterType);
-                    actuals[index] = chain.ApplyCast(actual, context, 
-                        () => new LocateableException(Location, $"The {index + 1}. parameter type does not match the function signature."));
-                }
-            }
-            this.Parameters = actuals;
-
-            this.SemanticType = function.ResultType;
+            ///TODO
             return this;
         }
 
@@ -74,6 +53,7 @@ namespace CQL.SyntaxTree
         public object Evaluate(IContext<object> context)
         {
             //TODO
+            return null;
         }
     }
 }

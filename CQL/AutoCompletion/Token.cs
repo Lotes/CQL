@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
-    public class Token : INameable
+    public class Token
     {
         public Token(string name, string usage)
         {

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections;
 
 namespace CQL.Contexts.Implementation
 {
@@ -11,12 +12,12 @@ namespace CQL.Contexts.Implementation
     {
         private Dictionary<string, IVariable<T>> variables = new Dictionary<string, IVariable<T>>();
 
-        public Scope(Scope<T> parent = null)
+        public Scope(IScope<T> parent = null)
         {
             Parent = parent;
         }
 
-        public Scope<T> Parent { get; private set; }
+        public IScope<T> Parent { get; private set; }
 
         private string Normalize(string str)
         {
@@ -33,12 +34,20 @@ namespace CQL.Contexts.Implementation
             return variables.TryGetValue(Normalize(name), out variable)
                 || (Parent != null && Parent.TryGetVariable(name, out variable));      
         }
+
+        public IEnumerator<IVariable<T>> GetEnumerator()
+        {
+            return variables.Values.GetEnumerator();
+        }
+
+        IEnumerator IEnumerable.GetEnumerator()
+        {
+            return GetEnumerator();
+        }
     }
 
     public class Variable<T> : IVariable<T>
     {
-        private T value;
-
         public Variable(string name, T value)
         {
             this.Name = name;

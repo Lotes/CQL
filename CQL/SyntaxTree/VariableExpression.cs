@@ -26,7 +26,7 @@ namespace CQL.SyntaxTree
         public Type SemanticType { get; private set; }
         public object Evaluate(IContext<object> subject)
         {
-            if (!hostType.IsAssignableFrom(typeof(TSubject)) || isNull(subject))
+            if (isNull(subject))
                 return null;
             return getter(subject);
         }
@@ -54,28 +54,12 @@ namespace CQL.SyntaxTree
 
         public VariableExpression Validate(IContext<Type> context)
         {
-            var nameable = context.Get(FullName);
-            if (nameable == null)
+            IVariable<Type> nameable;
+            if (!context.Scope.TryGetVariable(FullName, out nameable))
                 throw new LocateableException(Location, "Unknown field!");
-            if (nameable is Field)
-            {
-                var field = nameable as Field;
-                hostType = field.HostType;
-                getter = field.Getter;
-                isNull = field.IsNull;
-                SemanticType = field.FieldType;
-            }
-            else if (nameable is Constant)
-            {
-                var constant = nameable as Constant;
-                hostType = constant.HostType;
-                getter = a => constant.Getter(a);
-                isNull = a => false;
-                SemanticType = constant.FieldType;
-            }
-            else
-                throw new LocateableException(Location, "Name must identify a constant or a field.");
-            return this;
+            //TODO
+            throw new LocateableException(Location, "Name must identify a constant or a field.");
+            //return this;
         }
     }
 }

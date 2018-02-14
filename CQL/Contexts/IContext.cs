@@ -24,7 +24,7 @@ namespace CQL.Contexts
             var result = new Context<Type>(@this.TypeSystem);
             foreach(var elem in @this.Stack.Reverse().Select(t => t.GetType()))
                 result.Stack.Push(elem);
-            @this.Scope
+            ((Scope<object>)@this.Scope).ToValidationScope();
             return result;
         }
     }

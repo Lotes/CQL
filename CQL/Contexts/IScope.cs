@@ -9,6 +9,7 @@ namespace CQL.Contexts
     {
         bool TryGetVariable(string name, out IVariable<TAbstraction> variable);
         IVariable<TAbstraction> DefineVariable(string name, TAbstraction value);
+        IScope<TAbstraction> Parent { get; }
     }
 
     public static class ScopeExtensions
@@ -18,9 +19,10 @@ namespace CQL.Contexts
         {
             if (@this == null)
                 return null;
-            var result = new Scope<Type>();
-            foreach(var elem in @this)
-
+            var result = new Scope<Type>(@this.Parent.ToValidationScope());
+            foreach (var elem in @this)
+                @this.DefineVariable(elem.Name, elem.Value.GetType());
+            return result;
         }
         public static bool TryGetThis<T>(this IScope<T> @this, out IVariable<T> variable)
         {

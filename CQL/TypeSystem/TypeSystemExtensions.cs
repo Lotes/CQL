@@ -20,7 +20,7 @@ namespace CQL.TypeSystem
             }
             var current = expression;
             foreach (var rule in @this)
-                current = new CastExpression(rule, current, context);
+                current = new CastExpression(rule, current);
             return current;
         }
 

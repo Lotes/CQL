@@ -14,15 +14,14 @@ namespace CQL.Tests
     [TestClass]
     public class ValidationTests
     {
-        public static IContext<System.Type> context;
+        public static IContext<object> context;
 
         [ClassInitialize]
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            var contextBuilder = new ContextBuilder(typeSystemBuilder.Build());
-            contextBuilder.AddField<int, int>("a.b.c", "Test variable", a => 1, a => false);
-            context = contextBuilder.Build();
+            context = new Context<object>(typeSystemBuilder.Build());
+            context.Scope.DefineVariable("a.b.c", 1);
         }
 
         [TestMethod]

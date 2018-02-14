@@ -1,6 +1,7 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using CQL.Contexts;
+using CQL.Contexts.Implementation;
 using CQL.TypeSystem;
 using System;
 using System.Collections.Generic;
@@ -15,18 +16,18 @@ namespace CQL.AutoCompletion
         private string[] ruleNames;
         private IVocabulary vocabulary;
         private ATN atn;
-        private IScope context;
-        private Dictionary<int, Func<INameable, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<INameable, bool>>()
+        private IContext<object> context;
+        private Dictionary<int, Func<IVariable<object>, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<IVariable<object>, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is IType },
-            { CQLParser.RULE_member, symbol => symbol is IFunction || symbol is Field || symbol is Constant}
+            { CQLParser.RULE_member, symbol => symbol is IVariable<object> }
         };
         private Dictionary<int, SuggestionType> lookupSuggestionByRuleId = new Dictionary<int, SuggestionType>()
         {
             { CQLParser.RULE_typeName, SuggestionType.Type },
             { CQLParser.RULE_member, SuggestionType.Variable }
         };
-        private Dictionary<int, IEnumerable<INameable>> suggestionsByTokenType;
+        private Dictionary<int, IEnumerable<Token>> suggestionsByTokenType;
 
         public AutoCompletionSuggester(IContext<object> context)
         {
@@ -35,7 +36,7 @@ namespace CQL.AutoCompletion
             this.vocabulary = CQLParser.DefaultVocabulary;
             this.atn = CQLParser._ATN;
 
-            suggestionsByTokenType = new Dictionary<int, IEnumerable<INameable>>();
+            suggestionsByTokenType = new Dictionary<int, IEnumerable<Token>>();
             for (var index = 0; index < CQLLexer.DefaultVocabulary.MaxTokenType; index++)
             {
                 var name = CQLLexer.DefaultVocabulary.GetDisplayName(index);
@@ -128,19 +129,25 @@ namespace CQL.AutoCompletion
             {
                 case CQLLexer.ID:
                     var ruleId = parserStack.Top.ruleIndex;
-                    var nameables = context
-                        .GetByPrefix(token.Type < 0 ? "" : token.Text)
+                    var allVariables = new List<IVariable<object>>();
+                    var currentScope = context.Scope;
+                    while(currentScope != null)
+                    {
+                        allVariables.AddRange(currentScope);
+                        currentScope = currentScope.Parent;
+                    }
+                    var nameables = allVariables.Where(v => v.Name.ToUpper().StartsWith(token.Text.ToUpper()))
                         .Where(lookupPredicateByRuleId[ruleId])
                         .OrderBy(n => n.Name)
                         .ToArray();
                     var type = lookupSuggestionByRuleId[ruleId];
                     var length = token.Type < 0 ? 0 : token.Text.Length;
                     if (type == SuggestionType.Function)
-                        foreach (var nameable in nameables.OfType<IFunction>())
-                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name + "("+string.Join(", ", nameable.Parameters.Select(p => p.Name))+")", nameable.Usage));
+                        foreach (var nameable in nameables.OfType<IVariable<object>>())
+                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name + "(???)", ""));
                     else
                         foreach(var nameable in nameables)
-                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name, nameable.Usage));
+                            collector.Add(new Suggestion(type, token.Column, length, nameable.Name, ""));
                     break;
                 default:
                     if(suggestionsByTokenType.ContainsKey(currentTokenType))
