@@ -10,10 +10,6 @@ namespace CQL.SyntaxTree
 {
     public class VariableExpression : IExpression<VariableExpression>
     {
-        private Type hostType;
-        private Func<object, object> getter = null;
-        private Func<object, bool> isNull = null;
-
         public VariableExpression(IParserLocation location, string identifier)
         {
             this.Location = location;
@@ -24,12 +20,6 @@ namespace CQL.SyntaxTree
         public string Name { get; private set; }
         public IParserLocation Location { get; private set; }
         public Type SemanticType { get; private set; }
-        public object Evaluate(IContext<object> subject)
-        {
-            if (isNull(subject))
-                return null;
-            return getter(subject);
-        }
 
         public override string ToString()
         {
@@ -48,8 +38,7 @@ namespace CQL.SyntaxTree
 
         IExpression IExpression.Validate(IContext<Type> context)
         {
-            Validate(context);
-            return this;
+            return Validate(context);
         }
 
         public VariableExpression Validate(IContext<Type> context)
@@ -57,9 +46,16 @@ namespace CQL.SyntaxTree
             IVariable<Type> nameable;
             if (!context.Scope.TryGetVariable(FullName, out nameable))
                 throw new LocateableException(Location, "Unknown field!");
-            //TODO
-            throw new LocateableException(Location, "Name must identify a constant or a field.");
-            //return this;
+            SemanticType = nameable.Value;
+            return this;
+        }
+
+        public object Evaluate(IContext<object> context)
+        {
+            IVariable<object> nameable;
+            if (!context.Scope.TryGetVariable(FullName, out nameable))
+                throw new LocateableException(Location, "Unknown field!");
+            return nameable.Value;
         }
     }
 }

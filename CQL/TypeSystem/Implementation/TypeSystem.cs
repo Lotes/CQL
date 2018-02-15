@@ -19,12 +19,14 @@ namespace CQL.TypeSystem.Implementation
         private BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>> allCoercionRules = new BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>>();
         private BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>> implicitCoercionRules = new BidirectionalGraph<System.Type, TaggedEdge<System.Type, CoercionRule>>();
 
-        public void AddType<TType>(string name, string usage)
+        public IType<TType> AddType<TType>(string name, string usage)
         {
             if (types.Values.Any(t => t.CSharpType == typeof(TType)))
                 throw new InvalidOperationException("Type is already registered!");
             Debug.WriteLine($"- added type '{name}'");
-            types.Add(name.ToLower(), new Type(name, usage, typeof(TType)));
+            IType<TType> result;
+            types.Add(name.ToLower(), result = new Type<TType>(name, usage));
+            return result;
         }
 
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)

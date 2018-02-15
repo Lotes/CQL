@@ -19,12 +19,10 @@ namespace CQL.SyntaxTree
             Elements = elements.ToArray();
             Location = context;
             SemanticType = null;
-            ElementType = null;
         }
 
         public IParserLocation Location { get; private set; }
 
-        public Type ElementType { get; private set; }
         public Type SemanticType { get; private set; }
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
@@ -40,28 +38,32 @@ namespace CQL.SyntaxTree
             return $"[{string.Join(", ", Elements.Select(e => e.ToString()))}]";
         }
 
-        public ArrayExpression Validate(IContext<Type> context)
-        {
-            var elements = Elements.Select(e => e.Validate(context)).ToArray();
-            //Attention! The array has at least one element.
-            ElementType = Elements.First().SemanticType;
-            for(var index=1; index<elements.Length; index++)
-                if(elements[index].SemanticType != ElementType)
-                    ElementType = context.AlignTypes(ref elements[index-1], ref elements[index], () => new LocateableException(Location, "Could not unify type of this array!"));
-            Elements = elements;
-            ElementType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
-            SemanticType = ElementType.MakeArrayType();
-            return this;
-        }
-
         IExpression IExpression.Validate(IContext<Type> context)
         {
             return Validate(context);
         }
 
+        public ArrayExpression Validate(IContext<Type> context)
+        {
+            var elements = Elements.Select(e => e.Validate(context)).ToArray();
+            //Attention! The array has at least one element.
+            var elementType = Elements.First().SemanticType;
+            for(var index=1; index<elements.Length; index++)
+                if(elements[index].SemanticType != elementType)
+                    elementType = context.AlignTypes(ref elements[index-1], ref elements[index], () => new LocateableException(Location, "Could not unify type of this array!"));
+            Elements = elements;
+            elementType = Elements.Select(e => e.SemanticType).GetCommonBaseClass();
+            SemanticType = elementType.MakeArrayType();
+            return this;
+        }
+
         public object Evaluate(IContext<object> context)
         {
-            return Elements.Select(elem => elem.Evaluate(context)).ToArray();
+            var values = Elements.Select(elem => elem.Evaluate(context)).ToArray();
+            var result = (Array)Activator.CreateInstance(SemanticType, values.Length);
+            for (var index = 0; index < values.Length; index++)
+                result.SetValue(values[index], index);
+            return result;
         }
     }
 }

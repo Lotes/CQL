@@ -10,8 +10,6 @@ namespace CQL.SyntaxTree
 {
     public class ArrayAccessExpression : IExpression<ArrayAccessExpression>
     {
-        private MethodInfo getter;
-
         public ArrayAccessExpression(IParserLocation location, IExpression primary, IEnumerable<IExpression> indices)
         {
             this.Location = location;
@@ -41,10 +39,21 @@ namespace CQL.SyntaxTree
         {
             var thisExpression = ThisExpression.Validate(context);
             var indices = Indices.Select(i => i.Validate(context)).ToArray();
-            var type = thisExpression.GetType();
-            var property = type.GetProperty("Item", indices.Select(i => i.GetType()).ToArray());
-            SemanticType = property.PropertyType;
-            getter = property.GetMethod;
+            var type = context.TypeSystem.GetTypeByNative(thisExpression.SemanticType);
+            var indexer = type.Indexer;
+            if (indexer == null)
+                throw new InvalidOperationException("No indexer found!");
+            SemanticType = indexer.ReturnType;
+            var formalParameters = indexer.FormalParameters;
+            if (formalParameters.Length != indices.Length)
+                throw new InvalidOperationException("Parameter count mismatch!");
+            for(var index = 0; index<formalParameters.Length; index++)
+            {
+                var formal = formalParameters[index];
+                var actualExpression = indices[index];
+                if (!formal.IsAssignableFrom(actualExpression.SemanticType))
+                    throw new InvalidOperationException("Parameter type mismatch!");
+            }
             return this;
         }
 
@@ -52,7 +61,9 @@ namespace CQL.SyntaxTree
         {
             var @this = ThisExpression.Evaluate(context);
             var indices = Indices.Select(i => i.Evaluate(context)).ToArray();
-            return getter.Invoke(@this, indices);
+            var type = context.TypeSystem.GetTypeByNative(@this.GetType());
+            var indexer = type?.Indexer;
+            return indexer.Get(@this, indices);
         }
     }
 }

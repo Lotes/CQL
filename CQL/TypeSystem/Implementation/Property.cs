@@ -10,12 +10,13 @@ namespace CQL.TypeSystem.Implementation
         private string name;
         private Action<object, object> setter;
 
-        public Property(IdDelimiter delimiter, string name, Func<object, object> getter, Action<object, object> setter)
+        public Property(IdDelimiter delimiter, string name, Type returnType, Func<object, object> getter, Action<object, object> setter)
         {
             this.delimiter = delimiter;
             this.name = name;
             this.getter = getter;
             this.setter = setter;
+            ReturnType = returnType;
         }
 
         public string Name
@@ -25,6 +26,8 @@ namespace CQL.TypeSystem.Implementation
                 return name;
             }
         }
+
+        public Type ReturnType { get; private set; }
 
         public object Get(object @this)
         {

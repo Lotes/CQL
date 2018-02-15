@@ -21,7 +21,7 @@ namespace CQL.Contexts
                 return null;
             var result = new Scope<Type>(@this.Parent.ToValidationScope());
             foreach (var elem in @this)
-                @this.DefineVariable(elem.Name, elem.Value.GetType());
+                result.DefineVariable(elem.Name, elem.Value.GetType());
             return result;
         }
         public static bool TryGetThis<T>(this IScope<T> @this, out IVariable<T> variable)

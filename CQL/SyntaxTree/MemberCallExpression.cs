@@ -5,13 +5,12 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CQL.Contexts;
+using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
     public class MemberCallExpression : IExpression<MemberCallExpression>
     {
-        private MethodInfo getter;
-
         public MemberCallExpression(IParserLocation location, IExpression @this, IdDelimiter delimiter, string memberName)
         {
             Location = location;
@@ -44,15 +43,26 @@ namespace CQL.SyntaxTree
         public MemberCallExpression Validate(IContext<Type> context)
         {
             var @this = ThisExpression.Validate(context);
-            var property = @this.GetType().GetProperty(MemberName);
-            getter = property.GetMethod;
+            var thisType = @this.SemanticType;
+            var csharpType = context.TypeSystem.GetTypeByNative(thisType);
+            var symbol = csharpType.GetByName(Delimiter, MemberName);
+            if (!(symbol is IProperty))
+                throw new InvalidOperationException("Expecting property!");
+            var property = symbol as IProperty;
+            SemanticType = property.ReturnType;
             return this;
         }
 
         public object Evaluate(IContext<object> context)
         {
             var @this = ThisExpression.Evaluate(context);
-            return getter.Invoke(@this, new object[0]);
+            var thisType = @this.GetType();
+            var csharpType = context.TypeSystem.GetTypeByNative(thisType);
+            var symbol = csharpType.GetByName(Delimiter, MemberName);
+            if (!(symbol is IProperty))
+                throw new InvalidOperationException("Expecting property!");
+            var property = symbol as IProperty;
+            return property.Get(@this);
         }
 
         public override string ToString()

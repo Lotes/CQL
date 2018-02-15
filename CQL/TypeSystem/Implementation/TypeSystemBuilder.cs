@@ -35,9 +35,9 @@ namespace CQL.TypeSystem.Implementation
             }
         }
 
-        public void AddType<TType>(string name, string usage)
+        public IType<TType> AddType<TType>(string name, string usage)
         {
-            typeSystem.AddType<TType>(name, usage);
+            var result = typeSystem.AddType<TType>(name, usage);
             AddEqualsRule<TType>((a, b) => a != null && b != null && a.Equals(b));
             if (typeof(IComparable).IsAssignableFrom(typeof(TType)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);
@@ -51,6 +51,7 @@ namespace CQL.TypeSystem.Implementation
                 TryAddUnaryNumericOperation<TType>(UnaryOperator.Plus);
                 TryAddUnaryNumericOperation<TType>(UnaryOperator.Minus);
             }
+            return result;
         }
 
         private bool TryAddUnaryNumericOperation<TType>(UnaryOperator op)

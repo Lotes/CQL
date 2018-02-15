@@ -1,6 +1,7 @@
 ﻿using CQL.Contexts;
 using CQL.Contexts.Implementation;
 using CQL.ErrorHandling;
+using CQL.SyntaxTree;
 using CQL.TypeSystem.Implementation;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
@@ -14,14 +15,26 @@ namespace CQL.Tests
     [TestClass]
     public class ValidationTests
     {
+        public class A
+        {
+            public B b { get; set; }
+        }
+
+        public class B
+        {
+            public int c { get; set; }
+        }
+
         public static IContext<object> context;
 
         [ClassInitialize]
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
+            typeSystemBuilder.AddType<A>("A", "stuff").AddProperty(IdDelimiter.Dot, "b", a => a.b, null);
+            typeSystemBuilder.AddType<B>("B", "stuff 2").AddProperty(IdDelimiter.Dot, "c", a => a.c, null);
             context = new Context<object>(typeSystemBuilder.Build());
-            context.Scope.DefineVariable("a.b.c", 1);
+            context.Scope.DefineVariable("a", new A() { b = new B() { c = 1 } });
         }
 
         [TestMethod]

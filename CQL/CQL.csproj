@@ -93,6 +93,8 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSystem\IIndexer.cs" />
     <Compile Include="TypeSystem\IMethod.cs" />
+    <Compile Include="TypeSystem\Implementation\Indexer.cs" />
+    <Compile Include="TypeSystem\Implementation\Method.cs" />
     <Compile Include="TypeSystem\Implementation\Property.cs" />
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />

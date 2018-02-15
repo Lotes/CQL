@@ -21,7 +21,7 @@ namespace CQL.SyntaxTree
         {
             if (@this is ArrayExpression)
             {
-                elementType = ((ArrayExpression)@this).ElementType;
+                elementType = ((ArrayExpression)@this).SemanticType.GetElementType();
                 return true;
             }
             else
