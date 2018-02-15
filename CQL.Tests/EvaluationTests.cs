@@ -4,6 +4,7 @@ using CQL.TypeSystem.Implementation;
 using CQL.Contexts.Implementation;
 using CQL.Contexts;
 using CQL.ErrorHandling;
+using CQL.SyntaxTree;
 
 namespace CQL.Tests
 {
@@ -30,7 +31,10 @@ namespace CQL.Tests
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            var context = new Context<object>(typeSystemBuilder.Build());
+            var Ticket = typeSystemBuilder.AddType<Ticket>("Ticker", "Blubber");
+            Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id, null);
+            Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner, null);
+            context = new Context<object>(typeSystemBuilder.Build());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);
@@ -45,8 +49,8 @@ namespace CQL.Tests
         [TestMethod]
         public void GetTicketByNumber()
         {
-            Assert.IsTrue(Queries.Evaluate("ticketid = 1", ticketOne, context) == true);
-            Assert.IsFalse(Queries.Evaluate("ticketid = 1", ticketTwo, context) == true);
+            Assert.IsTrue(Queries.Evaluate("id = 1", ticketOne, context) == true);
+            Assert.IsFalse(Queries.Evaluate("id = 1", ticketTwo, context) == true);
         }
 
         [TestMethod]
