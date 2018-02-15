@@ -9,7 +9,7 @@ namespace CQL.TypeSystem
 {
     public interface ITypeSystemBuilder
     {
-        void AddType<TType>(string name, string usage);
+        IType<TType> AddType<TType>(string name, string usage);
         void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast);
         void AddContainsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate);
         void AddEqualsRule<TOperand>(Func<TOperand, TOperand, bool> aggregate);
