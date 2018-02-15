@@ -17,6 +17,7 @@ namespace CQL.TypeSystem
         /// </summary>
         /// <returns></returns>
         IIndexer Indexer { get; }
+        IEnumerable<ISymbol> Members { get; }
     }
 
     public interface IType<TType>: IType

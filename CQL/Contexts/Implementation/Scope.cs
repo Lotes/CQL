@@ -10,10 +10,15 @@ namespace CQL.Contexts.Implementation
 {
     public class Scope<T> : IScope<T>
     {
+        private ITypeSystem system;
+        private Func<T, Type> getType;
         private Dictionary<string, IVariable<T>> variables = new Dictionary<string, IVariable<T>>();
+        private Dictionary<string, IVariable<T>> thisMembers = new Dictionary<string, IVariable<T>>();
 
-        public Scope(IScope<T> parent = null)
+        public Scope(ITypeSystem system, Func<T, Type> getType, IScope<T> parent = null)
         {
+            this.system = system;
+            this.getType = getType;
             Parent = parent;
         }
 
@@ -26,12 +31,25 @@ namespace CQL.Contexts.Implementation
 
         public IVariable<T> DefineVariable(string name, T value)
         {
-            return variables[Normalize(name)] = new Variable<T>(name, value);
+            var normalizedName = Normalize(name);
+            var variable = variables[normalizedName] = new Variable<T>(name, value);
+            if(normalizedName == Normalize(ScopeExtensions.ThisName))
+            {
+                thisMembers.Clear();
+                var cqlType = system.GetTypeByNative(getType(variable.Value));
+                foreach(var member in cqlType.Members)
+                {
+
+                }
+            }
+            return variable;
         }
 
         public bool TryGetVariable(string name, out IVariable<T> variable)
         {
-            return variables.TryGetValue(Normalize(name), out variable)
+            name = Normalize(name);
+            return thisMembers.TryGetValue(name, out variable)
+                || variables.TryGetValue(name, out variable)
                 || (Parent != null && Parent.TryGetVariable(name, out variable));      
         }
 
@@ -60,9 +78,9 @@ namespace CQL.Contexts.Implementation
 
     public class Context<T>: IContext<T>
     {
-        public Context(ITypeSystem typeSystem)
+        public Context(ITypeSystem typeSystem, Func<T, Type> getType)
         {
-            Scope = new Scope<T>();
+            Scope = new Scope<T>(typeSystem, getType);
             Stack = new Stack<T>();
             TypeSystem = typeSystem;
         }

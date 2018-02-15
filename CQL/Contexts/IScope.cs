@@ -14,7 +14,7 @@ namespace CQL.Contexts
 
     public static class ScopeExtensions
     {
-        private static readonly string ThisName = "this";
+        public static readonly string ThisName = "this";
         public static IScope<Type> ToValidationScope(this IScope<object> @this)
         {
             if (@this == null)

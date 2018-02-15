@@ -183,5 +183,13 @@ namespace CQL.TypeSystem.Implementation
                 return indexer;
             }
         }
+
+        public IEnumerable<ISymbol> Members
+        {
+            get
+            {
+                return symbols.Values;
+            }
+        }
     }
 }
