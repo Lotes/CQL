@@ -11,13 +11,13 @@ namespace CQL.TypeSystem
     public interface IType
     {
         Type CSharpType { get; }
-        ISymbol GetByName(IdDelimiter delimiter, string name);
+        IProperty GetByName(IdDelimiter delimiter, string name);
         /// <summary>
         /// Null if not defined
         /// </summary>
         /// <returns></returns>
         IIndexer Indexer { get; }
-        IEnumerable<ISymbol> Members { get; }
+        IEnumerable<IProperty> Members { get; }
     }
 
     public interface IType<TType>: IType

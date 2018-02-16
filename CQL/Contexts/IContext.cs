@@ -21,7 +21,7 @@ namespace CQL.Contexts
     {
         public static IContext<Type> ToValidationContext(this IContext<object> @this)
         {
-            var result = new Context<Type>(@this.TypeSystem);
+            var result = new Context<Type>(@this.TypeSystem, t => t);
             foreach(var elem in @this.Stack.Reverse().Select(t => t.GetType()))
                 result.Stack.Push(elem);
             foreach (var @var in @this.Scope)

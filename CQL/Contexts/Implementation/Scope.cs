@@ -24,6 +24,14 @@ namespace CQL.Contexts.Implementation
 
         public IScope<T> Parent { get; private set; }
 
+        public ITypeSystem TypeSystem
+        {
+            get
+            {
+                return system;
+            }
+        }
+
         private string Normalize(string str)
         {
             return str.ToUpper();
@@ -39,7 +47,16 @@ namespace CQL.Contexts.Implementation
                 var cqlType = system.GetTypeByNative(getType(variable.Value));
                 foreach(var member in cqlType.Members)
                 {
-
+                    if(member is IProperty)
+                    {
+                        var property = member as IProperty;
+                        thisMembers.Add(member.Name, new Variable<T>(member.Name, default(T)));
+                    }
+                    else if(member is IMethod)
+                    {
+                        var method = member as IMethod;
+                        thisMembers.Add(member.Name, new Variable<T>(member.Name, default(T)));
+                    }
                 }
             }
             return variable;
@@ -78,8 +95,10 @@ namespace CQL.Contexts.Implementation
 
     public class Context<T>: IContext<T>
     {
+        private Func<T, Type> getType;
         public Context(ITypeSystem typeSystem, Func<T, Type> getType)
         {
+            this.getType = getType;
             Scope = new Scope<T>(typeSystem, getType);
             Stack = new Stack<T>();
             TypeSystem = typeSystem;
@@ -96,7 +115,7 @@ namespace CQL.Contexts.Implementation
 
         public void PushScope()
         {
-            Scope = new Scope<T>((Scope<T>)Scope);
+            Scope = new Scope<T>(TypeSystem, getType, (Scope<T>)Scope);
         }
     }
 }

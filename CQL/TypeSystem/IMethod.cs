@@ -2,7 +2,7 @@
 
 namespace CQL.TypeSystem
 {
-    public interface IMethod: ISymbol
+    public interface IMethod
     {
         System.Type[] FormalParameters { get; }
         System.Type ReturnType { get; }

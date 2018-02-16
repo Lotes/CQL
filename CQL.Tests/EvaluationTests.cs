@@ -34,7 +34,7 @@ namespace CQL.Tests
             var Ticket = typeSystemBuilder.AddType<Ticket>("Ticker", "Blubber");
             Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id, null);
             Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner, null);
-            context = new Context<object>(typeSystemBuilder.Build());
+            context = new Context<object>(typeSystemBuilder.Build(), o => o.GetType());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);

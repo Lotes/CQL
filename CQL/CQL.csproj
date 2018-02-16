@@ -98,7 +98,6 @@
     <Compile Include="TypeSystem\Implementation\Property.cs" />
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />
-    <Compile Include="TypeSystem\ISymbol.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\IScope.cs" />

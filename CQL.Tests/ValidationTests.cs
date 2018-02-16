@@ -33,7 +33,7 @@ namespace CQL.Tests
             var typeSystemBuilder = new TypeSystemBuilder();
             typeSystemBuilder.AddType<A>("A", "stuff").AddProperty(IdDelimiter.Dot, "b", a => a.b, null);
             typeSystemBuilder.AddType<B>("B", "stuff 2").AddProperty(IdDelimiter.Dot, "c", a => a.c, null);
-            context = new Context<object>(typeSystemBuilder.Build());
+            context = new Context<object>(typeSystemBuilder.Build(), o => o.GetType());
             context.Scope.DefineVariable("a", new A() { b = new B() { c = 1 } });
         }
 

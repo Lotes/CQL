@@ -10,7 +10,7 @@ namespace CQL.TypeSystem.Implementation
 {
     public class Type<TType> : IType<TType>
     {
-        private Dictionary<Tuple<IdDelimiter, string>, ISymbol> symbols = new Dictionary<Tuple<IdDelimiter, string>, ISymbol>();
+        private Dictionary<Tuple<IdDelimiter, string>, IProperty> symbols = new Dictionary<Tuple<IdDelimiter, string>, IProperty>();
         private IIndexer indexer = null;
 
         public Type(string name, string usage)
@@ -104,10 +104,10 @@ namespace CQL.TypeSystem.Implementation
             return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
         }
 
-        public ISymbol GetByName(IdDelimiter delimiter, string name)
+        public IProperty GetByName(IdDelimiter delimiter, string name)
         {
             var key = CreateKey(delimiter, name);
-            ISymbol symbol = null;
+            IProperty symbol = null;
             if (symbols.TryGetValue(key, out symbol))
                 return symbol;
             return null;
@@ -184,7 +184,7 @@ namespace CQL.TypeSystem.Implementation
             }
         }
 
-        public IEnumerable<ISymbol> Members
+        public IEnumerable<IProperty> Members
         {
             get
             {

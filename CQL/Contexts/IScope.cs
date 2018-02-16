@@ -7,6 +7,7 @@ namespace CQL.Contexts
 {
     public interface IScope<TAbstraction>: IEnumerable<IVariable<TAbstraction>>
     {
+        ITypeSystem TypeSystem { get; }
         bool TryGetVariable(string name, out IVariable<TAbstraction> variable);
         IVariable<TAbstraction> DefineVariable(string name, TAbstraction value);
         IScope<TAbstraction> Parent { get; }
@@ -19,7 +20,7 @@ namespace CQL.Contexts
         {
             if (@this == null)
                 return null;
-            var result = new Scope<Type>(@this.Parent.ToValidationScope());
+            var result = new Scope<Type>(@this.TypeSystem, t => t, @this.Parent.ToValidationScope());
             foreach (var elem in @this)
                 result.DefineVariable(elem.Name, elem.Value.GetType());
             return result;
