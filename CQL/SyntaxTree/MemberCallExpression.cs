@@ -35,12 +35,12 @@ namespace CQL.SyntaxTree
                 && this.MemberName == other.MemberName;
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }
 
-        public MemberCallExpression Validate(IContext<Type> context)
+        public MemberCallExpression Validate(IScope<Type> context)
         {
             var @this = ThisExpression.Validate(context);
             var thisType = @this.SemanticType;
@@ -53,7 +53,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             var @this = ThisExpression.Evaluate(context);
             var thisType = @this.GetType();

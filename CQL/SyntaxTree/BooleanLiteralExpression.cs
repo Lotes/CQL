@@ -23,7 +23,7 @@ namespace CQL.SyntaxTree
 
         public Type SemanticType { get { return typeof(bool); } }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             return Value;
         }
@@ -41,12 +41,12 @@ namespace CQL.SyntaxTree
             return Value.ToString();
         }
 
-        public BooleanLiteralExpression Validate(IContext<Type> context)
+        public BooleanLiteralExpression Validate(IScope<Type> context)
         {
             return this;
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }

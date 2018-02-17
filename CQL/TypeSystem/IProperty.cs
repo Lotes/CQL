@@ -7,6 +7,5 @@ namespace CQL.TypeSystem
         string Name { get; }
         Type ReturnType { get; }
         object Get(object @this);
-        void Set(object @this, object value);
     }
 }

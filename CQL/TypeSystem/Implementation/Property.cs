@@ -8,14 +8,12 @@ namespace CQL.TypeSystem.Implementation
         private IdDelimiter delimiter;
         private Func<object, object> getter;
         private string name;
-        private Action<object, object> setter;
 
-        public Property(IdDelimiter delimiter, string name, Type returnType, Func<object, object> getter, Action<object, object> setter)
+        public Property(IdDelimiter delimiter, string name, Type returnType, Func<object, object> getter)
         {
             this.delimiter = delimiter;
             this.name = name;
             this.getter = getter;
-            this.setter = setter;
             ReturnType = returnType;
         }
 
@@ -32,11 +30,6 @@ namespace CQL.TypeSystem.Implementation
         public object Get(object @this)
         {
             return getter(@this);
-        }
-
-        public void Set(object @this, object value)
-        {
-            setter.Invoke(@this, value);
         }
     }
 }

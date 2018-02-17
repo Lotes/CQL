@@ -71,8 +71,8 @@
     <Compile Include="AutoCompletion\ParserStack.cs" />
     <Compile Include="AutoCompletion\Suggestion.cs" />
     <Compile Include="AutoCompletion\SuggestionType.cs" />
-    <Compile Include="Contexts\IContext.cs" />
     <Compile Include="Contexts\Implementation\Scope.cs" />
+    <Compile Include="Contexts\Implementation\Variable.cs" />
     <Compile Include="Contexts\IVariable.cs" />
     <Compile Include="HashExtensions.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
@@ -93,11 +93,13 @@
     <Compile Include="TypeExtensions.cs" />
     <Compile Include="TypeSystem\IIndexer.cs" />
     <Compile Include="TypeSystem\IMethod.cs" />
+    <Compile Include="TypeSystem\IMethodClosure.cs" />
     <Compile Include="TypeSystem\Implementation\Indexer.cs" />
     <Compile Include="TypeSystem\Implementation\Method.cs" />
     <Compile Include="TypeSystem\Implementation\Property.cs" />
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />
+    <Compile Include="TypeSystem\MethodExtensions.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\IScope.cs" />

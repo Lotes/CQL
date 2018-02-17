@@ -8,17 +8,50 @@ using System.Collections;
 
 namespace CQL.Contexts.Implementation
 {
-    public class Scope<T> : IScope<T>
+    public class ValidationScope : Scope<Type>
+    {
+        public ValidationScope(ITypeSystem system, IScope<Type> parent = null) : base(system, parent)
+        {
+        }
+
+        protected override Type GetPropertyValue(Type value, IProperty property)
+        {
+            return property.ReturnType;
+        }
+
+        protected override Type GetValueType(Type value)
+        {
+            return value;
+        }
+    }
+
+    public class EvaluationScope : Scope<object>
+    {
+        public EvaluationScope(ITypeSystem system, IScope<object> parent = null) : base(system, parent)
+        {
+
+        }
+
+        protected override object GetPropertyValue(object value, IProperty property)
+        {
+            return property.Get(value);
+        }
+
+        protected override Type GetValueType(object value)
+        {
+            return value.GetType();
+        }
+    }
+
+    public abstract class Scope<T> : IScope<T>
     {
         private ITypeSystem system;
-        private Func<T, Type> getType;
         private Dictionary<string, IVariable<T>> variables = new Dictionary<string, IVariable<T>>();
         private Dictionary<string, IVariable<T>> thisMembers = new Dictionary<string, IVariable<T>>();
 
-        public Scope(ITypeSystem system, Func<T, Type> getType, IScope<T> parent = null)
+        public Scope(ITypeSystem system, IScope<T> parent = null)
         {
             this.system = system;
-            this.getType = getType;
             Parent = parent;
         }
 
@@ -44,23 +77,18 @@ namespace CQL.Contexts.Implementation
             if(normalizedName == Normalize(ScopeExtensions.ThisName))
             {
                 thisMembers.Clear();
-                var cqlType = system.GetTypeByNative(getType(variable.Value));
-                foreach(var member in cqlType.Members)
+                var cqlType = system.GetTypeByNative(GetValueType(variable.Value));
+                foreach(var property in cqlType.Properties)
                 {
-                    if(member is IProperty)
-                    {
-                        var property = member as IProperty;
-                        thisMembers.Add(member.Name, new Variable<T>(member.Name, default(T)));
-                    }
-                    else if(member is IMethod)
-                    {
-                        var method = member as IMethod;
-                        thisMembers.Add(member.Name, new Variable<T>(member.Name, default(T)));
-                    }
+                    thisMembers.Add(Normalize(property.Name), new Variable<T>(property.Name, GetPropertyValue(value, property)));
                 }
             }
             return variable;
         }
+
+        protected abstract T GetPropertyValue(T value, IProperty property);
+
+        protected abstract Type GetValueType(T value);
 
         public bool TryGetVariable(string name, out IVariable<T> variable)
         {
@@ -78,44 +106,6 @@ namespace CQL.Contexts.Implementation
         IEnumerator IEnumerable.GetEnumerator()
         {
             return GetEnumerator();
-        }
-    }
-
-    public class Variable<T> : IVariable<T>
-    {
-        public Variable(string name, T value)
-        {
-            this.Name = name;
-            this.Value = value;
-        }
-
-        public string Name { get; private set; }
-        public T Value { get; set; }
-    }
-
-    public class Context<T>: IContext<T>
-    {
-        private Func<T, Type> getType;
-        public Context(ITypeSystem typeSystem, Func<T, Type> getType)
-        {
-            this.getType = getType;
-            Scope = new Scope<T>(typeSystem, getType);
-            Stack = new Stack<T>();
-            TypeSystem = typeSystem;
-        }
-
-        public IScope<T> Scope { get; private set; }
-        public Stack<T> Stack { get; private set; }
-        public ITypeSystem TypeSystem { get; private set; }
-
-        public void PopScope()
-        {
-            Scope = ((Scope<T>)Scope).Parent;
-        }
-
-        public void PushScope()
-        {
-            Scope = new Scope<T>(TypeSystem, getType, (Scope<T>)Scope);
         }
     }
 }

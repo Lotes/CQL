@@ -10,9 +10,9 @@ namespace CQL.TypeSystem.Implementation
     public class Method : IMethod
     {
         private Delegate body;
-        public Method(IdDelimiter delimiter, string name, Type[] formalParameters, Type returnType, Delegate body)
+        public Method(Type thisType, IdDelimiter delimiter, string name, Type[] formalParameters, Type returnType, Delegate body)
         {
-
+            this.ThisType = thisType;
             this.Name = name;
             this.FormalParameters = formalParameters;
             this.ReturnType = returnType;
@@ -22,6 +22,8 @@ namespace CQL.TypeSystem.Implementation
 
         public IdDelimiter Delimiter { get; private set; }
         public Type[] FormalParameters { get; private set; }
+        public Type ThisType { get; private set; }
+
         public string Name { get; private set; }
         public Type ReturnType { get; private set; }
         public object Invoke(object @this, params object[] parameters)

@@ -16,7 +16,7 @@ namespace CQL.AutoCompletion
         private string[] ruleNames;
         private IVocabulary vocabulary;
         private ATN atn;
-        private IContext<object> context;
+        private IScope<object> context;
         private Dictionary<int, Func<IVariable<object>, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<IVariable<object>, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is IType },
@@ -29,7 +29,7 @@ namespace CQL.AutoCompletion
         };
         private Dictionary<int, IEnumerable<Token>> suggestionsByTokenType;
 
-        public AutoCompletionSuggester(IContext<object> context)
+        public AutoCompletionSuggester(IScope<object> context)
         {
             this.context = context;
             this.ruleNames = CQLParser.ruleNames;
@@ -130,7 +130,7 @@ namespace CQL.AutoCompletion
                 case CQLLexer.ID:
                     var ruleId = parserStack.Top.ruleIndex;
                     var allVariables = new List<IVariable<object>>();
-                    var currentScope = context.Scope;
+                    var currentScope = context;
                     while(currentScope != null)
                     {
                         allVariables.AddRange(currentScope);

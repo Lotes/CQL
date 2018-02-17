@@ -6,6 +6,7 @@ namespace CQL.TypeSystem
     {
         System.Type[] FormalParameters { get; }
         System.Type ReturnType { get; }
+        System.Type ThisType { get; }
         IdDelimiter Delimiter { get; }
         object Invoke(object @this, params object[] parameters);
     }

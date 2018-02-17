@@ -25,16 +25,16 @@ namespace CQL.Tests
             public int c { get; set; }
         }
 
-        public static IContext<object> context;
+        public static IScope<object> context;
 
         [ClassInitialize]
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            typeSystemBuilder.AddType<A>("A", "stuff").AddProperty(IdDelimiter.Dot, "b", a => a.b, null);
-            typeSystemBuilder.AddType<B>("B", "stuff 2").AddProperty(IdDelimiter.Dot, "c", a => a.c, null);
-            context = new Context<object>(typeSystemBuilder.Build(), o => o.GetType());
-            context.Scope.DefineVariable("a", new A() { b = new B() { c = 1 } });
+            typeSystemBuilder.AddType<A>("A", "stuff").AddProperty(IdDelimiter.Dot, "b", a => a.b);
+            typeSystemBuilder.AddType<B>("B", "stuff 2").AddProperty(IdDelimiter.Dot, "c", a => a.c);
+            context = new EvaluationScope(typeSystemBuilder.Build());
+            context.DefineVariable("a", new A() { b = new B() { c = 1 } });
         }
 
         [TestMethod]
@@ -51,21 +51,21 @@ namespace CQL.Tests
         }
 
         [TestMethod]
-        public void MultiId_SuccessTest()
+        public void VariableProperties_SuccessTest()
         {
             Queries.Parse("a.b.c = 1.0", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
-        public void MultiIdFail_UnknownIdTest()
+        public void VariablePropertiesFail_UnknownIdTest()
         {
             Queries.Parse("a.b = 1", context);
         }
 
         [TestMethod]
         [ExpectedException(typeof(LocateableException))]
-        public void MultiIdFail_NotBooleanTest()
+        public void VariablePropertiesFail_NotBooleanTest()
         {
             Queries.Parse("a.b.c", context);
         }

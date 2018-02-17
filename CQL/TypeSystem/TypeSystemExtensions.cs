@@ -11,7 +11,7 @@ namespace CQL.TypeSystem
 {
     public static class TypeSystemExtensions
     {
-        public static IExpression ApplyCast(this IEnumerable<CoercionRule> @this, IExpression expression, IContext<Type> context, Func<Exception> generateError = null)
+        public static IExpression ApplyCast(this IEnumerable<CoercionRule> @this, IExpression expression, IScope<Type> context, Func<Exception> generateError = null)
         {
             if (!@this.Any())
             {
@@ -24,7 +24,7 @@ namespace CQL.TypeSystem
             return current;
         }
 
-        public static Type AlignTypes(this IContext<Type> @this, ref IExpression lhs, ref IExpression rhs, Func<Exception> generateError)
+        public static Type AlignTypes(this IScope<Type> @this, ref IExpression lhs, ref IExpression rhs, Func<Exception> generateError)
         {
             var chain = @this.TypeSystem.GetImplicitlyCastChain(lhs.SemanticType, rhs.SemanticType);
             var newLeft = chain.ApplyCast(lhs, @this);

@@ -38,12 +38,12 @@ namespace CQL.SyntaxTree
             return $"[{string.Join(", ", Elements.Select(e => e.ToString()))}]";
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }
 
-        public ArrayExpression Validate(IContext<Type> context)
+        public ArrayExpression Validate(IScope<Type> context)
         {
             var elements = Elements.Select(e => e.Validate(context)).ToArray();
             //Attention! The array has at least one element.
@@ -57,7 +57,7 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             var values = Elements.Select(elem => elem.Evaluate(context)).ToArray();
             var result = (Array)Activator.CreateInstance(SemanticType, values.Length);

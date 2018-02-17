@@ -29,13 +29,13 @@ namespace CQL.TypeSystem.Implementation
             return str.ToUpper();
         }
 
-        public IProperty AddProperty<TProperty>(IdDelimiter delimiter, string name, Func<TType, TProperty> getter, Action<TType, TProperty> setter = null)
+        public IProperty AddProperty<TProperty>(IdDelimiter delimiter, string name, Func<TType, TProperty> getter)
         {
             var key = CreateKey(delimiter, name);
             if (symbols.ContainsKey(key))
                 throw new InvalidOperationException("Already assigned!");
             IProperty result;
-            symbols[key] = result = new Property(delimiter, name, typeof(TProperty), (t) => getter((TType)t), (t, v) => setter((TType)t, (TProperty)v));
+            symbols[key] = result = new Property(delimiter, name, typeof(TProperty), (t) => getter((TType)t));
             return result;
         }
 
@@ -44,27 +44,24 @@ namespace CQL.TypeSystem.Implementation
             return new Tuple<IdDelimiter, string>(delimiter, Normalize(name));
         }
 
-        public IIndexer AddIndexer<T1, TResult>(Func<TType, T1, TResult> getter, Action<TType, T1, TResult> setter = null)
+        public IIndexer AddIndexer<T1, TResult>(Func<TType, T1, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method),
-                Delegate.CreateDelegate(setter.GetType(), setter.Method)
+                Delegate.CreateDelegate(getter.GetType(), getter.Method)
             );
         }
 
-        public IIndexer AddIndexer<T1, T2, TResult>(Func<TType, T1, T2, TResult> getter, Action<TType, T1, T2, TResult> setter = null)
+        public IIndexer AddIndexer<T1, T2, TResult>(Func<TType, T1, T2, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method),
-                Delegate.CreateDelegate(setter.GetType(), setter.Method)
+                Delegate.CreateDelegate(getter.GetType(), getter.Method)
             );
         }
 
-        public IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, TResult> getter, Action<TType, T1, T2, T3, TResult> setter = null)
+        public IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, T3, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method),
-                Delegate.CreateDelegate(setter.GetType(), setter.Method)
+                Delegate.CreateDelegate(getter.GetType(), getter.Method)
             );
         }
 
@@ -153,12 +150,12 @@ namespace CQL.TypeSystem.Implementation
             return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
         }
 
-        private IIndexer AddAndReturnIndexer(Delegate getter, Delegate setter)
+        private IIndexer AddAndReturnIndexer(Delegate getter)
         {
             if(this.indexer != null)
                 throw new InvalidOperationException("Duplicate indexer!"); ;
             var parameters = getter.Method.GetParameters().Select(a => a.ParameterType).Skip(1).ToArray();
-            var indexer = new Indexer(parameters, getter.Method.ReturnType, getter, setter);
+            var indexer = new Indexer(parameters, getter.Method.ReturnType, getter);
             this.indexer = indexer;
             return indexer;
         }
@@ -166,11 +163,11 @@ namespace CQL.TypeSystem.Implementation
         private IMethod AddAndReturnMethod(IdDelimiter delimiter, string name, Delegate @delegate)
         {
             var parameters = @delegate.Method.GetParameters().Select(a => a.ParameterType).Skip(1).ToArray();
-            var method = new Method(delimiter, name, parameters, @delegate.Method.ReturnType, @delegate);
+            var method = new Method(this.CSharpType, delimiter, name, parameters, @delegate.Method.ReturnType, @delegate);
             var key = CreateKey(delimiter, name);
             if(!symbols.ContainsKey(key))
             {
-                symbols.Add(key, method);
+                AddProperty(delimiter, name, @this => method.BindThis(@this));
                 return method;
             }
             throw new InvalidOperationException("Duplicate symbol!"); ;
@@ -184,7 +181,7 @@ namespace CQL.TypeSystem.Implementation
             }
         }
 
-        public IEnumerable<IProperty> Members
+        public IEnumerable<IProperty> Properties
         {
             get
             {

@@ -39,18 +39,18 @@ namespace CQL.SyntaxTree
             return $"{ThisExpression.ToString()}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
         }
 
-        public FunctionCallExpression Validate(IContext<Type> context)
+        public FunctionCallExpression Validate(IScope<Type> context)
         {
-            ///TODO
+            
             return this;
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             //TODO
             return null;

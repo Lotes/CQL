@@ -43,12 +43,12 @@ namespace CQL
             }
         }
 
-        public static Query Parse(string text, IContext<object> context, IErrorListener errorListener = null)
+        public static Query Parse(string text, IScope<object> context, IErrorListener errorListener = null)
         {
             try
             {
                 var query = ParseForSyntaxOnly(text);
-                return query.Validate(context.ToValidationContext());
+                return query.Validate(context.ToValidationScope());
             }
             catch (LocateableException ex)
             {
@@ -61,18 +61,18 @@ namespace CQL
             }
         }
 
-        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IContext<object> context)
+        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IScope<object> context)
         {
             var suggester = new AutoCompletionSuggester(context);
             return suggester.GetSuggestions(textUntilCaret);
         }
 
-        public static bool? Evaluate<TSubject>(string text, TSubject subject, IContext<object> context, IErrorListener errorListener = null)
+        public static bool? Evaluate<TSubject>(string text, TSubject subject, IScope<object> context, IErrorListener errorListener = null)
         {
             try
-            { 
+            {
+                context.DefineThis(subject);
                 var query = Parse(text, context, errorListener);
-                context.Scope.DefineThis(subject);
                 return query.Evaluate(context);
             }
             catch (LocateableException ex)

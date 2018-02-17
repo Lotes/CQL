@@ -36,24 +36,24 @@ namespace CQL.SyntaxTree
             return other.Name == this.Name;
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }
 
-        public VariableExpression Validate(IContext<Type> context)
+        public VariableExpression Validate(IScope<Type> context)
         {
             IVariable<Type> nameable;
-            if (!context.Scope.TryGetVariable(FullName, out nameable))
+            if (!context.TryGetVariable(FullName, out nameable))
                 throw new LocateableException(Location, "Unknown field!");
             SemanticType = nameable.Value;
             return this;
         }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             IVariable<object> nameable;
-            if (!context.Scope.TryGetVariable(FullName, out nameable))
+            if (!context.TryGetVariable(FullName, out nameable))
                 throw new LocateableException(Location, "Unknown field!");
             return nameable.Value;
         }

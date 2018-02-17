@@ -109,7 +109,6 @@ emptyLiteral: EMPTY;
 /*
  * Lexer Rules
  */
-THIS: T H I S;
 TRUE: T R U E;
 FALSE: F A L S E;
 EMPTY: E M P T Y;

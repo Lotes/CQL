@@ -22,7 +22,7 @@ namespace CQL.Tests
             }
         }
 
-        public static IContext<object> context;
+        public static IScope<object> context;
         public static Ticket ticketOne;
         public static Ticket ticketTwo;
         public static Ticket ticketThree;
@@ -32,9 +32,9 @@ namespace CQL.Tests
         {
             var typeSystemBuilder = new TypeSystemBuilder();
             var Ticket = typeSystemBuilder.AddType<Ticket>("Ticker", "Blubber");
-            Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id, null);
-            Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner, null);
-            context = new Context<object>(typeSystemBuilder.Build(), o => o.GetType());
+            Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id);
+            Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
+            context = new EvaluationScope(typeSystemBuilder.Build());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);

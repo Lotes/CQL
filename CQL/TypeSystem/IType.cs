@@ -17,16 +17,16 @@ namespace CQL.TypeSystem
         /// </summary>
         /// <returns></returns>
         IIndexer Indexer { get; }
-        IEnumerable<IProperty> Members { get; }
+        IEnumerable<IProperty> Properties { get; }
     }
 
     public interface IType<TType>: IType
     {        
-        IProperty AddProperty<TProperty>(IdDelimiter delimiter, string name, Func<TType, TProperty> getter, Action<TType, TProperty> setter = null);
+        IProperty AddProperty<TProperty>(IdDelimiter delimiter, string name, Func<TType, TProperty> getter);
 
-        IIndexer AddIndexer<T1, TResult>(Func<TType, T1, TResult> getter, Action<TType, T1, TResult> setter = null);
-        IIndexer AddIndexer<T1, T2, TResult>(Func<TType, T1, T2, TResult> getter, Action<TType, T1, T2, TResult> setter = null);
-        IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, TResult> getter, Action<TType, T1, T2, T3, TResult> setter = null);
+        IIndexer AddIndexer<T1, TResult>(Func<TType, T1, TResult> getter);
+        IIndexer AddIndexer<T1, T2, TResult>(Func<TType, T1, T2, TResult> getter);
+        IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, T3, TResult> getter);
 
         IMethod AddAction(IdDelimiter delimiter, string name, Action<TType> action);
         IMethod AddAction<T1>(IdDelimiter delimiter, string name, Action<TType, T1> action);

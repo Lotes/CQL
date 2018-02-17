@@ -20,7 +20,7 @@ namespace CQL.Contexts
         {
             if (@this == null)
                 return null;
-            var result = new Scope<Type>(@this.TypeSystem, t => t, @this.Parent.ToValidationScope());
+            var result = new ValidationScope(@this.TypeSystem, @this.Parent.ToValidationScope());
             foreach (var elem in @this)
                 result.DefineVariable(elem.Name, elem.Value.GetType());
             return result;

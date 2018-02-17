@@ -69,7 +69,7 @@ namespace CQL.SyntaxTree
                 && this.RightExpression.StructurallyEquals(other.RightExpression);
         }
 
-        public BinaryOperationExpression Validate(IContext<Type> context)
+        public BinaryOperationExpression Validate(IScope<Type> context)
         {
             this.leftExpression = this.leftExpression.Validate(context);
             this.rightExpression = this.rightExpression.Validate(context);
@@ -171,12 +171,12 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IContext<Type> context)
+        IExpression IExpression.Validate(IScope<Type> context)
         {
             return Validate(context);
         }
 
-        public object Evaluate(IContext<object> context)
+        public object Evaluate(IScope<object> context)
         {
             var lhs = leftExpression.Evaluate(context);
             var rhs = rightExpression.Evaluate(context);
