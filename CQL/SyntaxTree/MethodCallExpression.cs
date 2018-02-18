@@ -10,12 +10,12 @@ using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
-    public class FunctionCallExpression: IExpression<FunctionCallExpression>
+    public class MethodCallExpression: IExpression<MethodCallExpression>
     {
         public IExpression ThisExpression;
         public IEnumerable<IExpression> Parameters { get; private set; }
 
-        public FunctionCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
+        public MethodCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
         {
             ThisExpression = @this;
             Parameters = parameters.ToArray();
@@ -27,7 +27,7 @@ namespace CQL.SyntaxTree
        
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
-            var other = node as FunctionCallExpression;
+            var other = node as MethodCallExpression;
             if (other == null)
                 return false;
             return this.ThisExpression.StructurallyEquals(other.ThisExpression)
@@ -39,11 +39,13 @@ namespace CQL.SyntaxTree
             return $"{ThisExpression.ToString()}({string.Join(", ", Parameters.Select(p => p.ToString()))})";
         }
 
-        public FunctionCallExpression Validate(IScope<Type> context)
+        public MethodCallExpression Validate(IScope<Type> context)
         {
             ThisExpression = ThisExpression.Validate(context);
-            if (!(ThisExpression.SemanticType is IMethodClosure))
-                throw new LocateableException(Location, "Return type must be a method!");
+            MethodSignature signature;
+            if (!(ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out signature)))
+                throw new LocateableException(Location, "Expected a method closure!");
+
             return this;
         }
 

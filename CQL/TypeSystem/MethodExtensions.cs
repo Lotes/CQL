@@ -25,10 +25,22 @@ namespace CQL.TypeSystem
             }
         }
 
+        public static bool IfMethodClosureTryGetMethodType(this Type @this, out MethodSignature signature)
+        {
+            signature = null;
+            var closure = @this.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMethodClosure<>));
+            if (closure == null)
+                return false;
+            var methodType = closure.GetGenericArguments()[0];
+            var arguments = methodType.GetGenericArguments();
+            signature = new MethodSignature(arguments[0], arguments[1], arguments.Skip(2).ToArray()); // by convention
+            return true;
+        }
+
         public static IMethodClosure<TMethod> BindThis<TMethod>(this TMethod method, object @this)
             where TMethod: Method
         {
-            if (!method.ThisType.IsAssignableFrom(@this.GetType()))
+            if (!method.Signature.ThisType.IsAssignableFrom(@this.GetType()))
                 throw new InvalidOperationException("Type mismatch on this!");
             return new Closure<TMethod>(@this, method); 
         }

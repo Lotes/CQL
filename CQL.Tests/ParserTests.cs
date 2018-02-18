@@ -29,7 +29,7 @@ namespace CQL.Tests
         [TestMethod]
         public void FunctionCallExpressionTest()
         {
-            AssertQueryEquals("max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new VariableExpression(pc, "max"), new[] 
+            AssertQueryEquals("max(1, 2)", new Query(pc, new MethodCallExpression(pc, new VariableExpression(pc, "max"), new[] 
             {
                 new DecimalLiteralExpression(pc, 1),
                 new DecimalLiteralExpression(pc, 2)
@@ -81,7 +81,7 @@ namespace CQL.Tests
         [TestMethod]
         public void MemberCallExpressionTest()
         {
-            AssertQueryEquals("a->b", new Query(pc, new MemberCallExpression(pc, new VariableExpression(pc, "a"), IdDelimiter.SingleArrow, "b")));
+            AssertQueryEquals("a->b", new Query(pc, new MemberExpression(pc, new VariableExpression(pc, "a"), IdDelimiter.SingleArrow, "b")));
         }
 
         [TestMethod]
@@ -103,7 +103,7 @@ namespace CQL.Tests
         [TestMethod]
         public void MemberFunctionCallExpressionTest()
         {
-            AssertQueryEquals("Math.Max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new MemberCallExpression(pc, new VariableExpression(pc, "Math"), IdDelimiter.Dot, "Max"), new[] 
+            AssertQueryEquals("Math.Max(1, 2)", new Query(pc, new MethodCallExpression(pc, new MemberExpression(pc, new VariableExpression(pc, "Math"), IdDelimiter.Dot, "Max"), new[] 
             {
                 new DecimalLiteralExpression(pc, 1),
                 new DecimalLiteralExpression(pc, 2)

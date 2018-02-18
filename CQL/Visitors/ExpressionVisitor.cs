@@ -181,7 +181,7 @@ namespace CQL.Visitors
                         case "->": delimiter = IdDelimiter.SingleArrow; break;
                         case "/": delimiter = IdDelimiter.Slash; break;
                     }
-                    primary = new MemberCallExpression((ParserLocation)memberCall, primary, delimiter, memberName);
+                    primary = new MemberExpression((ParserLocation)memberCall, primary, delimiter, memberName);
                 }
                 else if (element is MethodCallContext)
                 {
@@ -189,7 +189,7 @@ namespace CQL.Visitors
                     IEnumerable<IExpression> parameters = Enumerable.Empty<IExpression>();
                     if (methodCall.@params != null)
                         parameters = exprListVisitor.Visit(methodCall.@params);
-                    primary = new FunctionCallExpression((ParserLocation)methodCall, primary, parameters);
+                    primary = new MethodCallExpression((ParserLocation)methodCall, primary, parameters);
                 }
                 else
                     throw new InvalidOperationException("Unhandled chain element!");

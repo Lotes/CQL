@@ -12,18 +12,12 @@ namespace CQL.TypeSystem.Implementation
         private Delegate body;
         public Method(Type thisType, Type[] formalParameters, Type returnType, Delegate body)
         {
-            this.ThisType = thisType;
-            this.FormalParameters = formalParameters;
-            this.ReturnType = returnType;
+            this.Signature = new MethodSignature(thisType, returnType, formalParameters);
             this.body = body;
         }
 
-        public IdDelimiter Delimiter { get; private set; }
-        public Type[] FormalParameters { get; private set; }
-        public Type ThisType { get; private set; }
+        public MethodSignature Signature { get; private set; }
 
-        public string Name { get; private set; }
-        public Type ReturnType { get; private set; }
         public object Invoke(object @this, params object[] parameters)
         {
             return body.Method.Invoke(null, new[] { @this }.Concat(parameters).ToArray());
