@@ -5,11 +5,14 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using CQL.Contexts;
+using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
     public class ArrayAccessExpression : IExpression<ArrayAccessExpression>
     {
+        private IIndexer indexer = null;
+
         public ArrayAccessExpression(IParserLocation location, IExpression primary, IEnumerable<IExpression> indices)
         {
             this.Location = location;
@@ -40,7 +43,7 @@ namespace CQL.SyntaxTree
             var thisExpression = ThisExpression.Validate(context);
             var indices = Indices.Select(i => i.Validate(context)).ToArray();
             var type = context.TypeSystem.GetTypeByNative(thisExpression.SemanticType);
-            var indexer = type.Indexer;
+            indexer = type.Indexer;
             if (indexer == null)
                 throw new InvalidOperationException("No indexer found!");
             SemanticType = indexer.ReturnType;
@@ -61,8 +64,6 @@ namespace CQL.SyntaxTree
         {
             var @this = ThisExpression.Evaluate(context);
             var indices = Indices.Select(i => i.Evaluate(context)).ToArray();
-            var type = context.TypeSystem.GetTypeByNative(@this.GetType());
-            var indexer = type?.Indexer;
             return indexer.Get(@this, indices);
         }
     }

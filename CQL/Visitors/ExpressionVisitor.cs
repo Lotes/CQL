@@ -186,8 +186,10 @@ namespace CQL.Visitors
                 else if (element is MethodCallContext)
                 {
                     var methodCall = element as MethodCallContext;
-                    var memberName = exprListVisitor.Visit(methodCall.@params);
-                    primary = new FunctionCallExpression((ParserLocation)methodCall, primary, memberName);
+                    IEnumerable<IExpression> parameters = Enumerable.Empty<IExpression>();
+                    if (methodCall.@params != null)
+                        parameters = exprListVisitor.Visit(methodCall.@params);
+                    primary = new FunctionCallExpression((ParserLocation)methodCall, primary, parameters);
                 }
                 else
                     throw new InvalidOperationException("Unhandled chain element!");

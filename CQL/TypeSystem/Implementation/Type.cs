@@ -68,37 +68,51 @@ namespace CQL.TypeSystem.Implementation
         
         public IMethod AddFunction<TResult>(IdDelimiter delimiter, string name, Func<TType, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, T2, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1, T2>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, T2, T3, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, T3, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1, T2, T3>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, T2, T3, T4, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, T3, T4, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1, T2, T3, T4>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, T2, T3, T4, T5, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, T3, T4, T5, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1, T2, T3, T4, T5>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddFunction<T1, T2, T3, T4, T5, T6, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, T3, T4, T5, T6, TResult> func)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(func.GetType(), func.Method));
+            var method = new Method<TType, TResult, T1, T2, T3, T4, T5, T6>(func);
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IProperty GetByName(IdDelimiter delimiter, string name)
@@ -112,42 +126,58 @@ namespace CQL.TypeSystem.Implementation
 
         public IMethod AddAction(IdDelimiter delimiter, string name, Action<TType> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void>((t) => { action(t); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1>(IdDelimiter delimiter, string name, Action<TType, T1> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1>((t, a) => { action(t, a); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2>(IdDelimiter delimiter, string name, Action<TType, T1, T2> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2>((t, a, b) => { action(t, a, b); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2, T3>(IdDelimiter delimiter, string name, Action<TType, T1, T2, T3> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2, T3>((t, a, b, c) => { action(t, a, b, c); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2, T3, T4>(IdDelimiter delimiter, string name, Action<TType, T1, T2, T3, T4> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2, T3, T4>((t, a, b, c, d) => { action(t, a, b, c, d); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2, T3, T4, T5>(IdDelimiter delimiter, string name, Action<TType, T1, T2, T3, T4, T5> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2, T3, T4, T5>((t, a, b, c, d, e) => { action(t, a, b, c, d, e); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2, T3, T4, T5, T6>(IdDelimiter delimiter, string name, Action<TType, T1, T2, T3, T4, T5, T6> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2, T3, T4, T5, T6>((t, a, b, c, d, e, f) => { action(t, a, b, c, d, e, f); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         public IMethod AddAction<T1, T2, T3, T4, T5, T6, T7>(IdDelimiter delimiter, string name, Action<TType, T1, T2, T3, T4, T5, T6, T7> action)
         {
-            return AddAndReturnMethod(delimiter, name, Delegate.CreateDelegate(action.GetType(), action.Method));
+            var method = new Method<TType, Void, T1, T2, T3, T4, T5, T6, T7>((t, a, b, c, d, e, f, g) => { action(t, a, b, c, d, e, f, g); return Void.Instance; });
+            AddMethod(delimiter, name, method);
+            return method;
         }
 
         private IIndexer AddAndReturnIndexer(Delegate getter)
@@ -160,26 +190,18 @@ namespace CQL.TypeSystem.Implementation
             return indexer;
         }
 
-        private IMethod AddAndReturnMethod(IdDelimiter delimiter, string name, Delegate @delegate)
+        private void AddMethod(IdDelimiter delimiter, string name, IMethod method)
         {
-            var parameters = @delegate.Method.GetParameters().Select(a => a.ParameterType).Skip(1).ToArray();
-            var method = new Method(this.CSharpType, delimiter, name, parameters, @delegate.Method.ReturnType, @delegate);
             var key = CreateKey(delimiter, name);
             if(!symbols.ContainsKey(key))
             {
                 AddProperty(delimiter, name, @this => method.BindThis(@this));
-                return method;
+                return;
             }
             throw new InvalidOperationException("Duplicate symbol!"); ;
         }
 
-        public IIndexer Indexer
-        {
-            get
-            {
-                return indexer;
-            }
-        }
+        public IIndexer Indexer { get { return indexer; } }
 
         public IEnumerable<IProperty> Properties
         {

@@ -14,6 +14,7 @@ namespace CQL.TypeSystem
         IEnumerable<IType> GetTypesByPrefix(string prefix);
         // can throw exception
         IType GetTypeByNative(Type type);
+        IType<TType> GetTypeByNative<TType>();
         CoercionRule GetCoercionRule(Type original, Type casting);
         IEnumerable<CoercionRule> GetImplicitlyCastChain(Type original, Type destinationType);
         IEnumerable<Type> GetImplicitlyCastsTo(Type target);

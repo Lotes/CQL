@@ -34,7 +34,10 @@ namespace CQL.Tests
             var Ticket = typeSystemBuilder.AddType<Ticket>("Ticker", "Blubber");
             Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id);
             Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
-            context = new EvaluationScope(typeSystemBuilder.Build());
+            var typeSystem = typeSystemBuilder.Build();
+            context = new EvaluationScope(typeSystem);
+            var String = typeSystem.GetTypeByNative<string>();
+            String.AddFunction(IdDelimiter.Dot, "length", str => str.Length);
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);
@@ -93,6 +96,12 @@ namespace CQL.Tests
         public void CheckBuggyContains()
         {
             Queries.Evaluate("owner ~ owner", ticketThree, context);
+        }
+
+        [TestMethod]
+        public void CheckMethodCall()
+        {
+            Queries.Evaluate("owner.length()", ticketThree, context);
         }
     }
 }

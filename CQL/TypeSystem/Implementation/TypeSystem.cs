@@ -159,5 +159,10 @@ namespace CQL.TypeSystem.Implementation
                 return edges.Select(e => e.Source).Distinct();
             return Enumerable.Empty<System.Type>();
         }
+
+        public IType<TType> GetTypeByNative<TType>()
+        {
+            return (IType<TType>)GetTypeByNative(typeof(TType));
+        }
     }
 }

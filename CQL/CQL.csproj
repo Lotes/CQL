@@ -91,6 +91,7 @@
     <Compile Include="AutoCompletion\Token.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="TypeSystem\Void.cs" />
     <Compile Include="TypeSystem\IIndexer.cs" />
     <Compile Include="TypeSystem\IMethod.cs" />
     <Compile Include="TypeSystem\IMethodClosure.cs" />

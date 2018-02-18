@@ -12,7 +12,7 @@ namespace CQL.SyntaxTree
 {
     public class FunctionCallExpression: IExpression<FunctionCallExpression>
     {
-        public readonly IExpression ThisExpression;
+        public IExpression ThisExpression;
         public IEnumerable<IExpression> Parameters { get; private set; }
 
         public FunctionCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
@@ -41,7 +41,9 @@ namespace CQL.SyntaxTree
 
         public FunctionCallExpression Validate(IScope<Type> context)
         {
-            
+            ThisExpression = ThisExpression.Validate(context);
+            if (!(ThisExpression.SemanticType is IMethodClosure))
+                throw new LocateableException(Location, "Return type must be a method!");
             return this;
         }
 

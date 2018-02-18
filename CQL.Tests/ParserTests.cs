@@ -79,7 +79,7 @@ namespace CQL.Tests
         }
 
         [TestMethod]
-        public void MultiIdExpressionTest()
+        public void MemberCallExpressionTest()
         {
             AssertQueryEquals("a->b", new Query(pc, new MemberCallExpression(pc, new VariableExpression(pc, "a"), IdDelimiter.SingleArrow, "b")));
         }
@@ -98,6 +98,22 @@ namespace CQL.Tests
                 new DecimalLiteralExpression(pc, 1),
                 new DecimalLiteralExpression(pc, 2)
             )));
+        }
+
+        [TestMethod]
+        public void MemberFunctionCallExpressionTest()
+        {
+            AssertQueryEquals("Math.Max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new MemberCallExpression(pc, new VariableExpression(pc, "Math"), IdDelimiter.Dot, "Max"), new[] 
+            {
+                new DecimalLiteralExpression(pc, 1),
+                new DecimalLiteralExpression(pc, 2)
+            })));
+        }
+
+        [TestMethod]
+        public void IndexerExpressionTest()
+        {
+            AssertQueryEquals("array[100]", new Query(pc, new ArrayAccessExpression(pc, new VariableExpression(pc, "array"), new[] { new DecimalLiteralExpression(pc, 100) })));
         }
     }
 }

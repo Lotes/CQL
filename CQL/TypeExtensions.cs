@@ -1,4 +1,6 @@
-﻿using System;
+﻿using CQL.TypeSystem;
+using CQL.TypeSystem.Implementation;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -8,6 +10,17 @@ namespace CQL
 {
     public static class TypeExtensions
     {
+        public static bool IfMethodClosureTryGetMethodType(this Type @this, out Type elementType)
+        {
+            elementType = @this
+                .GetBase()
+                .FirstOrDefault(t =>
+                    t.IsGenericType
+                    && t.GetGenericTypeDefinition() == typeof(IEnumerable<>))?
+                .GetGenericArguments()[0];
+            return elementType != null;
+        }
+
         public static bool IsNumeric(this Type @this)
         {
             switch(Type.GetTypeCode(@this))

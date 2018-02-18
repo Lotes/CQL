@@ -9,9 +9,11 @@ using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
-    public class MemberCallExpression : IExpression<MemberCallExpression>
+    public class MemberExpression : IExpression<MemberExpression>
     {
-        public MemberCallExpression(IParserLocation location, IExpression @this, IdDelimiter delimiter, string memberName)
+        private IProperty validatedProperty = null;
+
+        public MemberExpression(IParserLocation location, IExpression @this, IdDelimiter delimiter, string memberName)
         {
             Location = location;
             SemanticType = null;
@@ -28,7 +30,7 @@ namespace CQL.SyntaxTree
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
-            var other = node as MemberCallExpression;
+            var other = node as MemberExpression;
             if (other == null)
                 return false;
             return this.ThisExpression.StructurallyEquals(other.ThisExpression)
@@ -40,7 +42,7 @@ namespace CQL.SyntaxTree
             return Validate(context);
         }
 
-        public MemberCallExpression Validate(IScope<Type> context)
+        public MemberExpression Validate(IScope<Type> context)
         {
             var @this = ThisExpression.Validate(context);
             var thisType = @this.SemanticType;
@@ -48,21 +50,15 @@ namespace CQL.SyntaxTree
             var symbol = csharpType.GetByName(Delimiter, MemberName);
             if (!(symbol is IProperty))
                 throw new InvalidOperationException("Expecting property!");
-            var property = symbol as IProperty;
-            SemanticType = property.ReturnType;
+            validatedProperty = symbol as IProperty;
+            SemanticType = validatedProperty.ReturnType;
             return this;
         }
 
         public object Evaluate(IScope<object> context)
         {
             var @this = ThisExpression.Evaluate(context);
-            var thisType = @this.GetType();
-            var csharpType = context.TypeSystem.GetTypeByNative(thisType);
-            var symbol = csharpType.GetByName(Delimiter, MemberName);
-            if (!(symbol is IProperty))
-                throw new InvalidOperationException("Expecting property!");
-            var property = symbol as IProperty;
-            return property.Get(@this);
+            return validatedProperty.Get(@this);
         }
 
         public override string ToString()

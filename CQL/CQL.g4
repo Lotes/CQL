@@ -60,7 +60,7 @@ factor
 	;
 chain_element
 	: LPAREN params=parameterList? RPAREN          #methodCall
-	| RBRACKET elems=elementList RBRACKET          #arrayAccess
+	| LBRACKET elems=elementList RBRACKET          #arrayAccess
 	| sep=SEPARATOR id=member                      #memberCall
 	;
 primary
