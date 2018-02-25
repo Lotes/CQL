@@ -28,7 +28,7 @@ namespace CQL.TypeSystem
         public static bool IfMethodClosureTryGetMethodType(this Type @this, out MethodSignature signature)
         {
             signature = null;
-            var closure = @this.GetInterfaces().FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMethodClosure<>));
+            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMethodClosure<>));
             if (closure == null)
                 return false;
             var methodType = closure.GetGenericArguments()[0];

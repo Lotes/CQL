@@ -7,12 +7,14 @@ using System.Threading.Tasks;
 using CQL.Contexts;
 using CQL.ErrorHandling;
 using CQL.TypeSystem;
+using CQL.TypeSystem.Implementation;
 
 namespace CQL.SyntaxTree
 {
     public class MethodCallExpression: IExpression<MethodCallExpression>
     {
         public IExpression ThisExpression;
+
         public IEnumerable<IExpression> Parameters { get; private set; }
 
         public MethodCallExpression(IParserLocation context, IExpression @this, IEnumerable<IExpression> parameters)
@@ -45,7 +47,7 @@ namespace CQL.SyntaxTree
             MethodSignature signature;
             if (!(ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out signature)))
                 throw new LocateableException(Location, "Expected a method closure!");
-
+            SemanticType = signature.ReturnType;
             return this;
         }
 
@@ -56,8 +58,10 @@ namespace CQL.SyntaxTree
 
         public object Evaluate(IScope<object> context)
         {
-            //TODO
-            return null;
+            var @this = this.ThisExpression.Evaluate(context);
+            if(@this is IMethodClosure)
+                return ((IMethodClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
+            throw new InvalidOperationException("Closure was expected!");
         }
     }
 }

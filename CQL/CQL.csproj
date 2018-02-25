@@ -74,6 +74,7 @@
     <Compile Include="Contexts\Implementation\Scope.cs" />
     <Compile Include="Contexts\Implementation\Variable.cs" />
     <Compile Include="Contexts\IVariable.cs" />
+    <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HashExtensions.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
     <Compile Include="ErrorHandling\ErrorListener.cs" />

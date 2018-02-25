@@ -101,7 +101,7 @@ namespace CQL.Tests
         [TestMethod]
         public void CheckMethodCall()
         {
-            Queries.Evaluate("owner.length()", ticketThree, context);
+            Queries.Evaluate("owner.length() = 6", ticketOne, context);
         }
     }
 }

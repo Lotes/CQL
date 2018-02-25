@@ -7,11 +7,15 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
-    public interface IMethodClosure<TMethod>
-        where TMethod: Method
+    public interface IMethodClosure
     {
         object ThisObject { get; }
-        TMethod Method { get; }
         object Invoke(params object[] parameters);
+    }
+
+    public interface IMethodClosure<TMethod>: IMethodClosure
+        where TMethod: Method
+    {
+        TMethod Method { get; }
     }
 }

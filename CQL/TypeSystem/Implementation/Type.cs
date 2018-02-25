@@ -190,7 +190,8 @@ namespace CQL.TypeSystem.Implementation
             return indexer;
         }
 
-        private void AddMethod(IdDelimiter delimiter, string name, Method method)
+        private void AddMethod<TMethod>(IdDelimiter delimiter, string name, TMethod method)
+            where TMethod: Method
         {
             var key = CreateKey(delimiter, name);
             if(!symbols.ContainsKey(key))
