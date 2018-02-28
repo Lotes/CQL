@@ -47,7 +47,7 @@ namespace CQL.TypeSystem.Implementation
         public IIndexer AddIndexer<T1, TResult>(Func<TType, T1, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method)
+                getter
             );
         }
 

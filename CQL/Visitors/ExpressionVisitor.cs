@@ -13,6 +13,7 @@ namespace CQL.Visitors
 {
     public class ExpressionVisitor : CQLBaseVisitor<IExpression>
     {
+        private Regex Pattern_IsFloatingPointNumber = new Regex(@"[\.eE]");
         private ExpressionsVisitor exprListVisitor;
         private NameVisitor nameVisitor;
 
@@ -228,8 +229,16 @@ namespace CQL.Visitors
         }
         public override IExpression VisitDecimal([NotNull] CQLParser.DecimalContext context)
         {
-            var value = Convert.ToDouble(context.value.Text, CultureInfo.InvariantCulture);
-            return new DecimalLiteralExpression((ParserLocation)context, value);
+            if (Pattern_IsFloatingPointNumber.IsMatch(context.value.Text))
+            {
+                var value = Convert.ToDouble(context.value.Text, CultureInfo.InvariantCulture);
+                return new FloatingPointLiteralExpression((ParserLocation)context, value);
+            }
+            else
+            {
+                var value = Convert.ToInt32(context.value.Text, CultureInfo.InvariantCulture);
+                return new IntegerLiteralExpression((ParserLocation)context, value);
+            }
         }
         public override IExpression VisitEmpty([NotNull] CQLParser.EmptyContext context)
         {

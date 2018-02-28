@@ -31,8 +31,8 @@ namespace CQL.Tests
         {
             AssertQueryEquals("max(1, 2)", new Query(pc, new MethodCallExpression(pc, new VariableExpression(pc, "max"), new[] 
             {
-                new DecimalLiteralExpression(pc, 1),
-                new DecimalLiteralExpression(pc, 2)
+                new IntegerLiteralExpression(pc, 1),
+                new IntegerLiteralExpression(pc, 2)
             })));
         }
 
@@ -57,7 +57,7 @@ namespace CQL.Tests
         [TestMethod]
         public void DecimalLiteralExpressionTest()
         {
-            AssertQueryEquals("0.5", new Query(pc, new DecimalLiteralExpression(pc, 0.5)));
+            AssertQueryEquals("0.5", new Query(pc, new FloatingPointLiteralExpression(pc, 0.5)));
         }
 
         [TestMethod]
@@ -69,13 +69,13 @@ namespace CQL.Tests
         [TestMethod]
         public void ArrayExpressionTest()
         {
-            AssertQueryEquals("[1]", new Query(pc, new ArrayExpression(pc, new[] { new DecimalLiteralExpression(pc, 1) })));
+            AssertQueryEquals("[1]", new Query(pc, new ArrayExpression(pc, new[] { new IntegerLiteralExpression(pc, 1) })));
         }
 
         [TestMethod]
         public void BinaryOperationExpressionTest()
         {
-            AssertQueryEquals("1+2", new Query(pc, new BinaryOperationExpression(pc, BinaryOperator.Add, new DecimalLiteralExpression(pc, 1), new DecimalLiteralExpression(pc, 2))));
+            AssertQueryEquals("1+2", new Query(pc, new BinaryOperationExpression(pc, BinaryOperator.Add, new IntegerLiteralExpression(pc, 1), new IntegerLiteralExpression(pc, 2))));
         }
 
         [TestMethod]
@@ -95,8 +95,8 @@ namespace CQL.Tests
         {
             AssertQueryEquals("true ? 1 : 2", new Query(pc, new ConditionalExpression(pc, 
                 new BooleanLiteralExpression(pc, true), 
-                new DecimalLiteralExpression(pc, 1),
-                new DecimalLiteralExpression(pc, 2)
+                new IntegerLiteralExpression(pc, 1),
+                new IntegerLiteralExpression(pc, 2)
             )));
         }
 
@@ -105,15 +105,15 @@ namespace CQL.Tests
         {
             AssertQueryEquals("Math.Max(1, 2)", new Query(pc, new MethodCallExpression(pc, new MemberExpression(pc, new VariableExpression(pc, "Math"), IdDelimiter.Dot, "Max"), new[] 
             {
-                new DecimalLiteralExpression(pc, 1),
-                new DecimalLiteralExpression(pc, 2)
+                new IntegerLiteralExpression(pc, 1),
+                new IntegerLiteralExpression(pc, 2)
             })));
         }
 
         [TestMethod]
         public void IndexerExpressionTest()
         {
-            AssertQueryEquals("array[100]", new Query(pc, new ArrayAccessExpression(pc, new VariableExpression(pc, "array"), new[] { new DecimalLiteralExpression(pc, 100) })));
+            AssertQueryEquals("array[100]", new Query(pc, new ArrayAccessExpression(pc, new VariableExpression(pc, "array"), new[] { new IntegerLiteralExpression(pc, 100) })));
         }
     }
 }

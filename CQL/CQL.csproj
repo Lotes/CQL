@@ -85,6 +85,7 @@
     <Compile Include="SyntaxTree\IdDelimiter.cs" />
     <Compile Include="SyntaxTree\IEvaluator.cs" />
     <Compile Include="SyntaxTree\IExpression.cs" />
+    <Compile Include="SyntaxTree\IntegerLiteralExpression.cs" />
     <Compile Include="SyntaxTree\IParserLocation.cs" />
     <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
     <Compile Include="SyntaxTree\MemberExpression.cs" />
@@ -122,7 +123,7 @@
     <Compile Include="SyntaxTree\BinaryOperator.cs" />
     <Compile Include="SyntaxTree\BooleanLiteralExpression.cs" />
     <Compile Include="SyntaxTree\ConditionalExpression.cs" />
-    <Compile Include="SyntaxTree\DecimalLiteralExpression.cs" />
+    <Compile Include="SyntaxTree\FloatingPointLiteralExpression.cs" />
     <Compile Include="SyntaxTree\EmptyExpression.cs" />
     <Compile Include="SyntaxTree\MethodCallExpression.cs" />
     <Compile Include="SyntaxTree\NullExpression.cs" />

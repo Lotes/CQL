@@ -1,19 +1,17 @@
-﻿using Antlr4.Runtime;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using CQL.Contexts;
-using CQL.ErrorHandling;
 
 namespace CQL.SyntaxTree
 {
-    public class DecimalLiteralExpression: IExpression<DecimalLiteralExpression>
+    public class IntegerLiteralExpression : IExpression<IntegerLiteralExpression>
     {
-        public readonly double Value;
+        public readonly int Value;
 
-        public DecimalLiteralExpression(IParserLocation context, double value)
+        public IntegerLiteralExpression(IParserLocation context, int value)
         {
             Value = value;
             Location = context;
@@ -21,7 +19,7 @@ namespace CQL.SyntaxTree
 
         public IParserLocation Location { get; private set; }
 
-        public Type SemanticType { get { return typeof(double); } }
+        public Type SemanticType { get { return typeof(int); } }
 
         public object Evaluate(IScope<object> context)
         {
@@ -30,7 +28,7 @@ namespace CQL.SyntaxTree
 
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
-            var other = node as DecimalLiteralExpression;
+            var other = node as IntegerLiteralExpression;
             if (other == null)
                 return false;
             return this.Value == other.Value;
@@ -41,7 +39,7 @@ namespace CQL.SyntaxTree
             return Value.ToString();
         }
 
-        public DecimalLiteralExpression Validate(IScope<Type> context)
+        public IntegerLiteralExpression Validate(IScope<Type> context)
         {
             return this;
         }

@@ -38,6 +38,8 @@ namespace CQL.Tests
             context = new EvaluationScope(typeSystem);
             var String = typeSystem.GetTypeByNative<string>();
             String.AddFunction(IdDelimiter.Dot, "length", str => str.Length);
+            String.AddProperty(IdDelimiter.Dot, "size", str => str.Length);
+            String.AddIndexer<int, string>((str, index) => str[index-1].ToString());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);
@@ -102,6 +104,18 @@ namespace CQL.Tests
         public void CheckMethodCall()
         {
             Queries.Evaluate("owner.length() = 6", ticketOne, context);
+        }
+
+        [TestMethod]
+        public void CheckMember()
+        {
+            Queries.Evaluate("owner.size = 6", ticketOne, context);
+        }
+
+        [TestMethod]
+        public void CheckArrayAccess()
+        {
+            Queries.Evaluate("owner[1] = \"M\"", ticketOne, context);
         }
     }
 }
