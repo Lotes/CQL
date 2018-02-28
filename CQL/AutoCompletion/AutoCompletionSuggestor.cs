@@ -20,11 +20,13 @@ namespace CQL.AutoCompletion
         private Dictionary<int, Func<IVariable<object>, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<IVariable<object>, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is IType },
+            { CQLParser.RULE_primeVar, symbol => symbol is IVariable<object> },
             { CQLParser.RULE_member, symbol => symbol is IVariable<object> }
         };
         private Dictionary<int, SuggestionType> lookupSuggestionByRuleId = new Dictionary<int, SuggestionType>()
         {
             { CQLParser.RULE_typeName, SuggestionType.Type },
+            { CQLParser.RULE_primeVar, SuggestionType.Variable },
             { CQLParser.RULE_member, SuggestionType.Variable }
         };
         private Dictionary<int, IEnumerable<Token>> suggestionsByTokenType;

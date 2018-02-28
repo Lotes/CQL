@@ -64,7 +64,7 @@ chain_element
 	| sep=SEPARATOR id=member                      #memberCall
 	;
 primary
-    : var=ID                                       #varExp
+    : p=primeVar                                   #varExp
     | LPAREN expr=expression RPAREN                #expr
     | NOT expr=factor                              #notFactor
     | PLUS expr=factor                             #plusFactor
@@ -73,6 +73,10 @@ primary
     | expr=list                                    #ls
 	| LPAREN type=typeName RPAREN expr=expression  #castFactor     
     ;
+primeVar
+	: var=ID
+	;
+
 member
 	: id=ID #memberName
 	;

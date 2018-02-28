@@ -27,9 +27,9 @@ namespace CQL.WPF.Composer
             InitializeComponent();
         }
 
-        public IScope Context
+        public IScope<object> Context
         {
-            get { return (IScope)GetValue(ContextProperty); }
+            get { return (IScope<object>)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public Query Query
@@ -49,7 +49,7 @@ namespace CQL.WPF.Composer
         }
 
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
+            DependencyProperty.Register("Context", typeof(IScope<object>), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyProperty QueryProperty =
             DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
         public static readonly DependencyPropertyKey StatusProperty =
@@ -160,21 +160,11 @@ namespace CQL.WPF.Composer
             {
                 var multiId = Uncast(comparsion.LeftExpression) as VariableExpression;
                 ComparsionValueViewModel comValue = null;
-                if (multiId == null || !(Context.Get(multiId.Name) is Field) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
+                IVariable<object> variable;
+                if (multiId == null || !(Context.TryGetVariable(multiId.Name, out variable)) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
                     return false;
-                var field = Context.Get(multiId.Name) as Field;
-                part = FilterBoxViewModel.NewComparsion(Context, negate, field, comparsion.Operator, comValue);
-                return true;
-            }
-
-            //constant query?
-            var constantQuery = expression as VariableExpression;
-            if (constantQuery != null && Context.Get(constantQuery.Name) is Constant)
-            {
-                var constant = (Constant)Context.Get(constantQuery.Name);
-                if (constant.FieldType != typeof(bool))
-                    return false;
-                part = FilterBoxViewModel.NewBooleanConstant(Context, negate, constant);
+                var field = variable;
+                part = FilterBoxViewModel.NewComparsion(Context.ToValidationScope(), negate, field.ToValidationVariable(), comparsion.Operator, comValue);
                 return true;
             }
 
@@ -182,7 +172,7 @@ namespace CQL.WPF.Composer
             var booleanLiteral = expression as BooleanLiteralExpression;
             if (booleanLiteral != null)
             {
-                part = FilterBoxViewModel.NewBooleanLiteral(Context, negate, booleanLiteral.Value);
+                part = FilterBoxViewModel.NewBooleanLiteral(Context.ToValidationScope(), negate, booleanLiteral.Value);
                 return true;
             }
 
@@ -207,7 +197,7 @@ namespace CQL.WPF.Composer
                 return true;
             }
 
-            var decimalLiteralExpression = expression as DecimalLiteralExpression;
+            var decimalLiteralExpression = expression as FloatingPointLiteralExpression;
             if (decimalLiteralExpression != null)
             {
                 value = new DecimalLiteralValueViewModel(decimalLiteralExpression.Value);
@@ -217,7 +207,7 @@ namespace CQL.WPF.Composer
             var signedExpression = expression as UnaryOperationExpression;
             if (signedExpression != null)
             {
-                var innerLiteralExpression = signedExpression.Expression as DecimalLiteralExpression;
+                var innerLiteralExpression = signedExpression.Expression as FloatingPointLiteralExpression;
                 if (innerLiteralExpression != null)
                 {
                     var sign = signedExpression.Operator == UnaryOperator.Plus ? 1 : signedExpression.Operator == UnaryOperator.Minus ? -1 : 0;
@@ -237,7 +227,7 @@ namespace CQL.WPF.Composer
         private void OnAdd(object sender, QueryPartSuggestion suggestion)
         {
             Filters.Last().IsLast = false;
-            var last = FilterBoxViewModel.NewEditor(Context, suggestion);
+            var last = FilterBoxViewModel.NewEditor(Context.ToValidationScope(), suggestion);
             BindPartToEvents(last);
             last.IsLast = true;
             Filters.Add(last);
@@ -260,7 +250,7 @@ namespace CQL.WPF.Composer
             {
                 var expression = Filters.Where(p => p.FilterState == FilterBoxState.ReadyToUse).Select(p => p.ToExpression()).Aggregate((lhs, rhs) => new BinaryOperationExpression(null, BinaryOperator.And, lhs, rhs));
                 var query = new Query(null, expression);
-                query.Validate(Context);
+                query.Validate(Context.ToValidationScope());
                 Query = query;
             }
             catch { }
