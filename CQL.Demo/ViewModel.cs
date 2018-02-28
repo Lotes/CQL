@@ -48,13 +48,13 @@ namespace CQL.Demo
             FilteredSubjects = new ObservableCollection<Subject>();
             var tbuilder = new TypeSystemBuilder();
             tbuilder.AddType<Subject>("Subject", "Object of interest.");
-            var builder = new ContextBuilder(tbuilder.Build());
-            builder.AddField<Subject, string>("Name", "Name of subject", subject => subject.Name, subject => subject == null);
-            builder.AddField<Subject, int>("Age", "Age of subject", subject => subject.Age, subject => false);
-            builder.AddField<Subject, int>("Class", "Class of subject", subject => subject.Class, subject => false);
-            builder.AddConstant<Subject, bool>("IsOld", "xyz", subject => subject.Age > 33);
-            builder.AddConstant<Subject, bool>("IsExperienced", "abc", subject => subject.Class >= 10);
-            Context = builder.Build();
+            var context = new EvaluationScope(tbuilder.Build());
+            context.DefineVariable("Name", "Name of subject", subject => subject.Name, subject => subject == null);
+            context.DefineVariable<Subject, int>("Age", "Age of subject", subject => subject.Age, subject => false);
+            context.DefineVariable<Subject, int>("Class", "Class of subject", subject => subject.Class, subject => false);
+            context.DefineVariable<Subject, bool>("IsOld", "xyz", subject => subject.Age > 33);
+            context.DefineVariable<Subject, bool>("IsExperienced", "abc", subject => subject.Class >= 10);
+            Context = context;
             Update();
         }
 
@@ -65,11 +65,11 @@ namespace CQL.Demo
             FilteredSubjects.Clear();
             if(Query != null)
                 foreach (var subject in database)
-                    if (Query.Evaluate<Subject>(subject))
+                    if (Query.Evaluate(subject))
                         FilteredSubjects.Add(subject);
         }
 
-        public IScope Context { get; }
+        public IScope<object> Context { get; }
 
         public ObservableCollection<Subject> FilteredSubjects { get; private set; }
     }

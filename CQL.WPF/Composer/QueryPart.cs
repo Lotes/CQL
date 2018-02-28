@@ -18,7 +18,7 @@ namespace CQL.WPF.Composer
     public abstract class QueryPartViewModel: ViewModelBase
     {
         public abstract IExpression ToExpression();
-        public abstract FilterBoxState Validate(IScope context);
+        public abstract FilterBoxState Validate(IScope<Type> context);
         public event EventHandler ReadyModeRequested;
         protected void RequestReadyMode() { ReadyModeRequested?.Invoke(this, new EventArgs()); }
     }
@@ -34,12 +34,12 @@ namespace CQL.WPF.Composer
     public class FieldComparsionViewModel : QueryPartViewModel
     {
         private FieldComparsionState state;
-        private Field field;
-        private IScope context;
+        private IVariable<Type> field;
+        private IScope<Type> context;
         private BinaryOperator? op;
         private ComparsionValueViewModel value;
         private Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>> binaryOperations = new Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>>();
-        public FieldComparsionViewModel(IScope context, Field field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
+        public FieldComparsionViewModel(IScope<Type> context, IVariable<Type> field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
             this.KeyDownCommand = new RelayCommand<KeyEventArgs>(args => 
             {
@@ -65,7 +65,7 @@ namespace CQL.WPF.Composer
 
         private void ComputePossibleStates()
         {
-            PossibleFields = new ObservableCollection<Field>();
+            PossibleFields = new ObservableCollection<IVariable<Type>>();
             PossibleOperators = new ObservableCollection<BinaryOperator>();
             
             var typeSystem = context.TypeSystem;
@@ -87,11 +87,11 @@ namespace CQL.WPF.Composer
 
         public FieldComparsionState State { get { return state; } set { state = value; RaisePropertyChanged(() => State); } }
 
-        public Field Field { get { return field; } set { field = value;  RaisePropertyChanged(() => Field); UpdateOperator(); } }
+        public IVariable<Type> Field { get { return field; } set { field = value;  RaisePropertyChanged(() => Field); UpdateOperator(); } }
         public BinaryOperator? Operator { get { return op; } set { op = value; RaisePropertyChanged(() => Operator); UpdateValue(); } }
         public ComparsionValueViewModel Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); } }
 
-        public ObservableCollection<Field> PossibleFields { get; private set; }
+        public ObservableCollection<IVariable<Type>> PossibleFields { get; private set; }
         public ObservableCollection<BinaryOperator> PossibleOperators { get; private set; }
 
         private void UpdateField()
@@ -99,7 +99,7 @@ namespace CQL.WPF.Composer
             PossibleFields.Clear();
             PossibleOperators.Clear();
 
-            foreach (var field in context.Fields)
+            foreach (var field in context)
                 PossibleFields.Add(field);
 
             if (Field != null)
@@ -112,7 +112,7 @@ namespace CQL.WPF.Composer
         {
             PossibleOperators.Clear();
 
-            var lhsType = Field.FieldType;
+            var lhsType = Field.Value;
             Dictionary<Type, HashSet<BinaryOperation>> ops;
             if (binaryOperations.TryGetValue(lhsType, out ops))
                 foreach (var op in ops.Values.SelectMany(bos => bos).Select(bo => bo.Operator).Distinct())
@@ -136,7 +136,7 @@ namespace CQL.WPF.Composer
             if(Field != null && Operator != null)
             {
                 Dictionary<Type, HashSet<BinaryOperation>> byRhs;
-                if(binaryOperations.TryGetValue(Field.FieldType, out byRhs))
+                if(binaryOperations.TryGetValue(Field.Value, out byRhs))
                 {
                     foreach (var rhs in byRhs.Keys.ToArray())
                         if (!byRhs[rhs].Any(operation => operation.Operator == Operator))
@@ -166,50 +166,9 @@ namespace CQL.WPF.Composer
                     value.ToExpression());
         }
 
-        public override FilterBoxState Validate(IScope context)
+        public override FilterBoxState Validate(IScope<Type> context)
         {
             return field == null || op == null || !op.HasValue || value == null ? FilterBoxState.HasErrors : FilterBoxState.ReadyToUse;
-        }
-    }
-    public class BooleanConstantViewModel : QueryPartViewModel
-    {
-        private Constant constant;
-        private IScope context;
-
-        public BooleanConstantViewModel(IScope context, Constant constant)
-        {
-            if (constant.FieldType != typeof(bool))
-                throw new ArgumentException("Constant must be a bool type!");
-            this.constant = constant;
-            this.context = context;
-        }
-
-        public Constant Constant
-        {
-            get { return constant; }
-            set { constant = value; RaisePropertyChanged(() => Constant); RequestReadyMode(); }
-        }
-
-        public IEnumerable<Constant> Constants
-        {
-            get
-            {
-                return context.Constants
-                    .Where(c => c.FieldType == typeof(bool))
-                    .OrderBy(c => c.Name, Comparer<string>.Create((lhs, rhs) => string.Compare(lhs, rhs, StringComparison.CurrentCultureIgnoreCase))).ToArray();
-            }
-        }
-
-        public override IExpression ToExpression()
-        {
-            return new VariableExpression(null, constant.Name);
-        }
-
-        public override FilterBoxState Validate(IScope context)
-        {
-            return context.Get(constant.Name) == constant && constant.FieldType == typeof(bool)
-                ? FilterBoxState.ReadyToUse
-                : FilterBoxState.HasErrors;
         }
     }
     public class BooleanLiteralViewModel : QueryPartViewModel
@@ -237,7 +196,7 @@ namespace CQL.WPF.Composer
             return new BooleanLiteralExpression(null, value);
         }
 
-        public override FilterBoxState Validate(IScope context)
+        public override FilterBoxState Validate(IScope<Type> context)
         {
             return FilterBoxState.ReadyToUse;
         }
@@ -285,7 +244,7 @@ namespace CQL.WPF.Composer
         public double Value { get { return value; } set { this.value = value; RaisePropertyChanged(() => Value); RaisePropertyChanged(() => Text); } }
         public override IExpression ToExpression()
         {
-            return new DecimalLiteralExpression(null, value);
+            return new FloatingPointLiteralExpression(null, value);
         }
 
         protected override string GetText()

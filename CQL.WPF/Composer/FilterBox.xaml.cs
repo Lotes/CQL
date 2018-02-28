@@ -48,13 +48,13 @@ namespace CQL.WPF.Composer
 
 
 
-        public IScope Context
+        public IScope<Type> Context
         {
-            get { return (Contexts.IScope)GetValue(ContextProperty); }
+            get { return (Contexts.IScope<Type>)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope), typeof(FilterBox), new PropertyMetadata(null));
+            DependencyProperty.Register("Context", typeof(IScope<Type>), typeof(FilterBox), new PropertyMetadata(null));
 
 
 
