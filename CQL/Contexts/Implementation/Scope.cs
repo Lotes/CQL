@@ -100,7 +100,7 @@ namespace CQL.Contexts.Implementation
 
         public IEnumerator<IVariable<T>> GetEnumerator()
         {
-            return variables.Values.GetEnumerator();
+            return thisMembers.Values.Union(variables.Values).GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()

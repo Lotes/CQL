@@ -47,13 +47,11 @@ namespace CQL.Demo
         {
             FilteredSubjects = new ObservableCollection<Subject>();
             var tbuilder = new TypeSystemBuilder();
-            tbuilder.AddType<Subject>("Subject", "Object of interest.");
+            var SubjectType = tbuilder.AddType<Subject>("Subject", "Object of interest.");
+            SubjectType.AddProperty(IdDelimiter.Dot, "name", sub => sub.Name);
+            SubjectType.AddProperty(IdDelimiter.Dot, "age", sub => sub.Age);
+            SubjectType.AddProperty(IdDelimiter.Dot, "class", sub => sub.Class);
             var context = new EvaluationScope(tbuilder.Build());
-            context.DefineVariable("Name", "Name of subject", subject => subject.Name, subject => subject == null);
-            context.DefineVariable<Subject, int>("Age", "Age of subject", subject => subject.Age, subject => false);
-            context.DefineVariable<Subject, int>("Class", "Class of subject", subject => subject.Class, subject => false);
-            context.DefineVariable<Subject, bool>("IsOld", "xyz", subject => subject.Age > 33);
-            context.DefineVariable<Subject, bool>("IsExperienced", "abc", subject => subject.Class >= 10);
             Context = context;
             Update();
         }
@@ -65,8 +63,11 @@ namespace CQL.Demo
             FilteredSubjects.Clear();
             if(Query != null)
                 foreach (var subject in database)
-                    if (Query.Evaluate(subject))
+                {
+                    Context.DefineThis(subject);
+                    if (Query.Evaluate(Context))
                         FilteredSubjects.Add(subject);
+                }
         }
 
         public IScope<object> Context { get; }

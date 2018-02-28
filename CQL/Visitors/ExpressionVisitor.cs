@@ -265,7 +265,7 @@ namespace CQL.Visitors
         }
         public override IExpression VisitVarExp([NotNull] CQLParser.VarExpContext context)
         {
-            return new VariableExpression((ParserLocation)context, context.var.Text);
+            return new VariableExpression((ParserLocation)context, nameVisitor.Visit(context.p));
         }
     }
 }
