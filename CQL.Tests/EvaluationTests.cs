@@ -38,11 +38,25 @@ namespace CQL.Tests
             context = new EvaluationScope(typeSystem);
             var String = typeSystem.GetTypeByNative<string>();
             String.AddFunction(IdDelimiter.Dot, "length", str => str.Length);
+            String.AddFunction<double, string>(IdDelimiter.Dot, "append", (str, index) => str+index);
             String.AddProperty(IdDelimiter.Dot, "size", str => str.Length);
             String.AddIndexer<int, string>((str, index) => str[index-1].ToString());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);
+        }
+
+        [TestMethod]
+        public void MethodParameterCoercion()
+        {
+            Assert.IsTrue(Queries.Evaluate("owner.append(1) = \"Markus1\"", ticketOne, context) == true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void MethodParameterCountMismatch()
+        {
+            Assert.IsTrue(Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context) == true);
         }
 
         [TestMethod]

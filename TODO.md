@@ -1,14 +1,10 @@
 TODO
 ====
 
-In progress
------------
-
-* replace multi ids with method/field/array chaining, allow "AAA/BBB" as tags
-
 Nice to have
 ------------
 
+* add functions
 * documentation (split in concrete tasks)
 * docuemnt hard coded behaviours for binary operators 'IS' and 'IN'
 * publish to nuget

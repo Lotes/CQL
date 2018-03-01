@@ -53,9 +53,12 @@ namespace CQL.SyntaxTree
             for(var index = 0; index<formalParameters.Length; index++)
             {
                 var formal = formalParameters[index];
-                var actualExpression = indices[index];
-                if (!formal.IsAssignableFrom(actualExpression.SemanticType))
-                    throw new InvalidOperationException("Parameter type mismatch!");
+                var actual = indices[index].SemanticType;
+                if(formal != actual)
+                {
+                    var chain = context.TypeSystem.GetImplicitlyCastChain(actual, formal);
+                    indices[index] = chain.ApplyCast(indices[index], context, () => new InvalidOperationException("Parameter type mismatch!"));
+                }
             }
             return this;
         }

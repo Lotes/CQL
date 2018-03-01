@@ -22,7 +22,7 @@ namespace CQL.Contexts
                 return null;
             var result = new ValidationScope(@this.TypeSystem, @this.Parent.ToValidationScope());
             foreach (var elem in @this)
-                result.DefineVariable(elem.Name, elem.Value.GetType());
+                result.DefineVariable(elem.Name, elem.Value?.GetType() ?? typeof(object));
             return result;
         }
         public static bool TryGetThis<T>(this IScope<T> @this, out IVariable<T> variable)

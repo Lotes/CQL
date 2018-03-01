@@ -47,6 +47,21 @@ namespace CQL.SyntaxTree
             MethodSignature signature;
             if (!(ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out signature)))
                 throw new LocateableException(Location, "Expected a method closure!");
+            var parameterIndex = 0;
+            if (signature.ParameterTypes.Length != Parameters.Count())
+                throw new InvalidOperationException("Parameter count mismatch!");
+            Parameters = Parameters.Select(p => 
+            {
+                p = p.Validate(context);
+                var formalType = signature.ParameterTypes[parameterIndex];
+                parameterIndex++;
+                if (p.SemanticType != formalType)
+                {
+                    var chain = context.TypeSystem.GetImplicitlyCastChain(p.SemanticType, formalType);
+                    p = chain.ApplyCast(p, context, () => new InvalidOperationException("Parameter " + parameterIndex + " type mismatch: can not convert."));
+                }
+                return p;
+            }).ToArray();
             SemanticType = signature.ReturnType;
             return this;
         }
