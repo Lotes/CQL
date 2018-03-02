@@ -44,26 +44,50 @@ namespace CQL.SyntaxTree
         public MethodCallExpression Validate(IScope<Type> context)
         {
             ThisExpression = ThisExpression.Validate(context);
-            MethodSignature signature;
-            if (!(ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out signature)))
-                throw new LocateableException(Location, "Expected a method closure!");
-            var parameterIndex = 0;
-            if (signature.ParameterTypes.Length != Parameters.Count())
-                throw new InvalidOperationException("Parameter count mismatch!");
-            Parameters = Parameters.Select(p => 
+            MethodSignature methodSignature;
+            FunctionSignature functionSignature;
+            if (ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out methodSignature))
             {
-                p = p.Validate(context);
-                var formalType = signature.ParameterTypes[parameterIndex];
-                parameterIndex++;
-                if (p.SemanticType != formalType)
+                var parameterIndex = 0;
+                if (methodSignature.ParameterTypes.Length != Parameters.Count())
+                    throw new InvalidOperationException("Parameter count mismatch!");
+                Parameters = Parameters.Select(p =>
                 {
-                    var chain = context.TypeSystem.GetImplicitlyCastChain(p.SemanticType, formalType);
-                    p = chain.ApplyCast(p, context, () => new InvalidOperationException("Parameter " + parameterIndex + " type mismatch: can not convert."));
-                }
-                return p;
-            }).ToArray();
-            SemanticType = signature.ReturnType;
-            return this;
+                    p = p.Validate(context);
+                    var formalType = methodSignature.ParameterTypes[parameterIndex];
+                    parameterIndex++;
+                    if (p.SemanticType != formalType)
+                    {
+                        var chain = context.TypeSystem.GetImplicitlyCastChain(p.SemanticType, formalType);
+                        p = chain.ApplyCast(p, context, () => new InvalidOperationException("Parameter " + parameterIndex + " type mismatch: can not convert."));
+                    }
+                    return p;
+                }).ToArray();
+                SemanticType = methodSignature.ReturnType;
+                return this;
+            }
+            else if (ThisExpression.SemanticType.IfFunctionClosureTryGetFunctionType(out functionSignature))
+            {
+                var parameterIndex = 0;
+                if (functionSignature.ParameterTypes.Length != Parameters.Count())
+                    throw new InvalidOperationException("Parameter count mismatch!");
+                Parameters = Parameters.Select(p =>
+                {
+                    p = p.Validate(context);
+                    var formalType = functionSignature.ParameterTypes[parameterIndex];
+                    parameterIndex++;
+                    if (p.SemanticType != formalType)
+                    {
+                        var chain = context.TypeSystem.GetImplicitlyCastChain(p.SemanticType, formalType);
+                        p = chain.ApplyCast(p, context, () => new InvalidOperationException("Parameter " + parameterIndex + " type mismatch: can not convert."));
+                    }
+                    return p;
+                }).ToArray();
+                SemanticType = functionSignature.ReturnType;
+                return this;
+            }
+            else
+                throw new LocateableException(Location, "Closure expected!");
         }
 
         IExpression IExpression.Validate(IScope<Type> context)
@@ -76,7 +100,9 @@ namespace CQL.SyntaxTree
             var @this = this.ThisExpression.Evaluate(context);
             if(@this is IMethodClosure)
                 return ((IMethodClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
-            throw new InvalidOperationException("Closure was expected!");
+            if (@this is IFunctionClosure)
+                return ((IFunctionClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
+            throw new InvalidOperationException("Closure expected!");
         }
     }
 }

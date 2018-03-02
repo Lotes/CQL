@@ -16,6 +16,6 @@ namespace CQL.TypeSystem
     public interface IMethodClosure<TMethod>: IMethodClosure
         where TMethod: Method
     {
-        TMethod Method { get; }
+        TMethod Function { get; }
     }
 }

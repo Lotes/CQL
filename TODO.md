@@ -1,10 +1,14 @@
 TODO
 ====
 
+Progress
+--------
+
+* add functions
+
 Nice to have
 ------------
 
-* add functions
 * documentation (split in concrete tasks)
 * docuemnt hard coded behaviours for binary operators 'IS' and 'IN'
 * publish to nuget
