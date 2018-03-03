@@ -22,7 +22,7 @@ namespace CQL.Tests
             }
         }
 
-        public static IScope<object> context;
+        public static EvaluationScope context;
         public static Ticket ticketOne;
         public static Ticket ticketTwo;
         public static Ticket ticketThree;
@@ -36,13 +36,34 @@ namespace CQL.Tests
             Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
             var typeSystem = typeSystemBuilder.Build();
             context = new EvaluationScope(typeSystem);
+            context.DefineFunction<int, int, int>("max", (a, b) => Math.Max(a, b));
             var String = typeSystem.GetTypeByNative<string>();
             String.AddFunction(IdDelimiter.Dot, "length", str => str.Length);
+            String.AddFunction<double, string>(IdDelimiter.Dot, "append", (str, index) => str+index);
             String.AddProperty(IdDelimiter.Dot, "size", str => str.Length);
             String.AddIndexer<int, string>((str, index) => str[index-1].ToString());
             ticketOne = new Ticket(1, "Markus");
             ticketTwo = new Ticket(2, "Jenny");
             ticketThree = new Ticket(3, null);
+        }
+
+        [TestMethod]
+        public void FunctionEval()
+        {
+            Assert.IsTrue(Queries.Evaluate("max(100,200) = 200", ticketOne, context) == true);
+        }
+
+        [TestMethod]
+        public void MethodParameterCoercion()
+        {
+            Assert.IsTrue(Queries.Evaluate("owner.append(1) = \"Markus1\"", ticketOne, context) == true);
+        }
+
+        [TestMethod]
+        [ExpectedException(typeof(InvalidOperationException))]
+        public void MethodParameterCountMismatch()
+        {
+            Assert.IsTrue(Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context) == true);
         }
 
         [TestMethod]

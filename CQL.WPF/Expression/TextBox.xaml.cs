@@ -22,7 +22,7 @@ namespace CQL.WPF.Expression
     {
         private TextMarkerService textMarkerService;
         private ToolTip toolTip;
-        private IScope nullContext;
+        private IScope<object> nullContext;
         private CompletionWindow completionWindow;
         private bool isUpdatingText = false;
 
@@ -35,8 +35,7 @@ namespace CQL.WPF.Expression
 
             var typeSystemBuilder = new TypeSystemBuilder();
             var typeSystem = typeSystemBuilder.Build();
-            var contextBuilder = new ContextBuilder(typeSystem);
-            nullContext = contextBuilder.Build();
+            nullContext = new EvaluationScope(typeSystem);
 
             textEditor.TextArea.TextEntered += TextArea_TextEntered;
             textEditor.TextArea.PreviewKeyDown += TextArea_PreviewKeyDown;
@@ -46,12 +45,12 @@ namespace CQL.WPF.Expression
 
 
 
-        public IScope Context
+        public IScope<object> Context
         {
-            get { return (IScope)GetValue(ContextProperty); }
+            get { return (IScope<object>)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
-        private IScope InternalContext { get { return Context ?? nullContext; } }
+        private IScope<object> InternalContext { get { return Context ?? nullContext; } }
         public Query Query
         {
             get { return (Query)GetValue(QueryProperty); }
@@ -62,7 +61,7 @@ namespace CQL.WPF.Expression
         public static readonly DependencyProperty QueryProperty =
             DependencyProperty.Register("Query", typeof(Query), typeof(TextBox), new PropertyMetadata(Queries.True, queryChangedCallback));
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope), typeof(TextBox), new PropertyMetadata(null, contextChangedCallback));
+            DependencyProperty.Register("Context", typeof(IScope<object>), typeof(TextBox), new PropertyMetadata(null, contextChangedCallback));
 
         private void InitializeText(string text)
         {

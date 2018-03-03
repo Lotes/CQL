@@ -1,10 +1,10 @@
 TODO
 ====
 
-In progress
------------
+Progress
+--------
 
-* replace multi ids with method/field/array chaining, allow "AAA/BBB" as tags
+* add functions
 
 Nice to have
 ------------

@@ -28,7 +28,7 @@ namespace CQL.WPF.Composer
         static QueryPartSuggestion()
         {
             icons = new Dictionary<Type, ImageSource>();
-            icons[typeof(BooleanConstantViewModel)] = Convert(Properties.Resources.variable);
+            //icons[typeof(BooleanConstantViewModel)] = Convert(Properties.Resources.variable);
             icons[typeof(BooleanLiteralViewModel)] = Convert(Properties.Resources.token);
             icons[typeof(FieldComparsionViewModel)] = Convert(Properties.Resources.variable);
         }

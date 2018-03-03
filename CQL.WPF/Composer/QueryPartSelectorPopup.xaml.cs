@@ -28,13 +28,13 @@ namespace CQL.WPF.Composer
             InitializeComponent();
         }
 
-        public IScope Context
+        public IScope<Type> Context
         {
-            get { return (Contexts.IScope)GetValue(ContextProperty); }
+            get { return (Contexts.IScope<Type>)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(Contexts.IScope), typeof(QueryPartSelectorPopup), new PropertyMetadata(null, contextChangedStatic));
+            DependencyProperty.Register("Context", typeof(Contexts.IScope<Type>), typeof(QueryPartSelectorPopup), new PropertyMetadata(null, contextChangedStatic));
         private static void contextChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as QueryPartSelectorPopup;
@@ -91,8 +91,7 @@ namespace CQL.WPF.Composer
         private void UpdateSuggestions()
         {
             Suggestions = new ObservableCollection<QueryPartSuggestion>();
-            foreach (var suggestion in Context.Fields.Select(FieldToSuggestion)
-                .Concat(Context.Constants.Where(c => c.FieldType == typeof(bool)).Select(ConstantToSuggestion))
+            foreach (var suggestion in Context.Select(FieldToSuggestion)
                 .Concat(new[]
                 {
                     new QueryPartSuggestion("True", "Tautology, everything will be accepted.", new BooleanLiteralViewModel(true)),
@@ -103,14 +102,9 @@ namespace CQL.WPF.Composer
             ApplyFilter();   
         }
 
-        private QueryPartSuggestion ConstantToSuggestion(Constant constant)
+        private QueryPartSuggestion FieldToSuggestion(IVariable<Type> field)
         {
-            return new QueryPartSuggestion(constant.Name, constant.Usage, new BooleanConstantViewModel(Context, constant));
-        }
-
-        private QueryPartSuggestion FieldToSuggestion(Field field)
-        {
-            return new QueryPartSuggestion(field.Name, field.Usage, new FieldComparsionViewModel(Context, field));
+            return new QueryPartSuggestion(field.Name, "???", new FieldComparsionViewModel(Context, field));
         }
 
         private void ApplyFilter()

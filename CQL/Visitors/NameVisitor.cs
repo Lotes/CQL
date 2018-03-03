@@ -28,7 +28,7 @@ namespace CQL.Visitors
             return context.value.Text;
         }
 
-        public override string VisitVarExp([NotNull] CQLParser.VarExpContext context)
+        public override string VisitPrimeVar([NotNull] CQLParser.PrimeVarContext context)
         {
             return context.var.Text;
         }

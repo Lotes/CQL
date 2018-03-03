@@ -15,13 +15,13 @@ namespace CQL.TypeSystem
             public Closure(object @this, TMethod method)
             {
                 ThisObject = @this;
-                Method = method;
+                Function = method;
             }
-            public TMethod Method { get; private set; }
+            public TMethod Function { get; private set; }
             public object ThisObject { get; private set; }
             public object Invoke(params object[] parameters)
             {
-                return Method.Invoke(ThisObject, parameters);
+                return Function.Invoke(ThisObject, parameters);
             }
         }
 
@@ -34,6 +34,18 @@ namespace CQL.TypeSystem
             var methodType = closure.GetGenericArguments()[0];
             var arguments = methodType.GetGenericArguments();
             signature = new MethodSignature(arguments[0], arguments[1], arguments.Skip(2).ToArray()); // by convention
+            return true;
+        }
+
+        public static bool IfFunctionClosureTryGetFunctionType(this Type @this, out FunctionSignature signature)
+        {
+            signature = null;
+            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IFunctionClosure<>));
+            if (closure == null)
+                return false;
+            var functionType = closure.GetGenericArguments()[0];
+            var arguments = functionType.GetGenericArguments();
+            signature = new FunctionSignature(arguments[0], arguments.Skip(1).ToArray()); // by convention
             return true;
         }
 
