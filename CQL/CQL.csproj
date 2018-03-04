@@ -93,6 +93,7 @@
     <Compile Include="AutoCompletion\Token.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
+    <Compile Include="TypeSystem\DefaultFlags.cs" />
     <Compile Include="TypeSystem\IFunction.cs" />
     <Compile Include="TypeSystem\Implementation\Function.cs" />
     <Compile Include="TypeSystem\Void.cs" />

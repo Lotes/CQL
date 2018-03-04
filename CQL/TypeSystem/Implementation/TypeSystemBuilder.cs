@@ -12,26 +12,53 @@ namespace CQL.TypeSystem.Implementation
     {
         private TypeSystem typeSystem = new TypeSystem();
 
-        public TypeSystemBuilder(bool initialzeDefaults = true)
+        public TypeSystemBuilder(DefaultFlags flags = DefaultFlags.All)
         {
-            if(initialzeDefaults)
+            if (flags.HasFlag(DefaultFlags.HasBoolean))
             {
                 AddType<bool>("boolean", "true or false");
                 typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.And, (lhs, rhs) => lhs && rhs);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.Or, (lhs, rhs) => lhs || rhs);
+            }
+            if(flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+            {
                 AddType<double>("double", "floating point number");
+                if(flags.HasFlag(DefaultFlags.HasBoolean))
+                {
+                    AddCoercionRule<bool, double>(CoercionKind.Explicit, @bool => @bool ? 1.0 : 0.0);
+                }
+            }
+            if(flags.HasFlag(DefaultFlags.HasWholeNumbers))
+            {
                 AddType<int>("int", "whole numbers");
+                if(flags.HasFlag(DefaultFlags.HasBoolean))
+                {
+                    AddCoercionRule<bool, int>(CoercionKind.Explicit, @bool => @bool ? 1 : 0);
+                }
+            }
+            if (flags.HasFlag(DefaultFlags.HasWholeNumbers) && flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+            {
                 AddCoercionRule<int, double>(CoercionKind.Implicit, @int => (double)@int);
                 AddCoercionRule<double, int>(CoercionKind.Explicit, @double => (int)@double);
+            }
+            if(flags.HasFlag(DefaultFlags.HasStrings))
+            {
                 AddType<string>("string", "sequence of chars");
-                AddCoercionRule<int, string>(CoercionKind.Explicit, @int => @int.ToString());
-                AddCoercionRule<double, string>(CoercionKind.Explicit, @double => @double.ToString());
-                AddCoercionRule<bool, string>(CoercionKind.Explicit, @bool => @bool.ToString());
-                AddCoercionRule<bool, int>(CoercionKind.Explicit, @bool => @bool ? 1 : 0);
-                AddCoercionRule<bool, double>(CoercionKind.Explicit, @bool => @bool ? 1.0 : 0.0);
                 typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
                 AddContainsRule<string, string>((haystack, needle) => haystack != null && needle != null && haystack.IndexOf(needle) > -1);
+                if (flags.HasFlag(DefaultFlags.HasBoolean))
+                {
+                    AddCoercionRule<bool, string>(CoercionKind.Explicit, @bool => @bool.ToString());
+                }
+                if (flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+                {
+                    AddCoercionRule<double, string>(CoercionKind.Explicit, @double => @double.ToString());
+                }
+                if (flags.HasFlag(DefaultFlags.HasWholeNumbers))
+                {
+                    AddCoercionRule<int, string>(CoercionKind.Explicit, @int => @int.ToString());
+                }
             }
         }
 
