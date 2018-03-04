@@ -245,3 +245,5 @@ ModelManifest.xml
 .fake/
 Tools
 /packages
+/nuget.exe
+/packaging/specs/nuget.exe
