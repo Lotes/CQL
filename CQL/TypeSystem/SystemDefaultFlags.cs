@@ -7,13 +7,13 @@ using System.Threading.Tasks;
 namespace CQL.TypeSystem
 {
     [Flags]
-    public enum DefaultFlags
+    public enum SystemDefaultFlags
     {
         None = 0,
         HasBoolean = 1,
-        HasWholeNumbers = 2,
-        HasDecimalNumbers = 4,
+        HasIntegers = 2,
+        HasDoubles = 4,
         HasStrings = 8,
-        All = HasBoolean | HasWholeNumbers | HasDecimalNumbers | HasStrings
+        All = HasBoolean | HasIntegers | HasDoubles | HasStrings
     }
 }

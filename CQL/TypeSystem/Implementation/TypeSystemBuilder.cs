@@ -12,63 +12,64 @@ namespace CQL.TypeSystem.Implementation
     {
         private TypeSystem typeSystem = new TypeSystem();
 
-        public TypeSystemBuilder(DefaultFlags flags = DefaultFlags.All)
+        public TypeSystemBuilder(SystemDefaultFlags flags = SystemDefaultFlags.All)
         {
-            if (flags.HasFlag(DefaultFlags.HasBoolean))
+            if (flags.HasFlag(SystemDefaultFlags.HasBoolean))
             {
                 AddType<bool>("boolean", "true or false");
                 typeSystem.AddRule<bool, bool>(UnaryOperator.Not, value => !value);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.And, (lhs, rhs) => lhs && rhs);
                 typeSystem.AddRule<bool, bool, bool>(BinaryOperator.Or, (lhs, rhs) => lhs || rhs);
             }
-            if(flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+            if(flags.HasFlag(SystemDefaultFlags.HasDoubles))
             {
                 AddType<double>("double", "floating point number");
-                if(flags.HasFlag(DefaultFlags.HasBoolean))
+                if(flags.HasFlag(SystemDefaultFlags.HasBoolean))
                 {
                     AddCoercionRule<bool, double>(CoercionKind.Explicit, @bool => @bool ? 1.0 : 0.0);
                 }
             }
-            if(flags.HasFlag(DefaultFlags.HasWholeNumbers))
+            if(flags.HasFlag(SystemDefaultFlags.HasIntegers))
             {
                 AddType<int>("int", "whole numbers");
-                if(flags.HasFlag(DefaultFlags.HasBoolean))
+                if(flags.HasFlag(SystemDefaultFlags.HasBoolean))
                 {
                     AddCoercionRule<bool, int>(CoercionKind.Explicit, @bool => @bool ? 1 : 0);
                 }
             }
-            if (flags.HasFlag(DefaultFlags.HasWholeNumbers) && flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+            if (flags.HasFlag(SystemDefaultFlags.HasIntegers) && flags.HasFlag(SystemDefaultFlags.HasDoubles))
             {
                 AddCoercionRule<int, double>(CoercionKind.Implicit, @int => (double)@int);
                 AddCoercionRule<double, int>(CoercionKind.Explicit, @double => (int)@double);
             }
-            if(flags.HasFlag(DefaultFlags.HasStrings))
+            if(flags.HasFlag(SystemDefaultFlags.HasStrings))
             {
                 AddType<string>("string", "sequence of chars");
                 typeSystem.AddRule<string, string, string>(BinaryOperator.Add, (lhs, rhs) => lhs + rhs);
                 AddContainsRule<string, string>((haystack, needle) => haystack != null && needle != null && haystack.IndexOf(needle) > -1);
-                if (flags.HasFlag(DefaultFlags.HasBoolean))
+                if (flags.HasFlag(SystemDefaultFlags.HasBoolean))
                 {
                     AddCoercionRule<bool, string>(CoercionKind.Explicit, @bool => @bool.ToString());
                 }
-                if (flags.HasFlag(DefaultFlags.HasDecimalNumbers))
+                if (flags.HasFlag(SystemDefaultFlags.HasDoubles))
                 {
                     AddCoercionRule<double, string>(CoercionKind.Explicit, @double => @double.ToString());
                 }
-                if (flags.HasFlag(DefaultFlags.HasWholeNumbers))
+                if (flags.HasFlag(SystemDefaultFlags.HasIntegers))
                 {
                     AddCoercionRule<int, string>(CoercionKind.Explicit, @int => @int.ToString());
                 }
             }
         }
 
-        public IType<TType> AddType<TType>(string name, string usage)
+        public IType<TType> AddType<TType>(string name, string usage, TypeDefaultFlags flags = TypeDefaultFlags.All)
         {
             var result = typeSystem.AddType<TType>(name, usage);
-            AddEqualsRule<TType>((a, b) => a != null && b != null && a.Equals(b));
-            if (typeof(IComparable).IsAssignableFrom(typeof(TType)))
+            if(flags.HasFlag(TypeDefaultFlags.Equals))
+                AddEqualsRule<TType>((a, b) => a != null && b != null && a.Equals(b));
+            if (flags.HasFlag(TypeDefaultFlags.Comparable) && typeof(IComparable).IsAssignableFrom(typeof(TType)))
                 AddLessRule<TType>((a, b) => ((IComparable)a).CompareTo(b) < 0);
-            if(typeof(TType).IsNumeric())
+            if(flags.HasFlag(TypeDefaultFlags.Numeric) && typeof(TType).IsNumeric())
             {
                 TryAddBinaryNumericOperation<TType>(BinaryOperator.Add);
                 TryAddBinaryNumericOperation<TType>(BinaryOperator.Sub);
