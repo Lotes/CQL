@@ -31,7 +31,7 @@ namespace CQL.Tests
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            var Ticket = typeSystemBuilder.AddType<Ticket>("Ticker", "Blubber");
+            var Ticket = typeSystemBuilder.AddType<Ticket>("Ticket", "Description of Ticket");
             Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id);
             Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
             var typeSystem = typeSystemBuilder.Build();

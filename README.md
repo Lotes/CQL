@@ -26,7 +26,11 @@ The two components, provided here, are
 Quickstart
 ----------
 
-First, installation... TODO
+First, installation
+
+```
+nuget Install-Package CQL
+```
 
 Second, let me shortly explain the concepts. You actually need to provide three objects:
 
@@ -38,21 +42,22 @@ Third, study the following code snippet:
 
 ```csharp
 //SETUP
-var tbuilder = new TypeSystemBuilder(true); //true = creates a type system with typically expected behaviour
-tbuilder.AddType<Person>("Person", "Object of interest.");
-var typeSystem = tbuilder.Build();
+var typeSystemBuilder = new TypeSystemBuilder();
+var Ticket = typeSystemBuilder.AddType<Ticket>("Ticket", "Description of Ticket");
+Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id);
+Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
+var typeSystem = typeSystemBuilder.Build();
 
-var builder = new ContextBuilder(typeSystem);
-builder.AddField<Person, string>("Name", "Name of the person", subject => subject.Name, subject => subject == null);
-builder.AddField<Person, int>("Age", "Age of person", subject => subject.Age, subject => false);
-var context = builder.Build();
+//DATA
+var ticket1 = new Ticket() { Id = 123, Owner = "Me" };
+var ticket2 = new Ticket() { Id = 124, Owner = "Myself" };
+var ticket3 = new Ticket() { Id = 125, Owner = "I" };
 
-//USE
-var query = Queries.Parse("age > 30", context);
-var person1 = new Person(Name="Lotes", Age=31);
-var person2 = new Person(Name="Amai", Age=30);
-query.Evaluate<Person>(person1)); //returns true
-query.Evaluate<Person>(person2)); //returns false
+//QUERY
+var context = new EvaluationScope(typeSystem);
+Assert.IsFalse(Queries.Evaluate("id > 123", ticket1, context));
+Assert.IsFalse(Queries.Evaluate("id > 123 AND Owner = \"I\"", ticket2, context));
+Assert.IsTrue(Queries.Evaluate("ID > 123 AND oWnEr = \"I\"", ticket3, context));
 ```
 
 Features
@@ -65,3 +70,8 @@ Features
 	* expert mode
 	* auto completion
 	* syntax highlighting
+
+Future
+------
+
+* setup operator precendence
