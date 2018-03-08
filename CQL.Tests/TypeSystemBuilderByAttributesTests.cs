@@ -33,6 +33,10 @@ namespace CQL.Tests
 
             [CQLMethod("toString", IdDelimiter.Dot)]
             public override string ToString() { return "Ticket " + Id; }
+
+            [CQLMethod("call", IdDelimiter.Dot)]
+            public void Call() { Console.WriteLine("Hallo?"); }
+
             [CQLIndexer]
             public string this[int index] { get { return Owner[index].ToString(); } }
         }
@@ -50,6 +54,18 @@ namespace CQL.Tests
         public void PropertyTest()
         {
             Assert.IsTrue(Queries.Evaluate<Ticket>("id = 7", new Ticket(7, "Me"), scope) == true);
+        }
+
+        [TestMethod]
+        public void MemberFunctionTest()
+        {
+            Assert.IsTrue(Queries.Evaluate<Ticket>("toString() = \"Ticket 7\"", new Ticket(7, "Me"), scope) == true);
+        }
+
+        [TestMethod]
+        public void MemberActionTest()
+        {
+            Assert.IsTrue(Queries.Evaluate<Ticket>("not(call() is null)", new Ticket(7, "Me"), scope) == true);
         }
     }
 }

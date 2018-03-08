@@ -20,7 +20,7 @@ namespace CQL.TypeSystem.Implementation
 
         public object Invoke(object @this, params object[] parameters)
         {
-            return body.Method.Invoke(body.Target, new[] { @this }.Concat(parameters).ToArray());
+            return body.DynamicInvoke(new[] { @this }.Concat(parameters).ToArray());
         }
     }
 
