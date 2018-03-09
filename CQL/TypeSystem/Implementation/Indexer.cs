@@ -19,7 +19,7 @@ namespace CQL.TypeSystem.Implementation
         public Type ReturnType { get; private set; }
         public object Get(object @this, params object[] indices)
         {
-            return getter.Method.Invoke(getter.Target, new[] { @this }.Concat(indices).ToArray());
+            return getter.DynamicInvoke(new[] { @this }.Concat(indices).ToArray());
         }
     }
 }

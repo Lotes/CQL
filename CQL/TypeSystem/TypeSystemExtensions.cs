@@ -57,6 +57,8 @@ namespace CQL.TypeSystem
         //IMethod AddFunction<T1, T2, T3, T4, T5, T6, TResult>(IdDelimiter delimiter, string name, Func<TType, T1, T2, T3, T4, T5, T6, TResult> func);
         private static Func<IType, Type, IEnumerable<Type>, Type, MethodInfo, IdDelimiter, string, IMethod> AddMemberFunction;
         private static Func<IType, Type, IEnumerable<Type>, MethodInfo, IdDelimiter, string, IMethod> AddMemberAction;
+        //public IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, T3, TResult> getter)
+        private static Func<IType, Type, IEnumerable<Type>, Type, PropertyInfo, IIndexer> AddIndexer = null;
 
         static TypeSystemBuilderExtensions()
         {
@@ -107,6 +109,20 @@ namespace CQL.TypeSystem
                 var func = lambda.Compile();
                 return (IMethod)genericAdd.Invoke(@this, new object[] { delimiter, name, func });
             };
+
+            AddIndexer = (@this, sourceType, parameterTypes, returnType, propertyInfo) =>
+            {
+                var genericType = type.MakeGenericType(sourceType);
+                var addPropertyMethod = genericType.GetMethods().FirstOrDefault(m => m.Name == "AddIndexer" && m.GetGenericArguments().Length == parameterTypes.Count() +1);
+                if(addPropertyMethod == null)
+                    throw new InvalidOperationException("Could not find add method for indexer!");
+                var genericAdd = addPropertyMethod.MakeGenericMethod(parameterTypes.Plus(returnType).ToArray());
+                var param = Expression.Parameter(sourceType, "instance");
+                var parameters = parameterTypes.Select(p => Expression.Parameter(p)).ToArray();
+                var lambda = Expression.Lambda(Expression.Property(param, propertyInfo, parameters), new[] { param }.Concat(parameters));
+                var func = lambda.Compile();
+                return (IIndexer)genericAdd.Invoke(@this, new object[] { func });
+            };
         }
 
         private static void AddTypeScan(this ITypeSystemBuilder @this, Type type)
@@ -121,7 +137,7 @@ namespace CQL.TypeSystem
 
             //Properties
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(p => new { prop = p, attrs = p.GetCustomAttributes<CQLPropertyAttribute>().FirstOrDefault() })
+                .Select(p => new { prop = p, attrs = p.GetCustomAttributes<CQLMemberPropertyAttribute>().FirstOrDefault() })
                 .Where(p => p.attrs != null)
                 .ToArray();
             foreach (var property in properties)
@@ -129,7 +145,7 @@ namespace CQL.TypeSystem
 
             //MemberFunctions/Actions
             var methods = type.GetMethods(BindingFlags.Public | BindingFlags.Instance)
-                .Select(m => new { method = m, attr = m.GetCustomAttributes<CQLMethodAttribute>().FirstOrDefault() })
+                .Select(m => new { method = m, attr = m.GetCustomAttributes<CQLMemberFunctionAttribute>().FirstOrDefault() })
                 .Where(m => m.attr != null)
                 .ToArray();
             foreach(var method in methods)
@@ -140,6 +156,18 @@ namespace CQL.TypeSystem
                     AddMemberAction(cqlType, type, @params, method.method, method.attr.Delimiter, method.attr.Name);
                 else
                     AddMemberFunction(cqlType, type, @params, @return, method.method, method.attr.Delimiter, method.attr.Name);
+            }
+
+            //Indexers
+            var indexers = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
+                .Where(p => p.Name == "Item")
+                .Select(p => new { prop = p, attrs = p.GetCustomAttributes<CQLMemberIndexerAttribute>().FirstOrDefault() })
+                .Where(p => p.attrs != null)
+                .ToArray();
+            foreach (var indexer in indexers)
+            {
+                var @params = indexer.prop.GetIndexParameters().Select(p => p.ParameterType).ToArray();
+                AddIndexer(cqlType, type, @params, indexer.prop.PropertyType, indexer.prop);
             }
         }
 

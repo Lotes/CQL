@@ -19,25 +19,31 @@ namespace CQL.Tests
         [CQLType("Ticket", "Object of interest.")]
         public class Ticket
         {
+            [CQLFunction]
+            public static int Max(int a, int b)
+            {
+                return Math.Max(a, b);
+            }
+
             public Ticket(int id, string owner)
             {
                 this.Id = id;
                 this.Owner = owner;
             }
 
-            [CQLProperty("Id", IdDelimiter.Dot)]
+            [CQLMemberProperty("Id", IdDelimiter.Dot)]
             public int Id { get; set; }
 
-            [CQLProperty("Owner", IdDelimiter.Dot)]
+            [CQLMemberProperty("Owner", IdDelimiter.Dot)]
             public string Owner { get; set; }
 
-            [CQLMethod("toString", IdDelimiter.Dot)]
+            [CQLMemberFunction("toString", IdDelimiter.Dot)]
             public override string ToString() { return "Ticket " + Id; }
 
-            [CQLMethod("call", IdDelimiter.Dot)]
+            [CQLMemberFunction("call", IdDelimiter.Dot)]
             public void Call() { Console.WriteLine("Hallo?"); }
 
-            [CQLIndexer]
+            [CQLMemberIndexer]
             public string this[int index] { get { return Owner[index].ToString(); } }
         }
 
@@ -53,19 +59,25 @@ namespace CQL.Tests
         [TestMethod]
         public void PropertyTest()
         {
-            Assert.IsTrue(Queries.Evaluate<Ticket>("id = 7", new Ticket(7, "Me"), scope) == true);
+            Assert.IsTrue(Queries.Evaluate("id = 7", new Ticket(7, "Me"), scope) == true);
         }
 
         [TestMethod]
         public void MemberFunctionTest()
         {
-            Assert.IsTrue(Queries.Evaluate<Ticket>("toString() = \"Ticket 7\"", new Ticket(7, "Me"), scope) == true);
+            Assert.IsTrue(Queries.Evaluate("toString() = \"Ticket 7\"", new Ticket(7, "Me"), scope) == true);
         }
 
         [TestMethod]
         public void MemberActionTest()
         {
-            Assert.IsTrue(Queries.Evaluate<Ticket>("not(call() is null)", new Ticket(7, "Me"), scope) == true);
+            Assert.IsTrue(Queries.Evaluate("not(call() is null)", new Ticket(7, "Me"), scope) == true);
+        }
+
+        [TestMethod]
+        public void IndexerTest()
+        {
+            Assert.IsTrue(Queries.Evaluate("this[0] = \"M\"", new Ticket(7, "Me"), scope) == true);
         }
     }
 }

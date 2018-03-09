@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
-    [AttributeUsage(AttributeTargets.Class)]
+    [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class CQLTypeAttribute : Attribute
     {
         public CQLTypeAttribute(string name, string usage)
@@ -19,32 +19,42 @@ namespace CQL.TypeSystem
         public string Usage { get; private set; }
     }
 
-    [AttributeUsage(AttributeTargets.Property)]
-    public class CQLPropertyAttribute : Attribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class CQLMemberPropertyAttribute : Attribute
     {
-        public CQLPropertyAttribute(string name, IdDelimiter delimiter)
+        public CQLMemberPropertyAttribute(string name, IdDelimiter delimiter)
         {
             Name = name;
             Delimiter = delimiter;
         }
         public string Name { get; private set; }
         public IdDelimiter Delimiter { get; private set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
+    public class CQLMemberFunctionAttribute : Attribute
+    {
+        public CQLMemberFunctionAttribute(string name, IdDelimiter delimiter)
+        {
+            Name = name;
+            Delimiter = delimiter;
+        }
+        public string Name { get; private set; }
+        public IdDelimiter Delimiter { get; private set; }
+    }
+
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
+    public class CQLMemberIndexerAttribute : Attribute
+    {
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class CQLMethodAttribute : Attribute
+    public class CQLFunction: Attribute
     {
-        public CQLMethodAttribute(string name, IdDelimiter delimiter)
+        public CQLFunction(string name)
         {
             Name = name;
-            Delimiter = delimiter;
         }
         public string Name { get; private set; }
-        public IdDelimiter Delimiter { get; private set; }
-    }
-
-    [AttributeUsage(AttributeTargets.Property)]
-    public class CQLIndexerAttribute : Attribute
-    {
     }
 }

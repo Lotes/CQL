@@ -54,14 +54,14 @@ namespace CQL.TypeSystem.Implementation
         public IIndexer AddIndexer<T1, T2, TResult>(Func<TType, T1, T2, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method)
+                getter
             );
         }
 
         public IIndexer AddIndexer<T1, T2, T3, TResult>(Func<TType, T1, T2, T3, TResult> getter)
         {
             return AddAndReturnIndexer(
-                Delegate.CreateDelegate(getter.GetType(), getter.Method)
+                getter
             );
         }
 
@@ -183,8 +183,12 @@ namespace CQL.TypeSystem.Implementation
         private IIndexer AddAndReturnIndexer(Delegate getter)
         {
             if(this.indexer != null)
-                throw new InvalidOperationException("Duplicate indexer!"); ;
-            var parameters = getter.Method.GetParameters().Select(a => a.ParameterType).Skip(1).ToArray();
+                throw new InvalidOperationException("Duplicate indexer!");
+            var parameters = getter.Method.GetParameters()
+                .SkipWhile(p => p.ParameterType.Namespace.StartsWith("System.Runtime.CompilerServices"))
+                .Skip(1)
+                .Select(a => a.ParameterType)
+                .ToArray();
             var indexer = new Indexer(parameters, getter.Method.ReturnType, getter);
             this.indexer = indexer;
             return indexer;
