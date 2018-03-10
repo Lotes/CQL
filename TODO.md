@@ -1,17 +1,11 @@
 TODO
 ====
 
-In progress
------------
-
-* update readme
-* publish to nugets
-
-Nice to have
-------------
+Wishlist
+--------
 
 * documentation (split in concrete tasks)
-* docuemnt hard coded behaviours for binary operators 'IS' and 'IN'
+* document hard coded behaviours for binary operators 'IS' and 'IN'
 * find a better user API (attributes on classes/methods/extensions or black/white listing)
 * introduce custom scope blocks for Excel templating (later feature)
 * introduce special strings... like regexing (e.g. R"^(aabb)$")
@@ -21,3 +15,4 @@ Nice to have
 	* template language
 	* query language
 	* value query/complex input fields
+* make syntax highlighting configurable

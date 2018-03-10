@@ -1,6 +1,6 @@
 ﻿namespace CQL.TypeSystem
 {
-    public interface IIndexer
+    public interface IMemberIndexer
     {
         System.Type ReturnType { get; }
         System.Type[] FormalParameters { get; }

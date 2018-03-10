@@ -4,7 +4,7 @@
 @msbuild %~dp0..\..\CQL.sln /p:Configuration=Release
 @nuget pack CQL.nuspec
 
-@echo AND NOW EXECUTE AND TEST:
-@echo  ./nuget push CQL.0.1.0.nupkg -source /c/Users/Markus/.nuget/
+@echo NOW PUSH WITH:
+@echo  ./nuget push CQL.x.x.x.nupkg
 
 pause

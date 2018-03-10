@@ -8,7 +8,7 @@
     <owners>Markus Rudolph</owners>
     <licenseUrl>https://github.com/Lotes/CQL/blob/master/LICENSE.md</licenseUrl>
     <projectUrl>https://github.com/Lotes/CQL</projectUrl>
-    <iconUrl>https://raw.githubusercontent.com/Lotes/CQL/master/CQL/icon.png</iconUrl>
+    <iconUrl>https://raw.githubusercontent.com/Lotes/CQL/master/icon.png</iconUrl>
     <requireLicenseAcceptance>false</requireLicenseAcceptance>
     <description>Configurable query language</description>
     <releaseNotes>Initial release. You are able to define own variables, types, operators, members and routines.</releaseNotes>

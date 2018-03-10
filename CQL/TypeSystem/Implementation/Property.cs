@@ -1,35 +1,49 @@
 ﻿using System;
 using CQL.SyntaxTree;
+using System.Reflection;
 
 namespace CQL.TypeSystem.Implementation
 {
-    internal class Property : IProperty
+    public class NativeProperty : IProperty
     {
-        private IdDelimiter delimiter;
-        private Func<object, object> getter;
-        private string name;
-
-        public Property(IdDelimiter delimiter, string name, Type returnType, Func<object, object> getter)
+        private PropertyInfo property;
+        public NativeProperty(IdDelimiter delimiter, string name, PropertyInfo property)
         {
-            this.delimiter = delimiter;
-            this.name = name;
-            this.getter = getter;
-            ReturnType = returnType;
+            this.property = property;
+            this.Delimiter = delimiter;
+            this.Name = name;
+            this.ReturnType = property.PropertyType;
         }
 
-        public string Name
-        {
-            get
-            {
-                return name;
-            }
-        }
-
+        public IdDelimiter Delimiter { get; private set; }
+        public string Name { get; private set; }
         public Type ReturnType { get; private set; }
 
         public object Get(object @this)
         {
-            return getter(@this);
+            return property.GetGetMethod().Invoke(@this, new object[0]);
+        }
+    }
+
+    public class ForeignProperty : IProperty
+    {
+        private Func<object, object> getter;
+
+        public ForeignProperty(IdDelimiter delimiter, string name, Type returnType, Func<object, object> getter)
+        {
+            this.Delimiter = delimiter;
+            this.Name = name;
+            this.ReturnType = returnType;
+            this.getter = getter;
+        }
+
+        public IdDelimiter Delimiter { get; private set; }
+        public string Name { get; private set; }
+        public Type ReturnType { get; private set; }
+
+        public object Get(object @this)
+        {
+            return getter.DynamicInvoke(@this);
         }
     }
 }

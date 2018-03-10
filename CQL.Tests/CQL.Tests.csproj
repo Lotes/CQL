@@ -63,6 +63,7 @@
     <Compile Include="EvaluationTests.cs" />
     <Compile Include="ParserTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TypeSystemBuilderByAttributesTests.cs" />
     <Compile Include="ValidationTests.cs" />
   </ItemGroup>
   <ItemGroup>
