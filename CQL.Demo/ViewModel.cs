@@ -48,9 +48,9 @@ namespace CQL.Demo
             FilteredSubjects = new ObservableCollection<Subject>();
             var tbuilder = new TypeSystemBuilder();
             var SubjectType = tbuilder.AddType<Subject>("Subject", "Object of interest.");
-            SubjectType.AddProperty(IdDelimiter.Dot, "name", sub => sub.Name);
-            SubjectType.AddProperty(IdDelimiter.Dot, "age", sub => sub.Age);
-            SubjectType.AddProperty(IdDelimiter.Dot, "class", sub => sub.Class);
+            SubjectType.AddForeignProperty(IdDelimiter.Dot, "name", sub => sub.Name);
+            SubjectType.AddForeignProperty(IdDelimiter.Dot, "age", sub => sub.Age);
+            SubjectType.AddForeignProperty(IdDelimiter.Dot, "class", sub => sub.Class);
             var context = new EvaluationScope(tbuilder.Build());
             Context = context;
             Update();

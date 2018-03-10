@@ -3,15 +3,15 @@ using System;
 
 namespace CQL.TypeSystem
 {
-    public interface IFunction
+    public interface IGlobalFunction
     {
-        FunctionSignature Signature { get; }
+        GlobalFunctionSignature Signature { get; }
         object Invoke(params object[] parameters);
     }
 
-    public class FunctionSignature
+    public class GlobalFunctionSignature
     {
-        public FunctionSignature(Type returnType, Type[] parameterTypes)
+        public GlobalFunctionSignature(Type returnType, Type[] parameterTypes)
         {
             ReturnType = returnType;
             ParameterTypes = parameterTypes;
@@ -21,13 +21,13 @@ namespace CQL.TypeSystem
         public Type[] ParameterTypes { get; private set; }
     }
 
-    public interface IFunctionClosure
+    public interface IGlobalFunctionClosure
     {
         object Invoke(params object[] parameters);
     }
 
-    public interface IFunctionClosure<TFunction> : IFunctionClosure
-        where TFunction : Function
+    public interface IFunctionClosure<TFunction> : IGlobalFunctionClosure
+        where TFunction : LambdaGlobalFunction
     {
         TFunction Function { get; }
     }

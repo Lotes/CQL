@@ -9,15 +9,15 @@ namespace CQL.TypeSystem
 {
     public static class MethodExtensions
     {
-        private class Closure<TMethod> : IMethodClosure<TMethod>
-            where TMethod: Method
+        private class Closure<TMemberFunction> : IMethodClosure<TMemberFunction>
+            where TMemberFunction: IMemberFunction
         {
-            public Closure(object @this, TMethod method)
+            public Closure(object @this, TMemberFunction method)
             {
                 ThisObject = @this;
                 Function = method;
             }
-            public TMethod Function { get; private set; }
+            public TMemberFunction Function { get; private set; }
             public object ThisObject { get; private set; }
             public object Invoke(params object[] parameters)
             {
@@ -37,7 +37,7 @@ namespace CQL.TypeSystem
             return true;
         }
 
-        public static bool IfFunctionClosureTryGetFunctionType(this Type @this, out FunctionSignature signature)
+        public static bool IfFunctionClosureTryGetFunctionType(this Type @this, out GlobalFunctionSignature signature)
         {
             signature = null;
             var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IFunctionClosure<>));
@@ -45,16 +45,16 @@ namespace CQL.TypeSystem
                 return false;
             var functionType = closure.GetGenericArguments()[0];
             var arguments = functionType.GetGenericArguments();
-            signature = new FunctionSignature(arguments[0], arguments.Skip(1).ToArray()); // by convention
+            signature = new GlobalFunctionSignature(arguments[0], arguments.Skip(1).ToArray()); // by convention
             return true;
         }
 
-        public static IMethodClosure<TMethod> BindThis<TMethod>(this TMethod method, object @this)
-            where TMethod: Method
+        public static IMethodClosure<TMemberFunction> BindThis<TMemberFunction>(this TMemberFunction function, object @this)
+            where TMemberFunction: IMemberFunction
         {
-            if (!method.Signature.ThisType.IsAssignableFrom(@this.GetType()))
+            if (!function.Signature.ThisType.IsAssignableFrom(@this.GetType()))
                 throw new InvalidOperationException("Type mismatch on this!");
-            return new Closure<TMethod>(@this, method); 
+            return new Closure<TMemberFunction>(@this, function); 
         }
     }
 }

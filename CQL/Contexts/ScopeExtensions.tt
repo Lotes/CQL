@@ -1,0 +1,85 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using CQL.Contexts.Implementation;
+using CQL.TypeSystem;
+using CQL.TypeSystem.Implementation;
+using System;
+using System.Collections.Generic;
+
+namespace CQL.Contexts
+{
+	public static class ScopeExtensions
+    {
+        private class Closure<TGlobalFunction> : IFunctionClosure<TGlobalFunction>
+            where TGlobalFunction : LambdaGlobalFunction
+        {
+            public Closure(TGlobalFunction method)
+            {
+                Function = method;
+            }
+            public TGlobalFunction Function { get; private set; }
+            public object Invoke(params object[] parameters)
+            {
+                return Function.Invoke(parameters);
+            }
+        }
+
+        public static readonly string ThisName = "this";
+        public static IScope<Type> ToValidationScope(this IScope<object> @this)
+        {
+            if (@this == null)
+                return null;
+            var result = new ValidationScope(@this.TypeSystem, @this.Parent.ToValidationScope());
+            foreach (var elem in @this)
+                result.DefineVariable(elem.Name, elem.Value?.GetType() ?? typeof(object));
+            return result;
+        }
+        public static bool TryGetThis<T>(this IScope<T> @this, out IVariable<T> variable)
+        {
+            return @this.TryGetVariable(ThisName, out variable);
+        }
+        public static IVariable<T> DefineThis<T>(this IScope<T> @this, T value)
+        {
+            return @this.DefineVariable(ThisName, value);
+        }
+
+
+		<#
+		const int MAX = 15; 
+		Func<int, Func<string, string>, string> getSequence = (index, convert) =>
+		{
+			var count = index;
+			var sequence = new LinkedList<string>();
+			while(count > 0)
+			{
+				sequence.AddLast(convert((index-count+1).ToString()));
+				count--;
+			}
+			return string.Join(", ", sequence);
+		};
+		#>
+		
+        public static IVariable<object> DefineFunction<TResult>(this EvaluationScope @this, string name, Func<TResult> func)
+        {
+            return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<TResult>>(new LambdaGlobalFunction<TResult>(func)));
+        }
+		<#
+		for(var index = 1; index<=MAX; index++) 
+		{
+			var ts = getSequence(index, str => "T"+str);
+		#>
+        
+		public static IVariable<object> DefineFunction<<#=ts#>, TResult>(this EvaluationScope @this, string name, Func<<#=ts#>, TResult> func)
+        {
+            return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<<#=ts#>, TResult>>(new LambdaGlobalFunction<<#=ts#>, TResult>(func)));
+        }
+
+		<#
+		}
+		#>
+    }
+}

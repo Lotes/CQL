@@ -78,7 +78,7 @@ namespace CQL.Contexts.Implementation
             {
                 thisMembers.Clear();
                 var cqlType = system.GetTypeByNative(GetValueType(variable.Value));
-                foreach(var property in cqlType.Properties)
+                foreach(var property in cqlType.Members)
                 {
                     thisMembers.Add(Normalize(property.Name), new Variable<T>(property.Name, GetPropertyValue(value, property)));
                 }

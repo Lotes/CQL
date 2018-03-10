@@ -1,0 +1,55 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Reflection;
+using System.Text;
+using System.Threading.Tasks;
+using CQL.SyntaxTree;
+
+namespace CQL.TypeSystem.Implementation
+{
+    public partial class Type<TType>
+    {
+		<#
+		const int MAX = 15; 
+		Func<int, string> getSequence = index =>
+		{
+			var count = index;
+			var sequence = "";
+			while(count > 0)
+			{
+				sequence += "T"+(index-count+1)+", ";
+				count--;
+			}
+			return sequence;
+		};
+
+		for(var index = 1; index<=MAX; index++) 
+		{
+			var sequence = getSequence(index);
+		#>public IMemberIndexer AddForeignIndexer<<#=sequence#>TResult>(Func<TType, <#=sequence#> TResult> getter)
+		{
+            return AddAndReturnIndexer(getter);
+        }
+		<#
+		}
+		for(var index = 0; index<=MAX; index++) 
+		{
+			var sequence = getSequence(index);
+		#>public IMemberFunction AddForeignFunction<<#=sequence#>TResult>(IdDelimiter delimiter, string name, Func<TType, <#=sequence#> TResult> func)
+		{
+            var method = new ForeignMemberFunction<TType, <#=sequence#>TResult>(func);
+            AddMemberFunction(delimiter, name, method);
+            return method;
+        }
+		<#
+		}
+		#>
+	}
+}

@@ -19,7 +19,7 @@ namespace CQL.Tests
         [CQLType("Ticket", "Object of interest.")]
         public class Ticket
         {
-            [CQLFunction]
+            [CQLGlobalFunction("Max")]
             public static int Max(int a, int b)
             {
                 return Math.Max(a, b);
@@ -31,19 +31,19 @@ namespace CQL.Tests
                 this.Owner = owner;
             }
 
-            [CQLMemberProperty("Id", IdDelimiter.Dot)]
+            [CQLMemberNativeProperty("Id", IdDelimiter.Dot)]
             public int Id { get; set; }
 
-            [CQLMemberProperty("Owner", IdDelimiter.Dot)]
+            [CQLMemberNativeProperty("Owner", IdDelimiter.Dot)]
             public string Owner { get; set; }
 
-            [CQLMemberFunction("toString", IdDelimiter.Dot)]
+            [CQLNativeMemberFunction("toString", IdDelimiter.Dot)]
             public override string ToString() { return "Ticket " + Id; }
 
-            [CQLMemberFunction("call", IdDelimiter.Dot)]
+            [CQLNativeMemberFunction("call", IdDelimiter.Dot)]
             public void Call() { Console.WriteLine("Hallo?"); }
 
-            [CQLMemberIndexer]
+            [CQLNativeMemberIndexer]
             public string this[int index] { get { return Owner[index].ToString(); } }
         }
 

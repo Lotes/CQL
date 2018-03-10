@@ -20,9 +20,9 @@ namespace CQL.TypeSystem
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class CQLMemberPropertyAttribute : Attribute
+    public class CQLMemberNativePropertyAttribute : Attribute
     {
-        public CQLMemberPropertyAttribute(string name, IdDelimiter delimiter)
+        public CQLMemberNativePropertyAttribute(string name, IdDelimiter delimiter)
         {
             Name = name;
             Delimiter = delimiter;
@@ -32,9 +32,9 @@ namespace CQL.TypeSystem
     }
 
     [AttributeUsage(AttributeTargets.Method, AllowMultiple = false)]
-    public class CQLMemberFunctionAttribute : Attribute
+    public class CQLNativeMemberFunctionAttribute : Attribute
     {
-        public CQLMemberFunctionAttribute(string name, IdDelimiter delimiter)
+        public CQLNativeMemberFunctionAttribute(string name, IdDelimiter delimiter)
         {
             Name = name;
             Delimiter = delimiter;
@@ -44,14 +44,14 @@ namespace CQL.TypeSystem
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class CQLMemberIndexerAttribute : Attribute
+    public class CQLNativeMemberIndexerAttribute : Attribute
     {
     }
 
     [AttributeUsage(AttributeTargets.Method)]
-    public class CQLFunction: Attribute
+    public class CQLGlobalFunction: Attribute
     {
-        public CQLFunction(string name)
+        public CQLGlobalFunction(string name)
         {
             Name = name;
         }

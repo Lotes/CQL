@@ -45,7 +45,7 @@ namespace CQL.SyntaxTree
         {
             ThisExpression = ThisExpression.Validate(context);
             MethodSignature methodSignature;
-            FunctionSignature functionSignature;
+            GlobalFunctionSignature functionSignature;
             if (ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out methodSignature))
             {
                 var parameterIndex = 0;
@@ -98,10 +98,10 @@ namespace CQL.SyntaxTree
         public object Evaluate(IScope<object> context)
         {
             var @this = this.ThisExpression.Evaluate(context);
-            if(@this is IMethodClosure)
-                return ((IMethodClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
-            if (@this is IFunctionClosure)
-                return ((IFunctionClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
+            if(@this is IMemberFunctionClosure)
+                return ((IMemberFunctionClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
+            if (@this is IGlobalFunctionClosure)
+                return ((IGlobalFunctionClosure)@this).Invoke(Parameters.Select(p => p.Evaluate(context)).ToArray());
             throw new InvalidOperationException("Closure expected!");
         }
     }

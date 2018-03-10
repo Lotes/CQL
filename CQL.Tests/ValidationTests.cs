@@ -31,8 +31,8 @@ namespace CQL.Tests
         public static void SetupFixture(TestContext testContext)
         {
             var typeSystemBuilder = new TypeSystemBuilder();
-            typeSystemBuilder.AddType<A>("A", "stuff").AddProperty(IdDelimiter.Dot, "b", a => a.b);
-            typeSystemBuilder.AddType<B>("B", "stuff 2").AddProperty(IdDelimiter.Dot, "c", a => a.c);
+            typeSystemBuilder.AddType<A>("A", "stuff").AddForeignProperty(IdDelimiter.Dot, "b", a => a.b);
+            typeSystemBuilder.AddType<B>("B", "stuff 2").AddForeignProperty(IdDelimiter.Dot, "c", a => a.c);
             context = new EvaluationScope(typeSystemBuilder.Build());
             context.DefineVariable("a", new A() { b = new B() { c = 1 } });
         }
