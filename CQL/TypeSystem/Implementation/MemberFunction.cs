@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem.Implementation
 {
-    public class NativeMemberFunction : IMemberFunction
+    public abstract class NativeMemberFunction : IMemberFunction
     {
         private MethodInfo method;
 

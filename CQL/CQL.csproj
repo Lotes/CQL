@@ -163,6 +163,7 @@
     <Compile Include="SyntaxTree\UnaryOperator.cs" />
     <Compile Include="TypeSystem\ITypeSystem.cs" />
     <Compile Include="TypeSystem\AmbigiousTypeException.cs" />
+    <Compile Include="TypeSystem\Void.cs" />
     <Compile Include="Visitors\ExpressionsVisitor.cs" />
     <Compile Include="Visitors\ExpressionVisitor.cs" />
     <Compile Include="Visitors\NameVisitor.cs" />

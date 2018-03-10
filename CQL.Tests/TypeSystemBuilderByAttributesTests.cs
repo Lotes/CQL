@@ -71,7 +71,7 @@ namespace CQL.Tests
         [TestMethod]
         public void MemberActionTest()
         {
-            Assert.IsTrue(Queries.Evaluate("not(call() is null)", new Ticket(7, "Me"), scope) == true);
+            Assert.IsTrue(Queries.Evaluate("call() is null", new Ticket(7, "Me"), scope) == true);
         }
 
         [TestMethod]

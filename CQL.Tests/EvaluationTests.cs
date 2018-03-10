@@ -39,7 +39,7 @@ namespace CQL.Tests
             context.DefineFunction<int, int, int>("max", (a, b) => Math.Max(a, b));
             var String = typeSystem.GetTypeByNative<string>();
             String.AddForeignFunction(IdDelimiter.Dot, "length", str => str.Length);
-            String.AddForeignFunction<double, string>(IdDelimiter.Dot, "append", (str, index) => str+index);
+            String.AddForeignFunction<int, string>(IdDelimiter.Dot, "append", (str, index) => str+index);
             String.AddForeignProperty(IdDelimiter.Dot, "size", str => str.Length);
             String.AddForeignIndexer<int, string>((str, index) => str[index-1].ToString());
             ticketOne = new Ticket(1, "Markus");

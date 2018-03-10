@@ -4,7 +4,7 @@
 <#@ import namespace="System.Text" #>
 <#@ import namespace="System.Collections.Generic" #>
 <#@ output extension=".cs" #>
-
+using System.Reflection;
 using CQL.SyntaxTree;
 using System;
 using System.Collections.Generic;
@@ -46,5 +46,44 @@ namespace CQL.TypeSystem.Implementation
     }
 	<#
 	}
+
+	for(var index = 0; index<=MAX; index++) 
+	{
+		var types = getSequence(index, str => "T"+str);
+		if(!string.IsNullOrEmpty(types))
+			types+=",";
+		var typeofs = getSequence(index, str => "typeof(T"+str+")");
+	#>public class NativeMemberFunction<TThis, <#=types#> TReturn> : NativeMemberFunction
+    {
+        public NativeMemberFunction(MethodInfo info) : base(typeof(TThis), info)
+        {
+        }
+    }
+	<#
+	}
 	#>
+	public static class NativeMemberFunctionExtensions
+	{
+		private static Dictionary<int, Type> classes = new Dictionary<int, Type>()
+		{
+		<#
+		for(var index = 0; index<=MAX; index++) 
+		{
+			var commas = getSequence(index, str => "");
+			if(index > 0)
+				commas += ",";
+		#>
+			{<#=index#>, typeof(NativeMemberFunction<,<#=commas#>>)},
+		<#
+		}
+		#>	
+		};
+		public static IMemberFunction CreateByMethodInfo(Type @this, MethodInfo info)
+		{
+            var parameterTypes = info.GetParameters().Select(p => p.ParameterType).ToArray();
+            var @class = classes[parameterTypes.Length];
+            var genericClass = @class.MakeGenericType(new[] { @this }.Concat(parameterTypes).Concat(new[] { info.ReturnType.Unvoid() }).ToArray());
+            return (IMemberFunction)Activator.CreateInstance(genericClass, info);
+		}
+	}
 }

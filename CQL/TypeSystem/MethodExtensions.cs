@@ -9,7 +9,7 @@ namespace CQL.TypeSystem
 {
     public static class MethodExtensions
     {
-        private class Closure<TMemberFunction> : IMethodClosure<TMemberFunction>
+        private class Closure<TMemberFunction> : IMemberFunctionClosure<TMemberFunction>
             where TMemberFunction: IMemberFunction
         {
             public Closure(object @this, TMemberFunction method)
@@ -28,12 +28,12 @@ namespace CQL.TypeSystem
         public static bool IfMethodClosureTryGetMethodType(this Type @this, out MethodSignature signature)
         {
             signature = null;
-            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMethodClosure<>));
+            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IMemberFunctionClosure<>));
             if (closure == null)
                 return false;
             var methodType = closure.GetGenericArguments()[0];
             var arguments = methodType.GetGenericArguments();
-            signature = new MethodSignature(arguments[0], arguments[1], arguments.Skip(2).ToArray()); // by convention
+            signature = new MethodSignature(arguments[0], arguments.Last(), arguments.Skip(1).Take(arguments.Count()-2).ToArray()); // by convention
             return true;
         }
 
@@ -49,7 +49,7 @@ namespace CQL.TypeSystem
             return true;
         }
 
-        public static IMethodClosure<TMemberFunction> BindThis<TMemberFunction>(this TMemberFunction function, object @this)
+        public static IMemberFunctionClosure<TMemberFunction> BindThis<TMemberFunction>(this TMemberFunction function, object @this)
             where TMemberFunction: IMemberFunction
         {
             if (!function.Signature.ThisType.IsAssignableFrom(@this.GetType()))

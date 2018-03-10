@@ -86,7 +86,11 @@ namespace CQL.TypeSystem
                 .ToArray();
             foreach (var indexer in indexers)
                 cqlType.AddNativeIndexer(indexer.prop);
-            
+        }
+
+        public static Type Unvoid(this Type @this)
+        {
+            return @this.FullName == "System.Void" ? typeof(Void) : @this;
         }
 
         public static void AddFromScan(this ITypeSystemBuilder @this, Type type)

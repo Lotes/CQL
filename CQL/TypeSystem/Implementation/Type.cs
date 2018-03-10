@@ -10,6 +10,20 @@ namespace CQL.TypeSystem.Implementation
 {
     public partial class Type<TType> : IType<TType>
     {
+        private static Action<Type<TType>, Type, IdDelimiter, string, IMemberFunction>
+            addMemberFunction = null;
+
+        static Type()
+        {
+            var genericType = typeof(Type<TType>);
+            var method = genericType.GetMethod("AddMemberFunction", BindingFlags.Instance | BindingFlags.NonPublic);
+            addMemberFunction = (@this, functionType, delimiter, name, function) =>
+            {
+                var genericMethod = method.MakeGenericMethod(functionType);
+                genericMethod.Invoke(@this, new object[] { delimiter, name, function });
+            };
+        }
+
         private Dictionary<Tuple<IdDelimiter, string>, IProperty> symbols = new Dictionary<Tuple<IdDelimiter, string>, IProperty>();
         private IMemberIndexer indexer = null;
 
@@ -81,8 +95,8 @@ namespace CQL.TypeSystem.Implementation
 
         public IMemberFunction AddNativeFunction(IdDelimiter delimiter, string name, MethodInfo methodInfo)
         {
-            var func = new NativeMemberFunction(typeof(TType), methodInfo);
-            AddMemberFunction<NativeMemberFunction>(delimiter, name, func);
+            var func = NativeMemberFunctionExtensions.CreateByMethodInfo(typeof(TType), methodInfo);
+            addMemberFunction(this, func.GetType(), delimiter, name, func);
             return func;
         }
         

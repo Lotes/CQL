@@ -13,7 +13,7 @@ namespace CQL.TypeSystem
         object Invoke(params object[] parameters);
     }
 
-    public interface IMethodClosure<TMemberFunction>: IMemberFunctionClosure
+    public interface IMemberFunctionClosure<TMemberFunction>: IMemberFunctionClosure
         where TMemberFunction : IMemberFunction
     {
         TMemberFunction Function { get; }
