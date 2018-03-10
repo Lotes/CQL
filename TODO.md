@@ -1,14 +1,6 @@
 TODO
 ====
 
-In progress
------------
-
-* add user friendly mechanisms
-	* default typesystems
-	* scan assemblies for types, properties, methods, functions, extensions with built-in attributes
-	* documentation in README.md
-
 Wishlist
 --------
 
