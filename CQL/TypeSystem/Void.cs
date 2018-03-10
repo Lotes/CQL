@@ -6,9 +6,8 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
-    public sealed class Void
+    public class Void
     {
-        public static Void Instance = new Void();
         private Void() { }
     }
 }

@@ -14,6 +14,8 @@ to empower him to address **complex properties**.
 Here is a solution!
 -------------------
 
+![CQL icon](icon.png =100x)
+
 The two components, provided here, are
 
 * a query language, that can be configured from a high-level point of view
@@ -29,7 +31,7 @@ Quickstart
 First, installation
 
 ```
-nuget Install-Package CQL
+PM> Install-Package CQL
 ```
 
 Second, let me shortly explain the concepts. You actually need to provide three objects:
@@ -41,11 +43,24 @@ Second, let me shortly explain the concepts. You actually need to provide three 
 Third, study the following code snippet:
 
 ```csharp
-//SETUP
+[CQLType("Ticket", "Object of interest.")]
+public class Ticket
+{
+	public Ticket(int id, string owner)
+	{
+		this.Id = id;
+		this.Owner = owner;
+	}
+
+	[CQLNativeMemberProperty("Id", IdDelimiter.Dot)]
+	public int Id { get; set; }
+
+	[CQLNativeMemberProperty("Owner", IdDelimiter.Dot)]
+	public string Owner { get; set; }
+}
+...
 var typeSystemBuilder = new TypeSystemBuilder();
-var Ticket = typeSystemBuilder.AddType<Ticket>("Ticket", "Description of Ticket");
-Ticket.AddProperty(IdDelimiter.Dot, "id", t => t.Id);
-Ticket.AddProperty(IdDelimiter.Dot, "owner", t => t.Owner);
+typeSystemBuilder.AddFromScan(typeof(Ticket));
 var typeSystem = typeSystemBuilder.Build();
 
 //DATA
@@ -60,18 +75,13 @@ Assert.IsFalse(Queries.Evaluate("id > 123 AND Owner = \"I\"", ticket2, context))
 Assert.IsTrue(Queries.Evaluate("ID > 123 AND oWnEr = \"I\"", ticket3, context));
 ```
 
-Features
---------
+Current features
+----------------
 
 * configurable type system
 * configurable context
-* configurable WPF component
+* configurable WPF component (in progress!!!)
 	* beginner mode
 	* expert mode
 	* auto completion
 	* syntax highlighting
-
-Future
-------
-
-* setup operator precendence

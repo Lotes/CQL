@@ -1,0 +1,100 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using CQL.SyntaxTree;
+using System;
+using System.Reflection;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CQL.TypeSystem.Implementation
+{
+    public class LambdaGlobalFunction<TReturn> : LambdaGlobalFunction
+    {
+        public LambdaGlobalFunction(Func<TReturn> body) : base(new Type[0], typeof(TReturn), body)
+        {
+        }
+    }
+
+	<#
+	const int MAX = 15; 
+	Func<int, Func<string, string>, string> getSequence = (index, convert) =>
+	{
+		var count = index;
+		var sequence = new LinkedList<string>();
+		while(count > 0)
+		{
+			sequence.AddLast(convert((index-count+1).ToString()));
+			count--;
+		}
+		return string.Join(", ", sequence);
+	};
+
+	for(var index = 1; index<=MAX; index++) 
+	{
+		var sequence = getSequence(index, str => "T"+str);
+		var typesOf = getSequence(index, str => "typeof(T"+str+")");
+	#>public class LambdaGlobalFunction<<#=sequence#>, TReturn> : LambdaGlobalFunction
+    {
+        public LambdaGlobalFunction(Func<<#=sequence#>, TReturn> body) : base(new Type[] { <#=typesOf#> }, typeof(TReturn), body)
+        {
+        }
+    }
+	<#
+	}
+	#>
+
+	public class NativeGlobalFunction<TReturn> : NativeGlobalFunction
+    {
+        public NativeGlobalFunction(MethodInfo info) : base(info)
+        {
+        }
+    }
+
+	<#
+	for(var index = 1; index<=MAX; index++) 
+	{
+		var sequence = getSequence(index, str => "T"+str);
+		var typesOf = getSequence(index, str => "typeof(T"+str+")");
+	#>
+	public class NativeGlobalFunction<<#=sequence#>, TReturn> : NativeGlobalFunction
+    {
+        public NativeGlobalFunction(MethodInfo info) : base(info)
+        {
+        }
+    }
+	<#
+	}
+	#>
+
+
+	public static class NativeGlobalFunctionExtensions
+	{
+		private static Dictionary<int, Type> classes = new Dictionary<int, Type>()
+		{
+		<#
+		for(var index = 0; index<=MAX; index++) 
+		{
+			var commas = getSequence(index, str => "");
+			if(index>0)
+				commas += ",";
+		#>
+			{<#=index#>, typeof(NativeGlobalFunction<<#=commas#>>)},
+		<#
+		}
+		#>	
+		};
+		public static IGlobalFunction CreateByMethodInfo(MethodInfo info)
+		{
+            var parameterTypes = info.GetParameters().Select(p => p.ParameterType).ToArray();
+            var @class = classes[parameterTypes.Length];
+            var genericClass = @class.MakeGenericType(parameterTypes.Concat(new[] { info.ReturnType.Unvoid() }).ToArray());
+            return (IGlobalFunction)Activator.CreateInstance(genericClass, info);
+		}
+	}
+}

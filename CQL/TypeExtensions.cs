@@ -3,6 +3,8 @@ using CQL.TypeSystem.Implementation;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Linq.Expressions;
+using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +12,15 @@ namespace CQL
 {
     public static class TypeExtensions
     {
+        public static string GetMethod<T>(Expression<Func<T, Delegate>> expression)
+        {
+            var unaryExpression = (UnaryExpression)expression.Body;
+            var methodCallExpression = (MethodCallExpression)unaryExpression.Operand;
+            var methodInfoExpression = (ConstantExpression)methodCallExpression.Arguments.Last();
+            var methodInfo = (MemberInfo)methodInfoExpression.Value;
+            return methodInfo.Name;
+        }
+
         public static bool IsNumeric(this Type @this)
         {
             switch(Type.GetTypeCode(@this))

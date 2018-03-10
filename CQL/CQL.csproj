@@ -74,6 +74,12 @@
     <Compile Include="Contexts\Implementation\Scope.cs" />
     <Compile Include="Contexts\Implementation\Variable.cs" />
     <Compile Include="Contexts\IVariable.cs" />
+    <Compile Include="Contexts\ScopeExtensions.cs" />
+    <Compile Include="Contexts\ScopeExtensions.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>ScopeExtensions.generated.tt</DependentUpon>
+    </Compile>
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HashExtensions.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
@@ -93,15 +99,37 @@
     <Compile Include="AutoCompletion\Token.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
-    <Compile Include="TypeSystem\IFunction.cs" />
-    <Compile Include="TypeSystem\Implementation\Function.cs" />
-    <Compile Include="TypeSystem\Void.cs" />
-    <Compile Include="TypeSystem\IIndexer.cs" />
-    <Compile Include="TypeSystem\IMethod.cs" />
-    <Compile Include="TypeSystem\IMethodClosure.cs" />
-    <Compile Include="TypeSystem\Implementation\Indexer.cs" />
-    <Compile Include="TypeSystem\Implementation\Method.cs" />
+    <Compile Include="TypeSystem\Attributes.cs" />
+    <Compile Include="TypeSystem\Implementation\GlobalFunction.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>GlobalFunction.generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TypeSystem\Implementation\MemberFunction.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>MemberFunction.generated.tt</DependentUpon>
+    </Compile>
     <Compile Include="TypeSystem\Implementation\Property.cs" />
+    <Compile Include="TypeSystem\Implementation\Type.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Type.generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TypeSystem\IType.generated.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>IType.generated.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TypeSystem\SystemDefaultFlags.cs" />
+    <Compile Include="TypeSystem\IGlobalFunction.cs" />
+    <Compile Include="TypeSystem\Implementation\GlobalFunction.cs" />
+    <Compile Include="TypeSystem\TypeDefaultFlags.cs" />
+    <Compile Include="TypeSystem\IMemberIndexer.cs" />
+    <Compile Include="TypeSystem\IMemberFunction.cs" />
+    <Compile Include="TypeSystem\IMemberFunctionClosure.cs" />
+    <Compile Include="TypeSystem\Implementation\Indexer.cs" />
+    <Compile Include="TypeSystem\Implementation\MemberFunction.cs" />
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />
     <Compile Include="TypeSystem\MethodExtensions.cs" />
@@ -136,6 +164,7 @@
     <Compile Include="SyntaxTree\UnaryOperator.cs" />
     <Compile Include="TypeSystem\ITypeSystem.cs" />
     <Compile Include="TypeSystem\AmbigiousTypeException.cs" />
+    <Compile Include="TypeSystem\Void.cs" />
     <Compile Include="Visitors\ExpressionsVisitor.cs" />
     <Compile Include="Visitors\ExpressionVisitor.cs" />
     <Compile Include="Visitors\NameVisitor.cs" />
@@ -149,7 +178,31 @@
     </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Content Include="Contexts\ScopeExtensions.generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>ScopeExtensions.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="TypeSystem\Implementation\GlobalFunction.generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>GlobalFunction.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="TypeSystem\Implementation\MemberFunction.generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>MemberFunction.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="TypeSystem\Implementation\Type.generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Type.generated.cs</LastGenOutput>
+    </Content>
+    <Content Include="TypeSystem\IType.generated.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>IType.generated.cs</LastGenOutput>
+    </Content>
+  </ItemGroup>
+  <ItemGroup>
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>

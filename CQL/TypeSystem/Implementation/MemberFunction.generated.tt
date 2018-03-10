@@ -1,0 +1,89 @@
+﻿<#@ template debug="false" hostspecific="false" language="C#" #>
+<#@ assembly name="System.Core" #>
+<#@ import namespace="System.Linq" #>
+<#@ import namespace="System.Text" #>
+<#@ import namespace="System.Collections.Generic" #>
+<#@ output extension=".cs" #>
+using System.Reflection;
+using CQL.SyntaxTree;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+
+namespace CQL.TypeSystem.Implementation
+{	
+	public class ForeignMemberFunction<TThis, TReturn> : ForeignMemberFunction
+    {
+        public ForeignMemberFunction(Func<TThis, TReturn> body) : base(typeof(TThis), new Type[0], typeof(TReturn), body)
+        {
+        }
+    }
+<#
+	const int MAX = 15; 
+	Func<int, Func<string, string>, string> getSequence = (index, convert) =>
+	{
+		var count = index;
+		var sequence = new LinkedList<string>();
+		while(count > 0)
+		{
+			sequence.AddLast(convert((index-count+1).ToString()));
+			count--;
+		}
+		return string.Join(", ", sequence);
+	};
+
+	for(var index = 1; index<=MAX; index++) 
+	{
+		var types = getSequence(index, str => "T"+str);
+		var typeofs = getSequence(index, str => "typeof(T"+str+")");
+	#>public class ForeignMemberFunction<TThis, <#=types#>, TReturn> : ForeignMemberFunction
+    {
+        public ForeignMemberFunction(Func<TThis, <#=types#>, TReturn> body) : base(typeof(TThis), new[] { <#=typeofs#> }, typeof(TReturn), body)
+        {
+        }
+    }
+	<#
+	}
+
+	for(var index = 0; index<=MAX; index++) 
+	{
+		var types = getSequence(index, str => "T"+str);
+		if(!string.IsNullOrEmpty(types))
+			types+=",";
+		var typeofs = getSequence(index, str => "typeof(T"+str+")");
+	#>public class NativeMemberFunction<TThis, <#=types#> TReturn> : NativeMemberFunction
+    {
+        public NativeMemberFunction(MethodInfo info) : base(typeof(TThis), info)
+        {
+        }
+    }
+	<#
+	}
+	#>
+	public static class NativeMemberFunctionExtensions
+	{
+		private static Dictionary<int, Type> classes = new Dictionary<int, Type>()
+		{
+		<#
+		for(var index = 0; index<=MAX; index++) 
+		{
+			var commas = getSequence(index, str => "");
+			if(index > 0)
+				commas += ",";
+		#>
+			{<#=index#>, typeof(NativeMemberFunction<,<#=commas#>>)},
+		<#
+		}
+		#>	
+		};
+		public static IMemberFunction CreateByMethodInfo(Type @this, MethodInfo info)
+		{
+            var parameterTypes = info.GetParameters().Select(p => p.ParameterType).ToArray();
+            var @class = classes[parameterTypes.Length];
+            var genericClass = @class.MakeGenericType(new[] { @this }.Concat(parameterTypes).Concat(new[] { info.ReturnType.Unvoid() }).ToArray());
+            return (IMemberFunction)Activator.CreateInstance(genericClass, info);
+		}
+	}
+}

@@ -11,7 +11,7 @@ namespace CQL.SyntaxTree
 {
     public class ArrayAccessExpression : IExpression<ArrayAccessExpression>
     {
-        private IIndexer indexer = null;
+        private IMemberIndexer indexer = null;
 
         public ArrayAccessExpression(IParserLocation location, IExpression primary, IEnumerable<IExpression> indices)
         {

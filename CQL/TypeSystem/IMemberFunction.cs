@@ -3,7 +3,7 @@ using System;
 
 namespace CQL.TypeSystem
 {
-    public interface IMethod
+    public interface IMemberFunction
     {
         MethodSignature Signature { get; }
         object Invoke(object @this, params object[] parameters);
