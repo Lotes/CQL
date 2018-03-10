@@ -12,10 +12,10 @@ using System.Collections.Generic;
 
 namespace CQL.Contexts
 {
-	public static class ScopeExtensions
+	public static partial class ScopeExtensions
     {
         private class Closure<TGlobalFunction> : IFunctionClosure<TGlobalFunction>
-            where TGlobalFunction : LambdaGlobalFunction
+            where TGlobalFunction : IGlobalFunction
         {
             public Closure(TGlobalFunction method)
             {
@@ -63,7 +63,7 @@ namespace CQL.Contexts
 		};
 		#>
 		
-        public static IVariable<object> DefineFunction<TResult>(this EvaluationScope @this, string name, Func<TResult> func)
+        public static IVariable<object> DefineForeignGlobalFunction<TResult>(this EvaluationScope @this, string name, Func<TResult> func)
         {
             return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<TResult>>(new LambdaGlobalFunction<TResult>(func)));
         }
@@ -73,7 +73,7 @@ namespace CQL.Contexts
 			var ts = getSequence(index, str => "T"+str);
 		#>
         
-		public static IVariable<object> DefineFunction<<#=ts#>, TResult>(this EvaluationScope @this, string name, Func<<#=ts#>, TResult> func)
+		public static IVariable<object> DefineForeignGlobalFunction<<#=ts#>, TResult>(this EvaluationScope @this, string name, Func<<#=ts#>, TResult> func)
         {
             return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<<#=ts#>, TResult>>(new LambdaGlobalFunction<<#=ts#>, TResult>(func)));
         }

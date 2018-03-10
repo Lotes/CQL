@@ -1,4 +1,5 @@
-﻿using CQL.Contexts.Implementation;
+﻿using CQL.Contexts;
+using CQL.Contexts.Implementation;
 using CQL.SyntaxTree;
 using CQL.TypeSystem;
 using CQL.TypeSystem.Implementation;
@@ -31,10 +32,10 @@ namespace CQL.Tests
                 this.Owner = owner;
             }
 
-            [CQLMemberNativeProperty("Id", IdDelimiter.Dot)]
+            [CQLNativeMemberProperty("Id", IdDelimiter.Dot)]
             public int Id { get; set; }
 
-            [CQLMemberNativeProperty("Owner", IdDelimiter.Dot)]
+            [CQLNativeMemberProperty("Owner", IdDelimiter.Dot)]
             public string Owner { get; set; }
 
             [CQLNativeMemberFunction("toString", IdDelimiter.Dot)]
@@ -54,6 +55,7 @@ namespace CQL.Tests
             typeSystemBuilder.AddFromScan(typeof(TypeSystemBuilderByAttributesTests));
             var typeSystem = typeSystemBuilder.Build();
             scope = new EvaluationScope(typeSystem);
+            scope.AddFromScan(typeof(TypeSystemBuilderByAttributesTests));
         }
 
         [TestMethod]
@@ -78,6 +80,12 @@ namespace CQL.Tests
         public void IndexerTest()
         {
             Assert.IsTrue(Queries.Evaluate("this[0] = \"M\"", new Ticket(7, "Me"), scope) == true);
+        }
+
+        [TestMethod]
+        public void GlobalFunctionTest()
+        {
+            Assert.IsTrue(Queries.Evaluate("max(1,200) = 200", new Ticket(7, "Me"), scope) == true);
         }
     }
 }

@@ -20,9 +20,9 @@ namespace CQL.TypeSystem
     }
 
     [AttributeUsage(AttributeTargets.Property, AllowMultiple = false)]
-    public class CQLMemberNativePropertyAttribute : Attribute
+    public class CQLNativeMemberPropertyAttribute : Attribute
     {
-        public CQLMemberNativePropertyAttribute(string name, IdDelimiter delimiter)
+        public CQLNativeMemberPropertyAttribute(string name, IdDelimiter delimiter)
         {
             Name = name;
             Delimiter = delimiter;

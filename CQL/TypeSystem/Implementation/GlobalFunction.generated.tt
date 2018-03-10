@@ -6,6 +6,7 @@
 <#@ output extension=".cs" #>
 using CQL.SyntaxTree;
 using System;
+using System.Reflection;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -47,4 +48,53 @@ namespace CQL.TypeSystem.Implementation
 	<#
 	}
 	#>
+
+	public class NativeGlobalFunction<TReturn> : NativeGlobalFunction
+    {
+        public NativeGlobalFunction(MethodInfo info) : base(info)
+        {
+        }
+    }
+
+	<#
+	for(var index = 1; index<=MAX; index++) 
+	{
+		var sequence = getSequence(index, str => "T"+str);
+		var typesOf = getSequence(index, str => "typeof(T"+str+")");
+	#>
+	public class NativeGlobalFunction<<#=sequence#>, TReturn> : NativeGlobalFunction
+    {
+        public NativeGlobalFunction(MethodInfo info) : base(info)
+        {
+        }
+    }
+	<#
+	}
+	#>
+
+
+	public static class NativeGlobalFunctionExtensions
+	{
+		private static Dictionary<int, Type> classes = new Dictionary<int, Type>()
+		{
+		<#
+		for(var index = 0; index<=MAX; index++) 
+		{
+			var commas = getSequence(index, str => "");
+			if(index>0)
+				commas += ",";
+		#>
+			{<#=index#>, typeof(NativeGlobalFunction<<#=commas#>>)},
+		<#
+		}
+		#>	
+		};
+		public static IGlobalFunction CreateByMethodInfo(MethodInfo info)
+		{
+            var parameterTypes = info.GetParameters().Select(p => p.ParameterType).ToArray();
+            var @class = classes[parameterTypes.Length];
+            var genericClass = @class.MakeGenericType(parameterTypes.Concat(new[] { info.ReturnType.Unvoid() }).ToArray());
+            return (IGlobalFunction)Activator.CreateInstance(genericClass, info);
+		}
+	}
 }

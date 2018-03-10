@@ -25,7 +25,7 @@ namespace CQL.TypeSystem.Implementation
         }
     }
 
-    public class NativeGlobalFunction : IGlobalFunction
+    public abstract class NativeGlobalFunction : IGlobalFunction
     {
         private MethodInfo method;
 

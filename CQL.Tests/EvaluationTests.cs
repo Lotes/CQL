@@ -36,7 +36,7 @@ namespace CQL.Tests
             Ticket.AddForeignProperty(IdDelimiter.Dot, "owner", t => t.Owner);
             var typeSystem = typeSystemBuilder.Build();
             context = new EvaluationScope(typeSystem);
-            context.DefineFunction<int, int, int>("max", (a, b) => Math.Max(a, b));
+            context.DefineForeignGlobalFunction<int, int, int>("max", (a, b) => Math.Max(a, b));
             var String = typeSystem.GetTypeByNative<string>();
             String.AddForeignFunction(IdDelimiter.Dot, "length", str => str.Length);
             String.AddForeignFunction<int, string>(IdDelimiter.Dot, "append", (str, index) => str+index);

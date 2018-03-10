@@ -27,7 +27,7 @@ namespace CQL.TypeSystem
     }
 
     public interface IFunctionClosure<TFunction> : IGlobalFunctionClosure
-        where TFunction : LambdaGlobalFunction
+        where TFunction : IGlobalFunction
     {
         TFunction Function { get; }
     }

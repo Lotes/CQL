@@ -64,7 +64,7 @@ namespace CQL.TypeSystem
 
             //Properties
             var properties = type.GetProperties(BindingFlags.Public | BindingFlags.Instance)
-                .Select(p => new { prop = p, attrs = p.GetCustomAttributes<CQLMemberNativePropertyAttribute>().FirstOrDefault() })
+                .Select(p => new { prop = p, attrs = p.GetCustomAttributes<CQLNativeMemberPropertyAttribute>().FirstOrDefault() })
                 .Where(p => p.attrs != null)
                 .ToArray();
             foreach (var property in properties)
