@@ -30,13 +30,13 @@ namespace CQL.TypeSystem.Implementation
                 throw new InvalidOperationException("This is not a native method!");
             this.method = method;
             var parameterTypes = method.GetParameters().Select(p => p.ParameterType).ToArray();
-            Signature = new MethodSignature(@this, method.ReturnType, parameterTypes);
+            Signature = new IMemberFunctionSignature(@this, method.ReturnType, parameterTypes);
         }
 
         /// <summary>
         /// Summarizes the signature of the function.
         /// </summary>
-        public MethodSignature Signature { get; private set; }
+        public IMemberFunctionSignature Signature { get; private set; }
 
         /// <summary>
         /// Invokes the function by passing the THIS object and the parameter objects.
@@ -67,14 +67,14 @@ namespace CQL.TypeSystem.Implementation
         /// <param name="body"></param>
         public ForeignMemberFunction(Type thisType, Type[] formalParameters, Type returnType, Delegate body)
         {
-            this.Signature = new MethodSignature(thisType, returnType, formalParameters);
+            this.Signature = new IMemberFunctionSignature(thisType, returnType, formalParameters);
             this.body = body;
         }
 
         /// <summary>
         /// The signature of the foreign member function.
         /// </summary>
-        public MethodSignature Signature { get; private set; }
+        public IMemberFunctionSignature Signature { get; private set; }
 
         /// <summary>
         /// Calls the lambda function, passing the THIS object and the parameters.

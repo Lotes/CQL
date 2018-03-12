@@ -73,15 +73,22 @@
     <Compile Include="AutoCompletion\ParserStack.cs" />
     <Compile Include="AutoCompletion\Suggestion.cs" />
     <Compile Include="AutoCompletion\SuggestionType.cs" />
-    <Compile Include="Contexts\Implementation\Scope.cs" />
-    <Compile Include="Contexts\Implementation\Variable.cs" />
+    <Compile Include="Contexts\IEvaluationScope.cs" />
+    <Compile Include="Contexts\Implementation\EvaluationScope.cs" />
+    <Compile Include="Contexts\Implementation\ValidationScope.cs" />
+    <Compile Include="Contexts\Implementation\VariableDeclaration.cs" />
+    <Compile Include="Contexts\Implementation\VariableDefinition.cs" />
+    <Compile Include="Contexts\IValidationScope.cs" />
     <Compile Include="Contexts\IVariable.cs" />
+    <Compile Include="Contexts\IVariableDeclaration.cs" />
+    <Compile Include="Contexts\IVariableDefinition.cs" />
     <Compile Include="Contexts\ScopeExtensions.cs" />
     <Compile Include="Contexts\ScopeExtensions.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>ScopeExtensions.generated.tt</DependentUpon>
     </Compile>
+    <Compile Include="Contexts\VariableExtensions.cs" />
     <Compile Include="EnumerableExtensions.cs" />
     <Compile Include="HashExtensions.cs" />
     <Compile Include="ErrorHandling\IErrorListener.cs" />
@@ -96,11 +103,20 @@
     <Compile Include="SyntaxTree\IParserLocation.cs" />
     <Compile Include="SyntaxTree\ISyntaxTreeNode.cs" />
     <Compile Include="SyntaxTree\MemberExpression.cs" />
+    <Compile Include="SyntaxTree\ParserLocation.cs" />
+    <Compile Include="SyntaxTree\ParserLocationExtensions.cs" />
     <Compile Include="SyntaxTree\SyntaxTreeExtensions.cs" />
     <Compile Include="AutoCompletion\Token.cs" />
     <Compile Include="SyntaxTree\VariableExpression.cs" />
     <Compile Include="TypeExtensions.cs" />
-    <Compile Include="TypeSystem\Attributes.cs" />
+    <Compile Include="TypeSystem\CQLGlobalFunction.cs" />
+    <Compile Include="TypeSystem\CQLNativeMemberFunctionAttribute.cs" />
+    <Compile Include="TypeSystem\CQLNativeMemberIndexerAttribute.cs" />
+    <Compile Include="TypeSystem\CQLNativeMemberPropertyAttribute.cs" />
+    <Compile Include="TypeSystem\CQLTypeAttribute.cs" />
+    <Compile Include="TypeSystem\GlobalFunctionSignature.cs" />
+    <Compile Include="TypeSystem\IGlobalFunctionClosure.cs" />
+    <Compile Include="TypeSystem\IMemberFunctionSignature.cs" />
     <Compile Include="TypeSystem\Implementation\GlobalFunction.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -134,6 +150,7 @@
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />
     <Compile Include="TypeSystem\MethodExtensions.cs" />
+    <Compile Include="TypeSystem\TypeSystemBuilderExtensions.cs" />
     <Compile Include="TypeSystem\UnknownTypeException.cs" />
     <Compile Include="TypeSystem\BinaryOperation.cs" />
     <Compile Include="Contexts\IScope.cs" />
@@ -177,7 +194,9 @@
       <Listener>True</Listener>
       <Visitor>True</Visitor>
     </Antlr4>
-    <None Include="packages.config" />
+    <None Include="packages.config">
+      <SubType>Designer</SubType>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Content Include="Contexts\ScopeExtensions.generated.tt">

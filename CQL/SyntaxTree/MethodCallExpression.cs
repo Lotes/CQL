@@ -83,9 +83,9 @@ namespace CQL.SyntaxTree
         public FunctionCallExpression Validate(IScope<Type> context)
         {
             ThisExpression = ThisExpression.Validate(context);
-            MethodSignature methodSignature;
+            IMemberFunctionSignature methodSignature;
             GlobalFunctionSignature functionSignature;
-            if (ThisExpression.SemanticType.IfMethodClosureTryGetMethodType(out methodSignature))
+            if (ThisExpression.SemanticType.IfMemberFunctionClosureTryGetMethodSignature(out methodSignature))
             {
                 var parameterIndex = 0;
                 if (methodSignature.ParameterTypes.Length != Parameters.Count())

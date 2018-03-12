@@ -1,34 +1,34 @@
 ﻿using CQL.TypeSystem.Implementation;
-using System;
 
 namespace CQL.TypeSystem
 {
+    /// <summary>
+    /// Describes a global function.
+    /// </summary>
     public interface IGlobalFunction
     {
+        /// <summary>
+        /// Type signature of this function.
+        /// </summary>
         GlobalFunctionSignature Signature { get; }
+        /// <summary>
+        /// Calls the function by passing concrete parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         object Invoke(params object[] parameters);
     }
 
-    public class GlobalFunctionSignature
-    {
-        public GlobalFunctionSignature(Type returnType, Type[] parameterTypes)
-        {
-            ReturnType = returnType;
-            ParameterTypes = parameterTypes;
-        }
-
-        public Type ReturnType { get; private set; }
-        public Type[] ParameterTypes { get; private set; }
-    }
-
-    public interface IGlobalFunctionClosure
-    {
-        object Invoke(params object[] parameters);
-    }
-
-    public interface IFunctionClosure<TFunction> : IGlobalFunctionClosure
+    /// <summary>
+    /// Generic variant of <see cref="IGlobalFunctionClosure"/>
+    /// </summary>
+    /// <typeparam name="TFunction"></typeparam>
+    public interface IGlobalFunctionClosure<TFunction> : IGlobalFunctionClosure
         where TFunction : IGlobalFunction
     {
+        /// <summary>
+        /// The bound global function.
+        /// </summary>
         TFunction Function { get; }
     }
 }

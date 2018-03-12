@@ -8,10 +8,17 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem.Implementation
 {
+    /// <summary>
+    /// Default implementation of <see cref="ITypeSystemBuilder"/>
+    /// </summary>
     public class TypeSystemBuilder: ITypeSystemBuilder
     {
         private TypeSystem typeSystem = new TypeSystem();
 
+        /// <summary>
+        /// Creates a type system builder.
+        /// </summary>
+        /// <param name="flags">Setups the initial types.</param>
         public TypeSystemBuilder(SystemDefaultFlags flags = SystemDefaultFlags.All)
         {
             if (flags.HasFlag(SystemDefaultFlags.HasBoolean))
@@ -62,6 +69,14 @@ namespace CQL.TypeSystem.Implementation
             }
         }
 
+        /// <summary>
+        /// Registers a native type to be known under the given name.
+        /// </summary>
+        /// <typeparam name="TType"></typeparam>
+        /// <param name="name"></param>
+        /// <param name="usage"></param>
+        /// <param name="flags"></param>
+        /// <returns></returns>
         public IType<TType> AddType<TType>(string name, string usage, TypeDefaultFlags flags = TypeDefaultFlags.All)
         {
             var result = typeSystem.AddType<TType>(name, usage);
@@ -176,23 +191,46 @@ namespace CQL.TypeSystem.Implementation
             }
         }
 
+        /// <summary>
+        /// Adds a coercion rule.
+        /// </summary>
+        /// <typeparam name="TOriginalType"></typeparam>
+        /// <typeparam name="TCastingType"></typeparam>
+        /// <param name="kind"></param>
+        /// <param name="cast"></param>
         public void AddCoercionRule<TOriginalType, TCastingType>(CoercionKind kind, Func<TOriginalType, TCastingType> cast)
         {
             typeSystem.AddCoercionRule(kind, cast);
         }
 
+        /// <summary>
+        /// Adds a contains rule.
+        /// </summary>
+        /// <typeparam name="TLeft"></typeparam>
+        /// <typeparam name="TRight"></typeparam>
+        /// <param name="aggregate"></param>
         public void AddContainsRule<TLeft, TRight>(Func<TLeft, TRight, bool> aggregate)
         {
             typeSystem.AddRule(BinaryOperator.Contains, aggregate);
             typeSystem.AddRule<TLeft, TRight, bool>(BinaryOperator.DoesNotContain, (lhs, rhs) => !aggregate(lhs, rhs));
         }
 
+        /// <summary>
+        /// Adds equality rules
+        /// </summary>
+        /// <typeparam name="TOperand"></typeparam>
+        /// <param name="aggregate"></param>
         public void AddEqualsRule<TOperand>(Func<TOperand, TOperand, bool> aggregate)
         {
             typeSystem.AddRule(BinaryOperator.Equals, aggregate);
             typeSystem.AddRule<TOperand, TOperand, bool>(BinaryOperator.NotEquals, (lhs, rhs) => !aggregate(lhs, rhs));
         }
 
+        /// <summary>
+        /// Adds "less" rules
+        /// </summary>
+        /// <typeparam name="TOperand"></typeparam>
+        /// <param name="aggregate"></param>
         public void AddLessRule<TOperand>(Func<TOperand, TOperand, bool> aggregate)
         {
             typeSystem.AddRule(BinaryOperator.LessThan, aggregate);
@@ -201,16 +239,35 @@ namespace CQL.TypeSystem.Implementation
             typeSystem.AddRule<TOperand, TOperand, bool>(BinaryOperator.LessThanEquals, (lhs, rhs) => !aggregate(rhs, lhs));
         }
 
+        /// <summary>
+        /// Eventually builds the type system.
+        /// </summary>
+        /// <returns></returns>
         public ITypeSystem Build()
         {
             return typeSystem;
         }
 
+        /// <summary>
+        /// Add unary rules.
+        /// </summary>
+        /// <typeparam name="TOperand"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="op"></param>
+        /// <param name="func"></param>
         public void AddRule<TOperand, TResult>(UnaryOperator op, Func<TOperand, TResult> func)
         {
             typeSystem.AddRule(op, func);
         }
 
+        /// <summary>
+        /// Adds binary rules.
+        /// </summary>
+        /// <typeparam name="TLeft"></typeparam>
+        /// <typeparam name="TRight"></typeparam>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="op"></param>
+        /// <param name="aggregate"></param>
         public void AddRule<TLeft, TRight, TResult>(BinaryOperator op, Func<TLeft, TRight, TResult> aggregate)
         {
             typeSystem.AddRule(op, aggregate);

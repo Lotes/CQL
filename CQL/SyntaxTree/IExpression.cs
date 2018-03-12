@@ -16,7 +16,7 @@ namespace CQL.SyntaxTree
     public interface IExpression: ISyntaxTreeNode
     {
         /// <summary>
-        /// Initially is null! After calling the <see cref="IExpression.Validate(IScope{Type})"/> method
+        /// Initially is null! After calling the <see cref="IExpression.Validate(IValidationScope)"/> method
         /// the actual type will be set.
         /// </summary>
         Type SemanticType { get; }
@@ -26,14 +26,14 @@ namespace CQL.SyntaxTree
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        IExpression Validate(IScope<Type> context);
+        IExpression Validate(IValidationScope context);
 
         /// <summary>
         /// Evaluates this node to a value of the validated semantic type.
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        object Evaluate(IScope<object> context);
+        object Evaluate(IEvaluationScope context);
     }
 
     /// <summary>

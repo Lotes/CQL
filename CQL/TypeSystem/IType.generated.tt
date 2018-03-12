@@ -16,6 +16,10 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
+    /// <summary>
+    /// A registered type in the type system, representing a C# native type.
+    /// </summary>
+    /// <typeparam name="TType">the native type</typeparam>
 	public partial interface IType<TType>
 	{
 		<# 
@@ -35,13 +39,39 @@ namespace CQL.TypeSystem
 		{
 			var sequence = getSequence(index);
 		#>
+
+		/// <summary>
+        /// Adds an foreign indexer by adding a lambda function to get the value.
+        /// </summary>
+		<#
+		for(var pIndex=1; pIndex<=index; pIndex++)
+		{
+		#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+        <#
+		}
+		#>/// <typeparam name="TResult"></typeparam>
+        /// <param name="getter"></param>
+        /// <returns></returns>
 		IMemberIndexer AddForeignIndexer<<#=sequence#>TResult>(Func<TType, <#=sequence#> TResult> getter);
 		<#
 		}
 		for(var index = 0; index<=MAX; index++) 
 		{
 			var sequence = getSequence(index);
-		#>
+		#>/// <summary>
+        /// Adds a foreign function to the type by a given lambda function.
+        /// </summary>
+		<#
+		for(var pIndex=1; pIndex<=index; pIndex++)
+		{
+		#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+        <#
+		}
+		#>/// <typeparam name="TResult"></typeparam>
+        /// <param name="delimiter"></param>
+        /// <param name="name"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
         IMemberFunction AddForeignFunction<<#=sequence#>TResult>(IdDelimiter delimiter, string name, Func<TType, <#=sequence#> TResult> func);
 		<#
 		}
