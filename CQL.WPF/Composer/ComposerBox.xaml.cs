@@ -161,7 +161,7 @@ namespace CQL.WPF.Composer
                 var multiId = Uncast(comparsion.LeftExpression) as VariableExpression;
                 ComparsionValueViewModel comValue = null;
                 IVariable<object> variable;
-                if (multiId == null || !(Context.TryGetVariable(multiId.Name, out variable)) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
+                if (multiId == null || !(Context.TryGetVariable(multiId.Identifier, out variable)) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
                     return false;
                 var field = variable;
                 part = FilterBoxViewModel.NewComparsion(Context.ToValidationScope(), negate, field.ToValidationVariable(), comparsion.Operator, comValue);

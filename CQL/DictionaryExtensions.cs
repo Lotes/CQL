@@ -6,8 +6,19 @@ using System.Threading.Tasks;
 
 namespace CQL
 {
+    /// <summary>
+    /// Extensions for dictionaries.
+    /// </summary>
     public static class DictionaryExtensions
     {
+        /// <summary>
+        /// Merges THIS dictionary with other dictionaries and returns a new dictionary.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="others"></param>
+        /// <returns></returns>
         public static IReadOnlyDictionary<TKey, TValue> MergeWith<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> @this, params IReadOnlyDictionary<TKey, TValue>[] others)
         {
             var keyValues = new[] { @this }.Concat(others).SelectMany(d => d);
@@ -15,7 +26,7 @@ namespace CQL
         }
 
         /// <summary>
-        /// Alters a value in a dictionary. If not present it execute the action on a given default value.
+        /// Alters a value in a dictionary. If not present it executes the action on a given default value.
         /// </summary>
         /// <typeparam name="TKey"></typeparam>
         /// <typeparam name="TValue"></typeparam>
@@ -26,47 +37,70 @@ namespace CQL
         public static void AlterValueOrDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue, TValue> action, TValue @default = default(TValue))
         {
             if (!dictionary.ContainsKey(key))
+            {
                 dictionary.Add(key, action(@default));
+            }
             else
+            {
                 dictionary[key] = action(dictionary[key]);
+            }
         }
 
+        /// <summary>
+        /// Gets a value for the given key, or if the key does not exist, does insert a default value.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="default"></param>
+        /// <returns></returns>
         public static TValue GetValueOrInsertedDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, TValue @default = default(TValue))
         {
-            TValue result;
-            if (!dictionary.TryGetValue(key, out result))
+            if (!dictionary.TryGetValue(key, out TValue result))
+            {
                 dictionary[key] = result = @default;
+            }
+
             return result;
         }
 
+        /// <summary>
+        /// Gets a value for the given key, or if the key does not exist, does insert a default value lazyly.
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="dictionary"></param>
+        /// <param name="key"></param>
+        /// <param name="default"></param>
+        /// <returns></returns>
         public static TValue GetValueOrInsertedLazyDefault<TKey, TValue>(this IDictionary<TKey, TValue> dictionary, TKey key, Func<TValue> @default)
         {
-            TValue result;
-            if (!dictionary.TryGetValue(key, out result))
+            if (!dictionary.TryGetValue(key, out TValue result))
+            {
                 dictionary[key] = result = @default();
+            }
+
             return result;
         }
 
+        /// <summary>
+        /// Returns the value for an existing key, or, if not existing, a default value. 
+        /// </summary>
+        /// <typeparam name="TKey"></typeparam>
+        /// <typeparam name="TValue"></typeparam>
+        /// <param name="_this"></param>
+        /// <param name="key"></param>
+        /// <param name="default"></param>
+        /// <returns></returns>
         public static TValue GetOrDefault<TKey, TValue>(this IReadOnlyDictionary<TKey, TValue> _this, TKey key, TValue @default = default(TValue))
         {
-            TValue value;
-            if (_this.TryGetValue(key, out value))
+            if (_this.TryGetValue(key, out TValue value))
+            {
                 return value;
+            }
+
             return @default;
-        }
-        public static TValue GetOrLazyInsert<TKey, TValue>(this IDictionary<TKey, TValue> _this, TKey key, Func<TValue> create)
-        {
-            TValue value;
-            if (_this.TryGetValue(key, out value))
-                return value;
-            return _this[key] = create();
-        }
-        public static TValue GetOrDefaultInsert<TKey, TValue>(this IDictionary<TKey, TValue> _this, TKey key, TValue @default = default(TValue))
-        {
-            TValue value;
-            if (_this.TryGetValue(key, out value))
-                return value;
-            return _this[key] = @default;
         }
     }
 }

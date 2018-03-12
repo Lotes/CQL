@@ -1,0 +1,3738 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>CQL</name>
+    </assembly>
+    <members>
+        <member name="M:CQL.SyntaxTree.Query.#ctor(CQL.SyntaxTree.IParserLocation,CQL.SyntaxTree.IExpression)">
+            <summary>
+            
+            </summary>
+            <param name="context"></param>
+            <param name="expression">not null</param>
+        </member>
+        <member name="P:CQL.TypeSystem.IType.Indexer">
+            <summary>
+            Null if not defined
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:CQL.DictionaryExtensions.AlterValueOrDefault``2(System.Collections.Generic.IDictionary{``0,``1},``0,System.Func{``1,``1},``1)">
+            <summary>
+            Alters a value in a dictionary. If not present it execute the action on a given default value.
+            </summary>
+            <typeparam name="TKey"></typeparam>
+            <typeparam name="TValue"></typeparam>
+            <param name="dictionary"></param>
+            <param name="key"></param>
+            <param name="action"></param>
+            <param name="default"></param>
+        </member>
+        <member name="T:CQL.ICQLListener">
+            <summary>
+            This interface defines a complete listener for a parse tree produced by
+            <see cref="T:CQL.CQLParser"/>.
+            </summary>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterString(CQL.CQLParser.StringContext)">
+            <summary>
+            Enter a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitString(CQL.CQLParser.StringContext)">
+            <summary>
+            Exit a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Enter a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Exit a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Enter a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Exit a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Enter a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Exit a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Enter a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Exit a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Enter a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Exit a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Enter a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Exit a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Enter a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Exit a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Enter a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Exit a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Enter a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Exit a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Enter a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Exit a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Enter a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Exit a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Enter a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Exit a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Enter a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Exit a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Enter a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Exit a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Enter a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Exit a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Enter a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Exit a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Enter a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Exit a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Enter a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Exit a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Enter a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Exit a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Enter a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Exit a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Enter a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Exit a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Enter a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Exit a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Enter a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Exit a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterIn(CQL.CQLParser.InContext)">
+            <summary>
+            Enter a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitIn(CQL.CQLParser.InContext)">
+            <summary>
+            Exit a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Enter a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Exit a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Enter a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Exit a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Enter a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Exit a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Enter a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Exit a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Enter a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Exit a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Enter a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Exit a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Enter a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Exit a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterList(CQL.CQLParser.ListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitList(CQL.CQLParser.ListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.EnterEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.ICQLListener.ExitEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="T:CQL.CQLBaseListener">
+            <summary>
+            This class provides an empty implementation of <see cref="T:CQL.ICQLListener"/>,
+            which can be extended to create a listener which only needs to handle a subset
+            of the available methods.
+            </summary>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterString(CQL.CQLParser.StringContext)">
+            <summary>
+            Enter a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitString(CQL.CQLParser.StringContext)">
+            <summary>
+            Exit a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Enter a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Exit a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Enter a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Exit a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Enter a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Exit a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Enter a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Exit a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Enter a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Exit a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Enter a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Exit a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Enter a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Exit a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Enter a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Exit a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Enter a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Exit a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Enter a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Exit a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Enter a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Exit a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Enter a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Exit a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Enter a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Exit a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Enter a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Exit a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Enter a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Exit a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Enter a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Exit a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Enter a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Exit a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Enter a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Exit a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Enter a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Exit a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Enter a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Exit a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Enter a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Exit a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Enter a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Exit a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Enter a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Exit a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterIn(CQL.CQLParser.InContext)">
+            <summary>
+            Enter a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitIn(CQL.CQLParser.InContext)">
+            <summary>
+            Exit a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Enter a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Exit a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Enter a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Exit a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Enter a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Exit a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Enter a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Exit a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Enter a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Exit a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Enter a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Exit a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Enter a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Exit a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Enter a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Exit a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Enter a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Exit a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterList(CQL.CQLParser.ListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitList(CQL.CQLParser.ListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Enter a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Exit a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            <para>The default implementation does nothing.</para>
+            </summary>
+            <param name="context">The parse tree.</param>
+        </member>
+        <member name="M:CQL.CQLBaseListener.EnterEveryRule(Antlr4.Runtime.ParserRuleContext)">
+            <inheritdoc/>
+            <remarks>The default implementation does nothing.</remarks>
+        </member>
+        <member name="M:CQL.CQLBaseListener.ExitEveryRule(Antlr4.Runtime.ParserRuleContext)">
+            <inheritdoc/>
+            <remarks>The default implementation does nothing.</remarks>
+        </member>
+        <member name="M:CQL.CQLBaseListener.VisitTerminal(Antlr4.Runtime.Tree.ITerminalNode)">
+            <inheritdoc/>
+            <remarks>The default implementation does nothing.</remarks>
+        </member>
+        <member name="M:CQL.CQLBaseListener.VisitErrorNode(Antlr4.Runtime.Tree.IErrorNode)">
+            <inheritdoc/>
+            <remarks>The default implementation does nothing.</remarks>
+        </member>
+        <member name="T:CQL.ICQLVisitor`1">
+            <summary>
+            This interface defines a complete generic visitor for a parse tree produced
+            by <see cref="T:CQL.CQLParser"/>.
+            </summary>
+            <typeparam name="Result">The return type of the visit operation.</typeparam>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitString(CQL.CQLParser.StringContext)">
+            <summary>
+            Visit a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Visit a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Visit a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Visit a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Visit a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Visit a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Visit a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Visit a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Visit a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Visit a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Visit a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Visit a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Visit a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Visit a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Visit a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Visit a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Visit a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Visit a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Visit a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Visit a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Visit a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Visit a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Visit a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Visit a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitIn(CQL.CQLParser.InContext)">
+            <summary>
+            Visit a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Visit a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Visit a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Visit a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Visit a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Visit a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Visit a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Visit a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitList(CQL.CQLParser.ListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.ICQLVisitor`1.VisitEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="T:CQL.CQLBaseVisitor`1">
+            <summary>
+            This class provides an empty implementation of <see cref="T:CQL.ICQLVisitor`1"/>,
+            which can be extended to create a visitor which only needs to handle a subset
+            of the available methods.
+            </summary>
+            <typeparam name="Result">The return type of the visit operation.</typeparam>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitString(CQL.CQLParser.StringContext)">
+            <summary>
+            Visit a parse tree produced by the <c>string</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitNull(CQL.CQLParser.NullContext)">
+            <summary>
+            Visit a parse tree produced by the <c>null</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitBool(CQL.CQLParser.BoolContext)">
+            <summary>
+            Visit a parse tree produced by the <c>bool</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitDecimal(CQL.CQLParser.DecimalContext)">
+            <summary>
+            Visit a parse tree produced by the <c>decimal</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitEmpty(CQL.CQLParser.EmptyContext)">
+            <summary>
+            Visit a parse tree produced by the <c>empty</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMinus(CQL.CQLParser.MinusContext)">
+            <summary>
+            Visit a parse tree produced by the <c>minus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitPlus(CQL.CQLParser.PlusContext)">
+            <summary>
+            Visit a parse tree produced by the <c>plus</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToMul(CQL.CQLParser.ToMulContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toMul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitArrayAccess(CQL.CQLParser.ArrayAccessContext)">
+            <summary>
+            Visit a parse tree produced by the <c>arrayAccess</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMethodCall(CQL.CQLParser.MethodCallContext)">
+            <summary>
+            Visit a parse tree produced by the <c>methodCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMemberCall(CQL.CQLParser.MemberCallContext)">
+            <summary>
+            Visit a parse tree produced by the <c>memberCall</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitBraceElems(CQL.CQLParser.BraceElemsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>braceElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitBracketElems(CQL.CQLParser.BracketElemsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>bracketElems</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.list"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitOr(CQL.CQLParser.OrContext)">
+            <summary>
+            Visit a parse tree produced by the <c>or</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToAnd(CQL.CQLParser.ToAndContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toAnd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToEquals(CQL.CQLParser.ToEqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitAnd(CQL.CQLParser.AndContext)">
+            <summary>
+            Visit a parse tree produced by the <c>and</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitEquals(CQL.CQLParser.EqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>equals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitNotEquals(CQL.CQLParser.NotEqualsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notEquals</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToCompare(CQL.CQLParser.ToCompareContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toCompare</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitDiv(CQL.CQLParser.DivContext)">
+            <summary>
+            Visit a parse tree produced by the <c>div</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMod(CQL.CQLParser.ModContext)">
+            <summary>
+            Visit a parse tree produced by the <c>mod</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMul(CQL.CQLParser.MulContext)">
+            <summary>
+            Visit a parse tree produced by the <c>mul</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToSpecial(CQL.CQLParser.ToSpecialContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toSpecial</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMemberName(CQL.CQLParser.MemberNameContext)">
+            <summary>
+            Visit a parse tree produced by the <c>memberName</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.member"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitConditional(CQL.CQLParser.ConditionalContext)">
+            <summary>
+            Visit a parse tree produced by the <c>conditional</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToOr(CQL.CQLParser.ToOrContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toOr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitParamSingle(CQL.CQLParser.ParamSingleContext)">
+            <summary>
+            Visit a parse tree produced by the <c>paramSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitParamList(CQL.CQLParser.ParamListContext)">
+            <summary>
+            Visit a parse tree produced by the <c>paramList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToAdd(CQL.CQLParser.ToAddContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toAdd</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitLt(CQL.CQLParser.LtContext)">
+            <summary>
+            Visit a parse tree produced by the <c>lt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitGte(CQL.CQLParser.GteContext)">
+            <summary>
+            Visit a parse tree produced by the <c>gte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitLte(CQL.CQLParser.LteContext)">
+            <summary>
+            Visit a parse tree produced by the <c>lte</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitGt(CQL.CQLParser.GtContext)">
+            <summary>
+            Visit a parse tree produced by the <c>gt</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitContains(CQL.CQLParser.ContainsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>contains</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitDoesNotContain(CQL.CQLParser.DoesNotContainContext)">
+            <summary>
+            Visit a parse tree produced by the <c>doesNotContain</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitIn(CQL.CQLParser.InContext)">
+            <summary>
+            Visit a parse tree produced by the <c>in</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitNotIn(CQL.CQLParser.NotInContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notIn</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitIs(CQL.CQLParser.IsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>is</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitToFactor(CQL.CQLParser.ToFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>toFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitComplexFactor(CQL.CQLParser.ComplexFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>complexFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.factor"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitElemSingle(CQL.CQLParser.ElemSingleContext)">
+            <summary>
+            Visit a parse tree produced by the <c>elemSingle</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitElemList(CQL.CQLParser.ElemListContext)">
+            <summary>
+            Visit a parse tree produced by the <c>elemList</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitTrue(CQL.CQLParser.TrueContext)">
+            <summary>
+            Visit a parse tree produced by the <c>true</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitFalse(CQL.CQLParser.FalseContext)">
+            <summary>
+            Visit a parse tree produced by the <c>false</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitVarExp(CQL.CQLParser.VarExpContext)">
+            <summary>
+            Visit a parse tree produced by the <c>varExp</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitConst(CQL.CQLParser.ConstContext)">
+            <summary>
+            Visit a parse tree produced by the <c>const</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitPlusFactor(CQL.CQLParser.PlusFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>plusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitNotFactor(CQL.CQLParser.NotFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>notFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitLs(CQL.CQLParser.LsContext)">
+            <summary>
+            Visit a parse tree produced by the <c>ls</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMinusFactor(CQL.CQLParser.MinusFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>minusFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitCastFactor(CQL.CQLParser.CastFactorContext)">
+            <summary>
+            Visit a parse tree produced by the <c>castFactor</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitExpr(CQL.CQLParser.ExprContext)">
+            <summary>
+            Visit a parse tree produced by the <c>expr</c>
+            labeled alternative in <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitQuery(CQL.CQLParser.QueryContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.query"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitExpression(CQL.CQLParser.ExpressionContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.expression"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitIfThenElseTerm(CQL.CQLParser.IfThenElseTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.ifThenElseTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitLogicalOrTerm(CQL.CQLParser.LogicalOrTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.logicalOrTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitLogicalAndTerm(CQL.CQLParser.LogicalAndTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.logicalAndTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitEqualsTerm(CQL.CQLParser.EqualsTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.equalsTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitCompareTerm(CQL.CQLParser.CompareTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.compareTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitAddTerm(CQL.CQLParser.AddTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.addTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMulTerm(CQL.CQLParser.MulTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.mulTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitSpecialTerm(CQL.CQLParser.SpecialTermContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.specialTerm"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitFactor(CQL.CQLParser.FactorContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.factor"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitChain_element(CQL.CQLParser.Chain_elementContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.chain_element"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitPrimary(CQL.CQLParser.PrimaryContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.primary"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitPrimeVar(CQL.CQLParser.PrimeVarContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.primeVar"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitMember(CQL.CQLParser.MemberContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.member"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitTypeName(CQL.CQLParser.TypeNameContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.typeName"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitList(CQL.CQLParser.ListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.list"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitElementList(CQL.CQLParser.ElementListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.elementList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitParameterList(CQL.CQLParser.ParameterListContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.parameterList"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitConstant(CQL.CQLParser.ConstantContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.constant"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitBooleanLiteral(CQL.CQLParser.BooleanLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.booleanLiteral"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitNullLiteral(CQL.CQLParser.NullLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.nullLiteral"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+        <member name="M:CQL.CQLBaseVisitor`1.VisitEmptyLiteral(CQL.CQLParser.EmptyLiteralContext)">
+            <summary>
+            Visit a parse tree produced by <see cref="M:CQL.CQLParser.emptyLiteral"/>.
+            <para>
+            The default implementation returns the result of calling <see cref="M:Antlr4.Runtime.Tree.AbstractParseTreeVisitor`1.VisitChildren(Antlr4.Runtime.Tree.IRuleNode)"/>
+            on <paramref name="context"/>.
+            </para>
+            </summary>
+            <param name="context">The parse tree.</param>
+            <return>The visitor result.</return>
+        </member>
+    </members>
+</doc>

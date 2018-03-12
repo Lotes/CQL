@@ -7,7 +7,6 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
-
     public class ParserStack
     {
         public static bool IsCompatibleWith(ATNState state, ParserStack parserStack)
@@ -70,9 +69,10 @@ namespace CQL.AutoCompletion
                 var loopState = state as LoopEndState;
                 if (states.Any())
                 {
-                    var last = states.Last() as StarLoopEntryState;
-                    if (last != null && last.loopBackState == loopState.loopBackState)
+                    if (states.Last() is StarLoopEntryState last && last.loopBackState == loopState.loopBackState)
+                    {
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
+                    }
                 }
                 return new Tuple<bool, ParserStack>(true, this);
             }
@@ -81,14 +81,18 @@ namespace CQL.AutoCompletion
                 var ruleState = state as RuleStopState;
                 if (states.Any())
                 {
-                    var last = states.Last() as RuleStartState;
-                    if (last != null && last.stopState == ruleState)
+                    if (states.Last() is RuleStartState last && last.stopState == ruleState)
+                    {
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
+                    }
                 }
                 return new Tuple<bool, ParserStack>(true, this);
             }
             if (remainingTypes.Any(t => t == currentType))
+            {
                 return new Tuple<bool, ParserStack>(true, this);
+            }
+
             throw new InvalidOperationException(currentType.FullName);
         }
     }

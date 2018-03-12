@@ -29,7 +29,10 @@ namespace CQL.SyntaxTree
         {
             var other = node as ArrayAccessExpression;
             if (other == null)
+            {
                 return false;
+            }
+
             return this.Indices.StructurallyEquals(other.Indices);
         }
 

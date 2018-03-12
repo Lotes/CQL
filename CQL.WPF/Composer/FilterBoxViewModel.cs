@@ -72,7 +72,7 @@ namespace CQL.WPF.Composer
                 return state;
             }
 
-            private set
+            set
             {
                 state = value;
                 RaisePropertyChanged(() => FilterState);

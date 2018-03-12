@@ -10,17 +10,16 @@ using System.Threading.Tasks;
 
 namespace CQL
 {
+    /// <summary>
+    /// Extensions defined for types.
+    /// </summary>
     public static class TypeExtensions
     {
-        public static string GetMethod<T>(Expression<Func<T, Delegate>> expression)
-        {
-            var unaryExpression = (UnaryExpression)expression.Body;
-            var methodCallExpression = (MethodCallExpression)unaryExpression.Operand;
-            var methodInfoExpression = (ConstantExpression)methodCallExpression.Arguments.Last();
-            var methodInfo = (MemberInfo)methodInfoExpression.Value;
-            return methodInfo.Name;
-        }
-
+        /// <summary>
+        /// Check whether a type is  numeric.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
         public static bool IsNumeric(this Type @this)
         {
             switch(Type.GetTypeCode(@this))
@@ -42,6 +41,13 @@ namespace CQL
             }
         }
 
+        /// <summary>
+        /// Checks whether the type contains the <see cref="System.Collections.Generic.IEnumerable{T}"/> interface.
+        /// If yes, returns its element type and returns true. If no, returns false.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="elementType"></param>
+        /// <returns></returns>
         public static bool IfEnumerableTryGetElementType(this Type @this, out Type elementType)
         {
             elementType = @this
@@ -53,6 +59,11 @@ namespace CQL
             return elementType != null;
         }
 
+        /// <summary>
+        /// Given a set of types, trys to determine the common type.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
         public static Type GetCommonBaseClass(this IEnumerable<Type> @this)
         {
             var types = @this.ToArray();
