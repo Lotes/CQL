@@ -11,7 +11,6 @@ namespace CQL.Contexts.Implementation
     /// </summary>
     public class ValidationScope : IValidationScope
     {
-        private ITypeSystem system;
         private Dictionary<string, IVariableDeclaration> variables = new Dictionary<string, IVariableDeclaration>();
         private Dictionary<string, IVariableDeclaration> thisMembers = new Dictionary<string, IVariableDeclaration>();
 
@@ -49,7 +48,7 @@ namespace CQL.Contexts.Implementation
             if (normalizedName == ScopeExtensions.NormalizeVariableName(ScopeExtensions.ThisName))
             {
                 thisMembers.Clear();
-                var cqlType = system.GetTypeByNative(GetValueType(variable.Value));
+                var cqlType = TypeSystem.GetTypeByNative(GetValueType(variable.Value));
                 foreach (var property in cqlType.Members)
                 {
                     thisMembers.Add(ScopeExtensions.NormalizeVariableName(property.Name), new VariableDeclaration(property.Name, GetPropertyValue(value, property)));
