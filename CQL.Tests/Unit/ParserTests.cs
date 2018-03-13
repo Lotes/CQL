@@ -1,10 +1,9 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using CQL.SyntaxTree;
-using Antlr4.Runtime;
+﻿using CQL.SyntaxTree;
+using NUnit.Framework;
 
-namespace CQL.Tests
+namespace CQL.Tests.Unit
 {
-    [TestClass]
+    [TestFixture]
     public class ParserTests
     {
         private static IParserLocation pc = new ParserLocation(0, 0);
@@ -14,19 +13,19 @@ namespace CQL.Tests
             Assert.IsTrue(actual.StructurallyEquals(expected));
         }
 
-        [TestMethod]
+        [Test]
         public void EmptyExpressionTest()
         {
             AssertQueryEquals("empty", new Query(pc, new EmptyExpression(pc)));
         }
 
-        [TestMethod]
+        [Test]
         public void NullExpressionTest()
         {
             AssertQueryEquals("null", new Query(pc, new NullExpression(pc)));
         }
 
-        [TestMethod]
+        [Test]
         public void FunctionCallExpressionTest()
         {
             AssertQueryEquals("max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new VariableExpression(pc, "max"), new[] 
@@ -36,61 +35,61 @@ namespace CQL.Tests
             })));
         }
 
-        [TestMethod]
+        [Test]
         public void VariableExpressionTest()
         {
             AssertQueryEquals("zwerg", new Query(pc, new VariableExpression(pc, "zwerg")));
         }
 
-        [TestMethod]
+        [Test]
         public void UnaryOperationExpressionTest()
         {
             AssertQueryEquals("!true", new Query(pc, new UnaryOperationExpression(pc, UnaryOperator.Not, new BooleanLiteralExpression(pc, true))));
         }
 
-        [TestMethod]
+        [Test]
         public void BooleanLiteralExpressionTest()
         {
             AssertQueryEquals("true", new Query(pc, new BooleanLiteralExpression(pc, true)));
         }
 
-        [TestMethod]
+        [Test]
         public void DecimalLiteralExpressionTest()
         {
             AssertQueryEquals("0.5", new Query(pc, new FloatingPointLiteralExpression(pc, 0.5)));
         }
 
-        [TestMethod]
+        [Test]
         public void StringLiteralExpressionTest()
         {
             AssertQueryEquals("\"test\\r\"", new Query(pc, new StringLiteralExpression(pc, "test\r")));
         }
 
-        [TestMethod]
+        [Test]
         public void ArrayExpressionTest()
         {
             AssertQueryEquals("[1]", new Query(pc, new ArrayExpression(pc, new[] { new IntegerLiteralExpression(pc, 1) })));
         }
 
-        [TestMethod]
+        [Test]
         public void BinaryOperationExpressionTest()
         {
             AssertQueryEquals("1+2", new Query(pc, new BinaryOperationExpression(pc, BinaryOperator.Add, new IntegerLiteralExpression(pc, 1), new IntegerLiteralExpression(pc, 2))));
         }
 
-        [TestMethod]
+        [Test]
         public void MemberCallExpressionTest()
         {
             AssertQueryEquals("a->b", new Query(pc, new MemberExpression(pc, new VariableExpression(pc, "a"), IdDelimiter.SingleArrow, "b")));
         }
 
-        [TestMethod]
+        [Test]
         public void CastExpressionTest()
         {
             AssertQueryEquals("(Integer)true", new Query(pc, new CastExpression(pc, TypeSystem.CoercionKind.Explicit, "Integer", new BooleanLiteralExpression(pc, true))));
         }
 
-        [TestMethod]
+        [Test]
         public void ConditionalExpressionTest()
         {
             AssertQueryEquals("true ? 1 : 2", new Query(pc, new ConditionalExpression(pc, 
@@ -100,7 +99,7 @@ namespace CQL.Tests
             )));
         }
 
-        [TestMethod]
+        [Test]
         public void MemberFunctionCallExpressionTest()
         {
             AssertQueryEquals("Math.Max(1, 2)", new Query(pc, new FunctionCallExpression(pc, new MemberExpression(pc, new VariableExpression(pc, "Math"), IdDelimiter.Dot, "Max"), new[] 
@@ -110,7 +109,7 @@ namespace CQL.Tests
             })));
         }
 
-        [TestMethod]
+        [Test]
         public void IndexerExpressionTest()
         {
             AssertQueryEquals("array[100]", new Query(pc, new ArrayAccessExpression(pc, new VariableExpression(pc, "array"), new[] { new IntegerLiteralExpression(pc, 100) })));

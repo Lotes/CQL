@@ -3,16 +3,12 @@ using CQL.Contexts.Implementation;
 using CQL.SyntaxTree;
 using CQL.TypeSystem;
 using CQL.TypeSystem.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NUnit.Framework;
 
-namespace CQL.Tests
+namespace CQL.Tests.Unit
 {
-    [Microsoft.VisualStudio.TestTools.UnitTesting.TestClass]
+    [TestFixture]
     public class TypeSystemBuilderByAttributesTests
     {
         private static EvaluationScope scope;
@@ -48,8 +44,8 @@ namespace CQL.Tests
             public string this[int index] { get { return Owner[index].ToString(); } }
         }
 
-        [ClassInitialize]
-        public static void Initialize(TestContext context)
+        [SetUp]
+        public void Initialize()
         {
             var typeSystemBuilder = new TypeSystemBuilder();
             typeSystemBuilder.AddFromScan(typeof(TypeSystemBuilderByAttributesTests));
@@ -58,31 +54,31 @@ namespace CQL.Tests
             scope.AddFromScan(typeof(TypeSystemBuilderByAttributesTests));
         }
 
-        [TestMethod]
+        [Test]
         public void PropertyTest()
         {
             Assert.IsTrue(Queries.Evaluate("id = 7", new Ticket(7, "Me"), scope) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void MemberFunctionTest()
         {
             Assert.IsTrue(Queries.Evaluate("toString() = \"Ticket 7\"", new Ticket(7, "Me"), scope) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void MemberActionTest()
         {
             Assert.IsTrue(Queries.Evaluate("call() is null", new Ticket(7, "Me"), scope) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void IndexerTest()
         {
             Assert.IsTrue(Queries.Evaluate("this[0] = \"M\"", new Ticket(7, "Me"), scope) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void GlobalFunctionTest()
         {
             Assert.IsTrue(Queries.Evaluate("max(1,200) = 200", new Ticket(7, "Me"), scope) == true);

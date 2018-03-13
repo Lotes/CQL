@@ -1,6 +1,7 @@
 Configurable Query Language (CQL)
 =================================
 
+[![Build Status](https://www.travis-ci.org/Lotes/CQL.svg?branch=master)](https://www.travis-ci.org/Lotes/CQL)
 [![Documentation Status](https://readthedocs.org/projects/cql/badge/?version=latest)](http://cql.readthedocs.io/en/latest/?badge=latest)
 
 ![Example](example.png)

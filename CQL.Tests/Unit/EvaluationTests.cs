@@ -1,14 +1,14 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using CQL.TypeSystem.Implementation;
 using CQL.Contexts.Implementation;
 using CQL.Contexts;
 using CQL.ErrorHandling;
 using CQL.SyntaxTree;
+using NUnit.Framework;
 
-namespace CQL.Tests
+namespace CQL.Tests.Unit
 {
-    [TestClass]
+    [TestFixture]
     public class EvaluationTests
     {
         public class Ticket
@@ -27,8 +27,8 @@ namespace CQL.Tests
         public static Ticket ticketTwo;
         public static Ticket ticketThree;
 
-        [ClassInitialize]
-        public static void SetupFixture(TestContext testContext)
+        [SetUp]
+        public void SetupFixture()
         {
             var typeSystemBuilder = new TypeSystemBuilder();
             var Ticket = typeSystemBuilder.AddType<Ticket>("Ticket", "Description of Ticket");
@@ -47,46 +47,50 @@ namespace CQL.Tests
             ticketThree = new Ticket(3, null);
         }
 
-        [TestMethod]
+        [Test]
         public void FunctionEval()
         {
             Assert.IsTrue(Queries.Evaluate("max(100,200) = 200", ticketOne, context) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void MethodParameterCoercion()
         {
             Assert.IsTrue(Queries.Evaluate("owner.append(1) = \"Markus1\"", ticketOne, context) == true);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [Test]
         public void MethodParameterCountMismatch()
         {
-            Assert.IsTrue(Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context) == true);
+            void TestDelegate()
+            {
+                Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context);
+            }
+
+            Assert.That((Action) TestDelegate, Throws.TypeOf<ArgumentException>());
         }
 
-        [TestMethod]
+        [Test]
         public void AddNumbers()
         {
             Assert.IsTrue(Queries.Evaluate("1 = 0.5 + 0.5", ticketOne, context) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void GetTicketByNumber()
         {
             Assert.IsTrue(Queries.Evaluate("id = 1", ticketOne, context) == true);
             Assert.IsFalse(Queries.Evaluate("id = 1", ticketTwo, context) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void GetTicketByOwner()
         {
             Assert.IsTrue(Queries.Evaluate("owner = \"Markus\"", ticketOne, context) == true);
             Assert.IsFalse(Queries.Evaluate("owner = \"Markus\"", ticketTwo, context) == true);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckOwnerNull()
         {
             Assert.IsTrue(Queries.Evaluate("NOT(owner IS NULL)", ticketOne, context) == true);
@@ -94,46 +98,37 @@ namespace CQL.Tests
             Assert.IsTrue(Queries.Evaluate("owner IS NULL", ticketThree, context) == true);
         }
 
-        /* HOWTO HANDLE? Currently: NULL + "a" == "a"
-        [TestMethod]
-        public void CheckConcatOwnerNull()
-        {
-            Assert.IsFalse(Queries.Evaluate("(owner+\"abc\") IS NULL", ticketOne, context) == true);
-            Assert.IsTrue(Queries.Evaluate("(owner+\"abc\") IS NULL", ticketThree, context) == true);
-        }*/
-
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void CheckBuggyIn()
         {
-            Queries.Evaluate("owner IN owner", ticketOne, context);
+            Assert.That(() => Queries.Evaluate("owner IN owner", ticketOne, context), Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
+        [Test]
         public void CheckNestedIn()
         {
             Queries.Evaluate("owner IN [owner]", ticketThree, context);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckBuggyContains()
         {
             Queries.Evaluate("owner ~ owner", ticketThree, context);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckMethodCall()
         {
             Queries.Evaluate("owner.length() = 6", ticketOne, context);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckMember()
         {
             Queries.Evaluate("owner.size = 6", ticketOne, context);
         }
 
-        [TestMethod]
+        [Test]
         public void CheckArrayAccess()
         {
             Queries.Evaluate("owner[1] = \"M\"", ticketOne, context);

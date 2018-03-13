@@ -3,16 +3,11 @@ using CQL.Contexts.Implementation;
 using CQL.ErrorHandling;
 using CQL.SyntaxTree;
 using CQL.TypeSystem.Implementation;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using NUnit.Framework;
 
-namespace CQL.Tests
+namespace CQL.Tests.Unit
 {
-    [TestClass]
+    [TestFixture]
     public class ValidationTests
     {
         public class A
@@ -27,8 +22,8 @@ namespace CQL.Tests
 
         public static IEvaluationScope context;
 
-        [ClassInitialize]
-        public static void SetupFixture(TestContext testContext)
+        [SetUp]
+        public void SetupFixture()
         {
             var typeSystemBuilder = new TypeSystemBuilder();
             typeSystemBuilder.AddType<A>("A", "stuff").AddForeignProperty(IdDelimiter.Dot, "b", a => a.b);
@@ -37,90 +32,100 @@ namespace CQL.Tests
             context.DefineVariable("a", new A() { b = new B() { c = 1 } });
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void ExplicitCast_FailMissingCoercionRuleTest()
         {
-            Queries.Parse("1 = (integer)1.2", context);
+            Assert.That(() =>
+            {
+                Queries.Parse("1 = (integer)1.2", context);
+            }, Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
+        [Test]
         public void ImplicitCoercion_SuccessTest()
         {
             Queries.Parse("1 = 1.0", context);
         }
 
-        [TestMethod]
+        [Test]
         public void VariableProperties_SuccessTest()
         {
             Queries.Parse("a.b.c = 1.0", context);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void VariablePropertiesFail_UnknownIdTest()
         {
-            Queries.Parse("a.b = 1", context);
+            Assert.That(() =>
+            {
+                Queries.Parse("a.b = 1", context);
+            }, Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void VariablePropertiesFail_NotBooleanTest()
         {
-            Queries.Parse("a.b.c", context);
+            Assert.That(() =>
+            {
+                Queries.Parse("a.b.c", context);
+            }, Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
+        [Test]
         public void UnaryOpConstant_SuccessTest()
         {
             Queries.Parse("not true", context);
         }
 
-        [TestMethod]
+        [Test]
         public void StringConcat_SuccessTest()
         {
             Queries.Parse("\"a\"+\"b\" = \"ab\"", context);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void Conditional_FailNoCommonTypeTest()
         {
-            Queries.Parse("true ? 123 : \"hallo\"", context);
+            Assert.That(() =>
+            {
+                Queries.Parse("true ? 123 : \"hallo\"", context);
+            }, Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
+        [Test]
         public void Conditional_SuccessTest()
         {
             Queries.Parse("(true ? 123 : a.b.c) = 1", context);
         }
 
-        [TestMethod]
-        [ExpectedException(typeof(LocateableException))]
+        [Test]
         public void IsEmpty_FailNoArrayTypeTest()
         {
-            Queries.Parse("true IS EMPTY", context);
+            Assert.That(() =>
+            {
+                Queries.Parse("true IS EMPTY", context);    
+            }, Throws.TypeOf<LocateableException>());
         }
 
-        [TestMethod]
+        [Test]
         public void IsEmpty_SuccessTest()
         {
             Queries.Parse("[a.b.c] IS EMPTY", context);
         }
 
-        [TestMethod]
+        [Test]
         public void IsNull_SuccessTest()
         {
             Queries.Parse("a.b.c IS NULL", context);
         }
 
-        [TestMethod]
+        [Test]
         public void IsVariableInSet_SuccessTest()
         {
             Queries.Parse("a.b.c in [1]", context);
         }
 
-        [TestMethod]
+        [Test]
         public void IsVariableInUnunifiedSet_SuccessTest()
         {
             Queries.Parse("a.b.c in [1.0, 2]", context);
