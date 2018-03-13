@@ -62,7 +62,7 @@ namespace CQL
         /// <param name="context"></param>
         /// <param name="errorListener"></param>
         /// <returns></returns>
-        public static Query Parse(string text, IScope<object> context, IErrorListener errorListener = null)
+        public static Query Parse(string text, IEvaluationScope context, IErrorListener errorListener = null)
         {
             try
             {
@@ -86,7 +86,7 @@ namespace CQL
         /// <param name="textUntilCaret"></param>
         /// <param name="context"></param>
         /// <returns></returns>
-        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IScope<object> context)
+        public static IEnumerable<Suggestion> AutoComplete(string textUntilCaret, IEvaluationScope context)
         {
             var suggester = new AutoCompletionSuggester(context);
             return suggester.GetSuggestions(textUntilCaret);
@@ -96,8 +96,8 @@ namespace CQL
         /// Evaluates a user query string with a given context and an optional error listener.
         /// If no listener is given, this method will throw exceptions instead.
         /// Do not use this method if you want to evaluate a query for multiple subjects.
-        /// Use <see cref="Parse(string, IScope{object}, IErrorListener)"/> instead in combination
-        /// with <see cref="Query.Evaluate(IScope{object})"/>.
+        /// Use <see cref="Parse(string, IEvaluationScope, IErrorListener)"/> instead in combination
+        /// with <see cref="Query.Evaluate(IEvaluationScope)"/>.
         /// </summary>
         /// <typeparam name="TSubject"></typeparam>
         /// <param name="text"></param>
@@ -105,7 +105,7 @@ namespace CQL
         /// <param name="context"></param>
         /// <param name="errorListener"></param>
         /// <returns></returns>
-        public static bool? Evaluate<TSubject>(string text, TSubject subject, IScope<object> context, IErrorListener errorListener = null)
+        public static bool? Evaluate<TSubject>(string text, TSubject subject, IEvaluationScope context, IErrorListener errorListener = null)
         {
             try
             {

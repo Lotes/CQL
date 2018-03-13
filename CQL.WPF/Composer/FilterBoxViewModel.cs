@@ -17,7 +17,7 @@ namespace CQL.WPF.Composer
 { 
     public class FilterBoxViewModel: ViewModelBase
     {
-        public static FilterBoxViewModel NewEditor(IScope<Type> context, QueryPartSuggestion suggestion)
+        public static FilterBoxViewModel NewEditor(IValidationScope context, QueryPartSuggestion suggestion)
         {
             var result = new FilterBoxViewModel(context, false, suggestion.Part);
             result.FilterState = result.QueryPart.Validate(context);
@@ -25,11 +25,11 @@ namespace CQL.WPF.Composer
                 result.FilterState = FilterBoxState.Editing;
             return result;
         }
-        public static FilterBoxViewModel NewBooleanLiteral(IScope<Type> context, bool negate, bool value)
+        public static FilterBoxViewModel NewBooleanLiteral(IValidationScope context, bool negate, bool value)
         {
             return new FilterBoxViewModel(context, negate, new BooleanLiteralViewModel(value)) { state = FilterBoxState.ReadyToUse };
         }
-        public static FilterBoxViewModel NewComparsion(IScope<Type> context, bool negate, IVariable<Type> field, BinaryOperator op, ComparsionValueViewModel value)
+        public static FilterBoxViewModel NewComparsion(IValidationScope context, bool negate, IVariable<Type> field, BinaryOperator op, ComparsionValueViewModel value)
         {
             return new FilterBoxViewModel(context, negate, new FieldComparsionViewModel(context, field, op, value)) { state = FilterBoxState.ReadyToUse };
         }
@@ -39,7 +39,7 @@ namespace CQL.WPF.Composer
         private FilterBoxState state;
         private QueryPartViewModel queryPart;
 
-        private FilterBoxViewModel(IScope<Type> context, bool negate, QueryPartViewModel queryPart)
+        private FilterBoxViewModel(IValidationScope context, bool negate, QueryPartViewModel queryPart)
         {
             this.Context = context;
             this.queryPart = queryPart;
@@ -55,7 +55,7 @@ namespace CQL.WPF.Composer
 
         public QueryPartViewModel QueryPart { get { return queryPart; } }
 
-        public IScope<Type> Context { get; private set; }
+        public IValidationScope Context { get; private set; }
         public bool Negate { get { return negate; } set { negate = value; RaiseChanged(); } }
         public bool IsLast { get { return last; } set { last = value; RaisePropertyChanged(() => IsLast); } }
         public event EventHandler<QueryPartSuggestion> Added;

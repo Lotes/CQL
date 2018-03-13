@@ -35,13 +35,13 @@ namespace CQL.WPF
         public static readonly DependencyProperty IsSimpleProperty =
             DependencyProperty.Register("IsSimple", typeof(bool), typeof(Editor), new PropertyMetadata(true));
 
-        public IScope<object> Context
+        public IEvaluationScope Context
         {
-            get { return (IScope<object>)GetValue(ContextProperty); }
+            get { return (IEvaluationScope)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope<object>), typeof(Editor), new PropertyMetadata(null));
+            DependencyProperty.Register("Context", typeof(IEvaluationScope), typeof(Editor), new PropertyMetadata(null));
         
         public Query Query
         {

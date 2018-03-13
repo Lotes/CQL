@@ -96,7 +96,6 @@
     <Compile Include="ErrorHandling\LocateableException.cs" />
     <Compile Include="SyntaxTree\ArrayAccessExpression.cs" />
     <Compile Include="SyntaxTree\CastExpression.cs" />
-    <Compile Include="SyntaxTree\Extensions.cs" />
     <Compile Include="SyntaxTree\IdDelimiter.cs" />
     <Compile Include="SyntaxTree\IExpression.cs" />
     <Compile Include="SyntaxTree\IntegerLiteralExpression.cs" />
@@ -117,17 +116,22 @@
     <Compile Include="TypeSystem\GlobalFunctionSignature.cs" />
     <Compile Include="TypeSystem\IGlobalFunctionClosure.cs" />
     <Compile Include="TypeSystem\IMemberFunctionSignature.cs" />
+    <Compile Include="TypeSystem\Implementation\ForeignIndexer.cs" />
+    <Compile Include="TypeSystem\Implementation\ForeignProperty.cs" />
     <Compile Include="TypeSystem\Implementation\GlobalFunction.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>GlobalFunction.generated.tt</DependentUpon>
     </Compile>
+    <Compile Include="TypeSystem\Implementation\LambdaGlobalFunction.cs" />
     <Compile Include="TypeSystem\Implementation\MemberFunction.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>MemberFunction.generated.tt</DependentUpon>
     </Compile>
-    <Compile Include="TypeSystem\Implementation\Property.cs" />
+    <Compile Include="TypeSystem\Implementation\NativeGlobalFunction.cs" />
+    <Compile Include="TypeSystem\Implementation\NativeIndexer.cs" />
+    <Compile Include="TypeSystem\Implementation\NativeProperty.cs" />
     <Compile Include="TypeSystem\Implementation\Type.generated.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -140,12 +144,10 @@
     </Compile>
     <Compile Include="TypeSystem\SystemDefaultFlags.cs" />
     <Compile Include="TypeSystem\IGlobalFunction.cs" />
-    <Compile Include="TypeSystem\Implementation\GlobalFunction.cs" />
     <Compile Include="TypeSystem\TypeDefaultFlags.cs" />
     <Compile Include="TypeSystem\IMemberIndexer.cs" />
     <Compile Include="TypeSystem\IMemberFunction.cs" />
     <Compile Include="TypeSystem\IMemberFunctionClosure.cs" />
-    <Compile Include="TypeSystem\Implementation\Indexer.cs" />
     <Compile Include="TypeSystem\Implementation\MemberFunction.cs" />
     <Compile Include="TypeSystem\Implementation\Type.cs" />
     <Compile Include="TypeSystem\IProperty.cs" />

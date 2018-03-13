@@ -3,11 +3,19 @@ using System;
 
 namespace CQL.Contexts
 {
+    /// <summary>
+    /// Extensions for variables.
+    /// </summary>
     public static class VariableExtensions
     {
-        public static IVariable<Type> ToValidationVariable(this IVariable<object> @this)
+        /// <summary>
+        /// Converts a evaluation into a validation variable.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static IVariableDeclaration ToValidationVariable(this IVariableDefinition @this)
         {
-            return new Variable<Type>(@this.Name, @this.Value.GetType());
+            return new VariableDeclaration(@this.Name, @this.Value.GetType());
         }
     }
 }

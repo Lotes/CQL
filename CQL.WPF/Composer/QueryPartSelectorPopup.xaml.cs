@@ -28,13 +28,13 @@ namespace CQL.WPF.Composer
             InitializeComponent();
         }
 
-        public IScope<Type> Context
+        public IValidationScope Context
         {
-            get { return (Contexts.IScope<Type>)GetValue(ContextProperty); }
+            get { return (Contexts.IValidationScope)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(Contexts.IScope<Type>), typeof(QueryPartSelectorPopup), new PropertyMetadata(null, contextChangedStatic));
+            DependencyProperty.Register("Context", typeof(Contexts.IValidationScope), typeof(QueryPartSelectorPopup), new PropertyMetadata(null, contextChangedStatic));
         private static void contextChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = d as QueryPartSelectorPopup;

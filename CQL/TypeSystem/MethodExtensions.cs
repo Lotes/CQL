@@ -55,7 +55,7 @@ namespace CQL.TypeSystem
         public static bool IfFunctionClosureTryGetFunctionType(this Type @this, out GlobalFunctionSignature signature)
         {
             signature = null;
-            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IFunctionClosure<>));
+            var closure = @this.GetInterfaces().Plus(@this).FirstOrDefault(i => i.IsGenericType && i.GetGenericTypeDefinition() == typeof(IGlobalFunctionClosure<>));
             if (closure == null)
                 return false;
             var functionType = closure.GetGenericArguments()[0];

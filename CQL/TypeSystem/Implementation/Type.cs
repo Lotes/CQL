@@ -156,7 +156,7 @@ namespace CQL.TypeSystem.Implementation
             if (symbols.ContainsKey(key))
                 throw new InvalidOperationException("Already assigned!");
             IProperty result;
-            symbols[key] = result = new NativeProperty(delimiter, name, propertyInfo);
+            symbols[key] = result = new NativeProperty(name, propertyInfo);
             return result;
         }
 

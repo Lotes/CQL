@@ -11,7 +11,7 @@ namespace CQL.SyntaxTree
     /// <summary>
     /// An expression that addresses a variable from the EvaluationScope.
     /// </summary>
-    /// <seealso cref="CQL.SyntaxTree.IExpression{CQL.SyntaxTree.VariableExpression}" />
+    /// <seealso cref="CQL.SyntaxTree.IExpression" />
     /// <seealso cref="CQL.Contexts.Implementation.EvaluationScope" />
     public class VariableExpression : IExpression<VariableExpression>
     {
@@ -65,7 +65,7 @@ namespace CQL.SyntaxTree
             return other.Identifier == this.Identifier;
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
@@ -76,9 +76,9 @@ namespace CQL.SyntaxTree
         /// <param name="context">The context.</param>
         /// <returns></returns>
         /// <exception cref="LocateableException">Unknown field!</exception>
-        public VariableExpression Validate(IScope<Type> context)
+        public VariableExpression Validate(IValidationScope context)
         {
-            if (!context.TryGetVariable(Identifier, out IVariable<Type> nameable))
+            if (!context.TryGetVariable(Identifier, out IVariableDeclaration nameable))
             {
                 throw new LocateableException(Location, "Unknown field!");
             }
@@ -93,9 +93,9 @@ namespace CQL.SyntaxTree
         /// <param name="context">The context.</param>
         /// <returns></returns>
         /// <exception cref="LocateableException">Unknown field!</exception>
-        public object Evaluate(IScope<object> context)
+        public object Evaluate(IEvaluationScope context)
         {
-            if (!context.TryGetVariable(Identifier, out IVariable<object> nameable))
+            if (!context.TryGetVariable(Identifier, out IVariableDefinition nameable))
             {
                 throw new LocateableException(Location, "Unknown field!");
             }

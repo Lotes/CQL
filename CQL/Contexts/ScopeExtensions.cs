@@ -85,5 +85,45 @@ namespace CQL.Contexts
             var function = NativeGlobalFunctionExtensions.CreateByMethodInfo(info);
             addGlobalFunction(@this, function.GetType(), name, function);
         }
+
+        /// <summary>
+        /// The name of the THIS object.
+        /// </summary>
+        public static readonly string ThisName = "this";
+        /// <summary>
+        /// Converts a concrete evaluation scope into a abstract validation scope.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
+        public static IValidationScope ToValidationScope(this IEvaluationScope @this)
+        {
+            if (@this == null)
+                return null;
+            var result = new ValidationScope(@this.TypeSystem, @this.Parent.ToValidationScope());
+            foreach (var elem in @this)
+                result.DefineVariable(elem.Name, elem.Value?.GetType() ?? typeof(object));
+            return result;
+        }
+
+        /// <summary>
+        /// Lookup THIS
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="variable"></param>
+        /// <returns></returns>
+        public static bool TryGetThis(this IEvaluationScope @this, out IVariableDefinition variable)
+        {
+            return @this.TryGetVariable(ThisName, out variable);
+        }
+        /// <summary>
+        /// Define THIS.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <param name="value"></param>
+        /// <returns></returns>
+        public static IVariableDefinition DefineThis(this IEvaluationScope @this, object value)
+        {
+            return @this.DefineVariable(ThisName, value);
+        }
     }
 }

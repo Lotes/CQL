@@ -80,12 +80,10 @@ namespace CQL.SyntaxTree
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public FunctionCallExpression Validate(IScope<Type> context)
+        public FunctionCallExpression Validate(IValidationScope context)
         {
             ThisExpression = ThisExpression.Validate(context);
-            IMemberFunctionSignature methodSignature;
-            GlobalFunctionSignature functionSignature;
-            if (ThisExpression.SemanticType.IfMemberFunctionClosureTryGetMethodSignature(out methodSignature))
+            if (ThisExpression.SemanticType.IfMemberFunctionClosureTryGetMethodSignature(out IMemberFunctionSignature methodSignature))
             {
                 var parameterIndex = 0;
                 if (methodSignature.ParameterTypes.Length != Parameters.Count())
@@ -105,7 +103,7 @@ namespace CQL.SyntaxTree
                 SemanticType = methodSignature.ReturnType;
                 return this;
             }
-            else if (ThisExpression.SemanticType.IfFunctionClosureTryGetFunctionType(out functionSignature))
+            else if (ThisExpression.SemanticType.IfFunctionClosureTryGetFunctionType(out GlobalFunctionSignature functionSignature))
             {
                 var parameterIndex = 0;
                 if (functionSignature.ParameterTypes.Length != Parameters.Count())
@@ -129,7 +127,7 @@ namespace CQL.SyntaxTree
                 throw new LocateableException(Location, "Closure expected!");
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
@@ -139,7 +137,7 @@ namespace CQL.SyntaxTree
         /// </summary>
         /// <param name="context"></param>
         /// <returns></returns>
-        public object Evaluate(IScope<object> context)
+        public object Evaluate(IEvaluationScope context)
         {
             var @this = this.ThisExpression.Evaluate(context);
             if(@this is IMemberFunctionClosure)

@@ -7,8 +7,18 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
+    /// <summary>
+    /// The parser stack is a helper class. It helps to find the right rule state.
+    /// Different states have different suggestions.
+    /// </summary>
     public class ParserStack
     {
+        /// <summary>
+        /// Checks whether the ATNState is compatiple with the given stack.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="parserStack"></param>
+        /// <returns></returns>
         public static bool IsCompatibleWith(ATNState state, ParserStack parserStack)
         {
             var res = parserStack.Process(state);
@@ -27,6 +37,11 @@ namespace CQL.AutoCompletion
         }
 
         private IEnumerable<ATNState> states;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="states"></param>
         public ParserStack(IEnumerable<ATNState> states = null)
         {
             if (states == null)
@@ -34,8 +49,16 @@ namespace CQL.AutoCompletion
             this.states = states;
         }
 
+        /// <summary>
+        /// Tip of the stack.
+        /// </summary>
         public ATNState Top { get { return states.LastOrDefault(); } }
 
+        /// <summary>
+        /// One step of reading in ATNState.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public Tuple<bool, ParserStack> Process(ATNState state)
         {
             var currentType = state.GetType();

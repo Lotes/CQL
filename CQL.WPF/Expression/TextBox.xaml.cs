@@ -22,7 +22,7 @@ namespace CQL.WPF.Expression
     {
         private TextMarkerService textMarkerService;
         private ToolTip toolTip;
-        private IScope<object> nullContext;
+        private IEvaluationScope nullContext;
         private CompletionWindow completionWindow;
         private bool isUpdatingText = false;
 
@@ -45,12 +45,12 @@ namespace CQL.WPF.Expression
 
 
 
-        public IScope<object> Context
+        public IEvaluationScope Context
         {
-            get { return (IScope<object>)GetValue(ContextProperty); }
+            get { return (IEvaluationScope)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
-        private IScope<object> InternalContext { get { return Context ?? nullContext; } }
+        private IEvaluationScope InternalContext { get { return Context ?? nullContext; } }
         public Query Query
         {
             get { return (Query)GetValue(QueryProperty); }
@@ -61,7 +61,7 @@ namespace CQL.WPF.Expression
         public static readonly DependencyProperty QueryProperty =
             DependencyProperty.Register("Query", typeof(Query), typeof(TextBox), new PropertyMetadata(Queries.True, queryChangedCallback));
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope<object>), typeof(TextBox), new PropertyMetadata(null, contextChangedCallback));
+            DependencyProperty.Register("Context", typeof(IEvaluationScope), typeof(TextBox), new PropertyMetadata(null, contextChangedCallback));
 
         private void InitializeText(string text)
         {

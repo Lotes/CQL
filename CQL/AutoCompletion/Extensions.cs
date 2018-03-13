@@ -8,12 +8,23 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
+    /// <summary>
+    /// Auto completion extensions.
+    /// </summary>
     public static class Extensions
     {
         private static ConditionalWeakTable<CQLLexer, IEnumerable<IToken>> tokensByLexer = new ConditionalWeakTable<CQLLexer, IEnumerable<IToken>>();
 
-        public const int CARET_TOKEN_TYPE = -10;
+        /// <summary>
+        /// Special id for the caret.
+        /// </summary>
+        public const int TokenType_Caret = -10;
 
+        /// <summary>
+        /// Converts lexer processings into a set of resulting tokens.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
         public static IEnumerable<IToken> ToList(this CQLLexer @this)
         {
             return tokensByLexer.GetValue(@this, lexer =>
@@ -29,7 +40,7 @@ namespace CQL.AutoCompletion
                         {
                             if (next.Type < 0)
                             {
-                                next = new CommonToken(new Tuple<ITokenSource, ICharStream>(next.TokenSource, next.InputStream), CARET_TOKEN_TYPE, 0, next.StartIndex, next.StopIndex);
+                                next = new CommonToken(new Tuple<ITokenSource, ICharStream>(next.TokenSource, next.InputStream), TokenType_Caret, 0, next.StartIndex, next.StopIndex);
                             }
                             res.AddLast(next);
                         }

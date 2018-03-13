@@ -4,17 +4,8 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace CQL.WPF.Composer
 {
@@ -27,9 +18,9 @@ namespace CQL.WPF.Composer
             InitializeComponent();
         }
 
-        public IScope<object> Context
+        public IEvaluationScope Context
         {
-            get { return (IScope<object>)GetValue(ContextProperty); }
+            get { return (IEvaluationScope)GetValue(ContextProperty); }
             set { SetValue(ContextProperty, value); }
         }
         public Query Query
@@ -49,15 +40,15 @@ namespace CQL.WPF.Composer
         }
 
         public static readonly DependencyProperty ContextProperty =
-            DependencyProperty.Register("Context", typeof(IScope<object>), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
+            DependencyProperty.Register("Context", typeof(IEvaluationScope), typeof(ComposerBox), new PropertyMetadata(null, ChangedStatic));
         public static readonly DependencyProperty QueryProperty =
-            DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, changedStatic));
+            DependencyProperty.Register("Query", typeof(Query), typeof(ComposerBox), new PropertyMetadata(null, ChangedStatic));
         public static readonly DependencyPropertyKey StatusProperty =
             DependencyProperty.RegisterReadOnly("Status", typeof(ComposerStatus), typeof(ComposerBox), new PropertyMetadata(ComposerStatus.Uninitialized));
         public static readonly DependencyPropertyKey FiltersProperty =
             DependencyProperty.RegisterReadOnly("Filters", typeof(ObservableCollection<FilterBoxViewModel>), typeof(ComposerBox), new PropertyMetadata(new ObservableCollection<FilterBoxViewModel>()));
 
-        private static void changedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        private static void ChangedStatic(DependencyObject d, DependencyPropertyChangedEventArgs e)
         {
             var control = (ComposerBox)d;
             if (control.isUpdating)
@@ -78,14 +69,12 @@ namespace CQL.WPF.Composer
             while (stack.Any())
             {
                 var top = stack.Pop();
-                var and = top as BinaryOperationExpression;
-                FilterBoxViewModel part;
-                if (and != null && and.Operator == BinaryOperator.And)
+                if (top is BinaryOperationExpression and && and.Operator == BinaryOperator.And)
                 {
                     stack.Push(and.RightExpression);
                     stack.Push(and.LeftExpression);
                 }
-                else if (TryMakePart(top, out part))
+                else if (TryMakePart(top, out FilterBoxViewModel part))
                 {
                     parts.Add(part);
                     BindPartToEvents(part);
@@ -143,9 +132,8 @@ namespace CQL.WPF.Composer
             expression = Uncast(expression);
 
             //maybe get negation
-            var not = expression as UnaryOperationExpression;
             var negate = false;
-            if (not != null && not.Operator == UnaryOperator.Not)
+            if (expression is UnaryOperationExpression not && not.Operator == UnaryOperator.Not)
             {
                 negate = true;
                 expression = not.Expression;
@@ -155,13 +143,10 @@ namespace CQL.WPF.Composer
             expression = Uncast(expression);
 
             //field comparsion?
-            var comparsion = expression as BinaryOperationExpression;
-            if(comparsion != null && ComparsionOperators.Contains(comparsion.Operator))
+            if (expression is BinaryOperationExpression comparsion && ComparsionOperators.Contains(comparsion.Operator))
             {
                 var multiId = Uncast(comparsion.LeftExpression) as VariableExpression;
-                ComparsionValueViewModel comValue = null;
-                IVariable<object> variable;
-                if (multiId == null || !(Context.TryGetVariable(multiId.Identifier, out variable)) || !TryMakeValue(Uncast(comparsion.RightExpression), out comValue))
+                if (multiId == null || !(Context.TryGetVariable(multiId.Identifier, out IVariableDefinition variable)) || !TryMakeValue(Uncast(comparsion.RightExpression), out ComparsionValueViewModel comValue))
                     return false;
                 var field = variable;
                 part = FilterBoxViewModel.NewComparsion(Context.ToValidationScope(), negate, field.ToValidationVariable(), comparsion.Operator, comValue);
@@ -169,8 +154,7 @@ namespace CQL.WPF.Composer
             }
 
             //boolean literal
-            var booleanLiteral = expression as BooleanLiteralExpression;
-            if (booleanLiteral != null)
+            if (expression is BooleanLiteralExpression booleanLiteral)
             {
                 part = FilterBoxViewModel.NewBooleanLiteral(Context.ToValidationScope(), negate, booleanLiteral.Value);
                 return true;
@@ -183,32 +167,27 @@ namespace CQL.WPF.Composer
         {
             value = null;
 
-            var booleanLiteralExpression = expression as BooleanLiteralExpression;
-            if(booleanLiteralExpression != null)
+            if (expression is BooleanLiteralExpression booleanLiteralExpression)
             {
                 value = new BooleanLiteralValueViewModel(booleanLiteralExpression.Value);
                 return true;
             }
 
-            var stringLiteralExpression = expression as StringLiteralExpression;
-            if (stringLiteralExpression != null)
+            if (expression is StringLiteralExpression stringLiteralExpression)
             {
                 value = new StringLiteralValueViewModel(stringLiteralExpression.Value);
                 return true;
             }
 
-            var decimalLiteralExpression = expression as FloatingPointLiteralExpression;
-            if (decimalLiteralExpression != null)
+            if (expression is FloatingPointLiteralExpression decimalLiteralExpression)
             {
                 value = new DecimalLiteralValueViewModel(decimalLiteralExpression.Value);
                 return true;
             }
 
-            var signedExpression = expression as UnaryOperationExpression;
-            if (signedExpression != null)
+            if (expression is UnaryOperationExpression signedExpression)
             {
-                var innerLiteralExpression = signedExpression.Expression as FloatingPointLiteralExpression;
-                if (innerLiteralExpression != null)
+                if (signedExpression.Expression is FloatingPointLiteralExpression innerLiteralExpression)
                 {
                     var sign = signedExpression.Operator == UnaryOperator.Plus ? 1 : signedExpression.Operator == UnaryOperator.Minus ? -1 : 0;
                     value = new DecimalLiteralValueViewModel(sign * innerLiteralExpression.Value);

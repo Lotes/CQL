@@ -70,7 +70,7 @@ namespace CQL.Demo
                 }
         }
 
-        public IScope<object> Context { get; }
+        public IEvaluationScope Context { get; }
 
         public ObservableCollection<Subject> FilteredSubjects { get; private set; }
     }
