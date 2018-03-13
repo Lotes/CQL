@@ -19,6 +19,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution 
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 		TODO.md = TODO.md
+		xmldoc2md.ps1 = xmldoc2md.ps1
+		xmldoc2md.xsl = xmldoc2md.xsl
+		.travis.yml = .travis.yml
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B8DC3D85-D705-48A9-B4EC-B96518CC5632}"

@@ -1,6 +1,8 @@
 Configurable Query Language (CQL)
 =================================
 
+[![Documentation Status](https://readthedocs.org/projects/cql/badge/?version=latest)](http://cql.readthedocs.io/en/latest/?badge=latest)
+
 ![Example](example.png)
 
 What is the problem?

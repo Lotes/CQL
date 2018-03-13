@@ -1,0 +1,226 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ContentModelStore">
+    <e p="C:\Users\Markus\.Rider2017.3\system\resharper-host\local\Transient\ReSharperHost\v11\SolutionCaches\_CQL.155661546.00" t="ExcludeRecursive" />
+    <e p="C:\Users\Markus\Projekte\CQL" t="IncludeFlat">
+      <e p=".travis.yml" t="Include" />
+      <e p="CQL" t="IncludeRecursive">
+        <e p="AutoCompletion" t="Include">
+          <e p="AutoCompletionSuggestor.cs" t="Include" />
+          <e p="Extensions.cs" t="Include" />
+          <e p="IAutoCompletionSuggester.cs" t="Include" />
+          <e p="MyTokenStream.cs" t="Include" />
+          <e p="ParserStack.cs" t="Include" />
+          <e p="Suggestion.cs" t="Include" />
+          <e p="SuggestionType.cs" t="Include" />
+          <e p="Token.cs" t="Include" />
+        </e>
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Contexts" t="Include">
+          <e p="IEvaluationScope.cs" t="Include" />
+          <e p="Implementation" t="Include">
+            <e p="EvaluationScope.cs" t="Include" />
+            <e p="ValidationScope.cs" t="Include" />
+            <e p="VariableDeclaration.cs" t="Include" />
+            <e p="VariableDefinition.cs" t="Include" />
+          </e>
+          <e p="IScope.cs" t="Include" />
+          <e p="IValidationScope.cs" t="Include" />
+          <e p="IVariable.cs" t="Include" />
+          <e p="IVariableDeclaration.cs" t="Include" />
+          <e p="IVariableDefinition.cs" t="Include" />
+          <e p="ScopeExtensions.cs" t="Include" />
+          <e p="ScopeExtensions.generated.cs" t="Include" />
+          <e p="ScopeExtensions.generated.tt" t="Include" />
+          <e p="VariableExtensions.cs" t="Include" />
+        </e>
+        <e p="CQL.csproj" t="IncludeRecursive" />
+        <e p="CQL.g4" t="Include" />
+        <e p="DictionaryExtensions.cs" t="Include" />
+        <e p="EnumerableExtensions.cs" t="Include" />
+        <e p="ErrorHandling" t="Include">
+          <e p="ErrorListener.cs" t="Include" />
+          <e p="IErrorListener.cs" t="Include" />
+          <e p="LocateableException.cs" t="Include" />
+        </e>
+        <e p="HashExtensions.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="Queries.cs" t="Include" />
+        <e p="StringExtensions.cs" t="Include" />
+        <e p="SyntaxTree" t="Include">
+          <e p="ArrayAccessExpression.cs" t="Include" />
+          <e p="ArrayExpression.cs" t="Include" />
+          <e p="BinaryOperationExpression.cs" t="Include" />
+          <e p="BinaryOperator.cs" t="Include" />
+          <e p="BooleanLiteralExpression.cs" t="Include" />
+          <e p="CastExpression.cs" t="Include" />
+          <e p="ConditionalExpression.cs" t="Include" />
+          <e p="EmptyExpression.cs" t="Include" />
+          <e p="FloatingPointLiteralExpression.cs" t="Include" />
+          <e p="IdDelimiter.cs" t="Include" />
+          <e p="IExpression.cs" t="Include" />
+          <e p="IntegerLiteralExpression.cs" t="Include" />
+          <e p="IParserLocation.cs" t="Include" />
+          <e p="ISyntaxTreeNode.cs" t="Include" />
+          <e p="MemberExpression.cs" t="Include" />
+          <e p="MethodCallExpression.cs" t="Include" />
+          <e p="NullExpression.cs" t="Include" />
+          <e p="ParenthesisExpression.cs" t="Include" />
+          <e p="ParserLocation.cs" t="Include" />
+          <e p="ParserLocationExtensions.cs" t="Include" />
+          <e p="Query.cs" t="Include" />
+          <e p="StringLiteralExpression.cs" t="Include" />
+          <e p="SyntaxTreeExtensions.cs" t="Include" />
+          <e p="UnaryOperationExpression.cs" t="Include" />
+          <e p="UnaryOperator.cs" t="Include" />
+          <e p="VariableExpression.cs" t="Include" />
+        </e>
+        <e p="TypeExtensions.cs" t="Include" />
+        <e p="TypeSystem" t="Include">
+          <e p="AmbigiousTypeException.cs" t="Include" />
+          <e p="BinaryOperation.cs" t="Include" />
+          <e p="CoercionKind.cs" t="Include" />
+          <e p="CoercionRule.cs" t="Include" />
+          <e p="CQLGlobalFunction.cs" t="Include" />
+          <e p="CQLNativeMemberFunctionAttribute.cs" t="Include" />
+          <e p="CQLNativeMemberIndexerAttribute.cs" t="Include" />
+          <e p="CQLNativeMemberPropertyAttribute.cs" t="Include" />
+          <e p="CQLTypeAttribute.cs" t="Include" />
+          <e p="GlobalFunctionSignature.cs" t="Include" />
+          <e p="IGlobalFunction.cs" t="Include" />
+          <e p="IGlobalFunctionClosure.cs" t="Include" />
+          <e p="IMemberFunction.cs" t="Include" />
+          <e p="IMemberFunctionClosure.cs" t="Include" />
+          <e p="IMemberFunctionSignature.cs" t="Include" />
+          <e p="IMemberIndexer.cs" t="Include" />
+          <e p="Implementation" t="Include">
+            <e p="ForeignIndexer.cs" t="Include" />
+            <e p="ForeignProperty.cs" t="Include" />
+            <e p="GlobalFunction.generated.cs" t="Include" />
+            <e p="GlobalFunction.generated.tt" t="Include" />
+            <e p="LambdaGlobalFunction.cs" t="Include" />
+            <e p="MemberFunction.cs" t="Include" />
+            <e p="MemberFunction.generated.cs" t="Include" />
+            <e p="MemberFunction.generated.tt" t="Include" />
+            <e p="NativeGlobalFunction.cs" t="Include" />
+            <e p="NativeIndexer.cs" t="Include" />
+            <e p="NativeProperty.cs" t="Include" />
+            <e p="Type.cs" t="Include" />
+            <e p="Type.generated.cs" t="Include" />
+            <e p="Type.generated.tt" t="Include" />
+            <e p="TypeSystem.cs" t="Include" />
+            <e p="TypeSystemBuilder.cs" t="Include" />
+          </e>
+          <e p="IProperty.cs" t="Include" />
+          <e p="IType.cs" t="Include" />
+          <e p="IType.generated.cs" t="Include" />
+          <e p="IType.generated.tt" t="Include" />
+          <e p="ITypeSystem.cs" t="Include" />
+          <e p="ITypeSystemBuilder.cs" t="Include" />
+          <e p="MethodExtensions.cs" t="Include" />
+          <e p="SystemDefaultFlags.cs" t="Include" />
+          <e p="TypeDefaultFlags.cs" t="Include" />
+          <e p="TypeSystemBuilderExtensions.cs" t="Include" />
+          <e p="TypeSystemExtensions.cs" t="Include" />
+          <e p="UnaryOperation.cs" t="Include" />
+          <e p="UnknownTypeException.cs" t="Include" />
+          <e p="Void.cs" t="Include" />
+        </e>
+        <e p="Visitors" t="Include">
+          <e p="ExpressionsVisitor.cs" t="Include" />
+          <e p="ExpressionVisitor.cs" t="Include" />
+          <e p="NameVisitor.cs" t="Include" />
+          <e p="QueryVisitor.cs" t="Include" />
+        </e>
+      </e>
+      <e p="CQL.Demo" t="IncludeRecursive">
+        <e p="App.config" t="Include" />
+        <e p="App.xaml" t="Include" />
+        <e p="App.xaml.cs" t="Include" />
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CQL.Demo.csproj" t="IncludeRecursive" />
+        <e p="MainWindow.xaml" t="Include" />
+        <e p="MainWindow.xaml.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+          <e p="Settings.Designer.cs" t="Include" />
+          <e p="Settings.settings" t="Include" />
+        </e>
+        <e p="ViewModel.cs" t="Include" />
+      </e>
+      <e p="CQL.sln" t="IncludeFlat" />
+      <e p="CQL.Tests" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="CQL.Tests.csproj" t="IncludeRecursive" />
+        <e p="EvaluationTests.cs" t="Include" />
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="ParserTests.cs" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+        </e>
+        <e p="TypeSystemBuilderByAttributesTests.cs" t="Include" />
+        <e p="ValidationTests.cs" t="Include" />
+      </e>
+      <e p="CQL.WPF" t="IncludeRecursive">
+        <e p="bin" t="ExcludeRecursive" />
+        <e p="Composer" t="Include">
+          <e p="ComposerBox.xaml" t="Include" />
+          <e p="ComposerBox.xaml.cs" t="Include" />
+          <e p="ComposerStatus.cs" t="Include" />
+          <e p="FilterBox.xaml" t="Include" />
+          <e p="FilterBox.xaml.cs" t="Include" />
+          <e p="FilterBoxState.cs" t="Include" />
+          <e p="FilterBoxViewModel.cs" t="Include" />
+          <e p="QueryPart.cs" t="Include" />
+          <e p="QueryPartSelectorPopup.xaml" t="Include" />
+          <e p="QueryPartSelectorPopup.xaml.cs" t="Include" />
+          <e p="QueryPartSuggestion.cs" t="Include" />
+        </e>
+        <e p="CQL.WPF.csproj" t="IncludeRecursive" />
+        <e p="Editor.xaml" t="Include" />
+        <e p="Editor.xaml.cs" t="Include" />
+        <e p="Expression" t="Include">
+          <e p="AvalonEditSchema.xsd" t="Include" />
+          <e p="CompletionData.cs" t="Include" />
+          <e p="SyntaxHighlighting.xml" t="Include" />
+          <e p="TextBox.xaml" t="Include" />
+          <e p="TextBox.xaml.cs" t="Include" />
+          <e p="TextMarkerService.cs" t="Include" />
+        </e>
+        <e p="Images" t="Include">
+          <e p="function.png" t="Include" />
+          <e p="token.png" t="Include" />
+          <e p="type.png" t="Include" />
+          <e p="variable.png" t="Include" />
+        </e>
+        <e p="obj" t="ExcludeRecursive" />
+        <e p="packages.config" t="Include" />
+        <e p="Properties" t="Include">
+          <e p="AssemblyInfo.cs" t="Include" />
+          <e p="Resources.Designer.cs" t="Include" />
+          <e p="Resources.resx" t="Include" />
+        </e>
+      </e>
+      <e p="docs\CQL.api.md" t="Include" />
+      <e p="docs\README.md" t="Include" />
+      <e p="LICENSE.md" t="Include" />
+      <e p="packages" t="ExcludeRecursive" />
+      <e p="README.md" t="Include" />
+      <e p="Solution Items" t="Include">
+        <e p="docs" t="Include" />
+      </e>
+      <e p="TODO.md" t="Include" />
+      <e p="xmldoc2md.ps1" t="Include" />
+      <e p="xmldoc2md.xsl" t="Include" />
+    </e>
+  </component>
+</project>
