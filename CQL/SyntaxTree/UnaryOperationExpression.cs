@@ -10,12 +10,30 @@ using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
+    /// <summary>
+    /// AST node, representing a unary operation.
+    /// </summary>
     public class UnaryOperationExpression: IExpression<UnaryOperationExpression>
     {
+        /// <summary>
+        /// The expression on whcih the unary operator will be applied.
+        /// </summary>
         public IExpression Expression { get; private set; }
+        /// <summary>
+        /// The applied operator.
+        /// </summary>
         public readonly UnaryOperator Operator;
+        /// <summary>
+        /// The operation behind the operator. Will be set during validation.
+        /// </summary>
         private UnaryOperation operation;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="operator"></param>
+        /// <param name="expression"></param>
         public UnaryOperationExpression(IParserLocation context, UnaryOperator @operator, IExpression expression)
         {
             Expression = expression;
@@ -23,10 +41,21 @@ namespace CQL.SyntaxTree
             Location = context;
         }
 
+        /// <summary>
+        /// Location in the query text of this AST node.
+        /// </summary>
         public IParserLocation Location { get; private set; }
 
+        /// <summary>
+        /// The validated type of this expression.
+        /// </summary>
         public Type SemanticType { get; private set; }
 
+        /// <summary>
+        /// Deep equals.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as UnaryOperationExpression;
@@ -36,6 +65,10 @@ namespace CQL.SyntaxTree
                 && this.Expression.StructurallyEquals(other.Expression);
         }
 
+        /// <summary>
+        /// Outputs a user-friendly string representation of this expression.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string opStr;
@@ -49,7 +82,12 @@ namespace CQL.SyntaxTree
             return $"{opStr} {Expression.ToString()}";
         }
 
-        public UnaryOperationExpression Validate(IScope<Type> context)
+        /// <summary>
+        /// Validation: Determine the actual operation and return type of this unary operator.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public UnaryOperationExpression Validate(IValidationScope context)
         {
             Expression = Expression.Validate(context);
             operation = context.TypeSystem.GetUnaryOperation(Operator, Expression.SemanticType);
@@ -61,12 +99,17 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
 
-        public object Evaluate(IScope<object> context)
+        /// <summary>
+        /// Evaluation: execute the unary operation.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public object Evaluate(IEvaluationScope context)
         {
             return operation.Operation(Expression.Evaluate(context));
         }

@@ -18,7 +18,7 @@ namespace CQL.WPF.Composer
     public abstract class QueryPartViewModel: ViewModelBase
     {
         public abstract IExpression ToExpression();
-        public abstract FilterBoxState Validate(IScope<Type> context);
+        public abstract FilterBoxState Validate(IValidationScope context);
         public event EventHandler ReadyModeRequested;
         protected void RequestReadyMode() { ReadyModeRequested?.Invoke(this, new EventArgs()); }
     }
@@ -35,11 +35,11 @@ namespace CQL.WPF.Composer
     {
         private FieldComparsionState state;
         private IVariable<Type> field;
-        private IScope<Type> context;
+        private IValidationScope context;
         private BinaryOperator? op;
         private ComparsionValueViewModel value;
         private Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>> binaryOperations = new Dictionary<Type, Dictionary<Type, HashSet<BinaryOperation>>>();
-        public FieldComparsionViewModel(IScope<Type> context, IVariable<Type> field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
+        public FieldComparsionViewModel(IValidationScope context, IVariable<Type> field, BinaryOperator? op = null, ComparsionValueViewModel value = null)
         {
             this.KeyDownCommand = new RelayCommand<KeyEventArgs>(args => 
             {
@@ -75,12 +75,12 @@ namespace CQL.WPF.Composer
                 var lhss = new[] { operation.LeftType }.Concat(typeSystem.GetImplicitlyCastsTo(operation.LeftType));
                 var rhss = new[] { operation.RightType }.Concat(typeSystem.GetImplicitlyCastsTo(operation.RightType));
                 foreach (var lhs in lhss)
-                    binaryOperations.GetOrLazyInsert(lhs, () => new Dictionary<Type, HashSet<BinaryOperation>>())
-                        .GetOrLazyInsert(operation.RightType, () => new HashSet<BinaryOperation>())
+                    binaryOperations.GetValueOrInsertedLazyDefault(lhs, () => new Dictionary<Type, HashSet<BinaryOperation>>())
+                        .GetValueOrInsertedLazyDefault(operation.RightType, () => new HashSet<BinaryOperation>())
                         .Add(operation);
                 foreach (var rhs in rhss)
-                    binaryOperations.GetOrLazyInsert(operation.LeftType, () => new Dictionary<Type, HashSet<BinaryOperation>>())
-                        .GetOrLazyInsert(rhs, () => new HashSet<BinaryOperation>())
+                    binaryOperations.GetValueOrInsertedLazyDefault(operation.LeftType, () => new Dictionary<Type, HashSet<BinaryOperation>>())
+                        .GetValueOrInsertedLazyDefault(rhs, () => new HashSet<BinaryOperation>())
                         .Add(operation);
             }
         }
@@ -113,11 +113,10 @@ namespace CQL.WPF.Composer
             PossibleOperators.Clear();
 
             var lhsType = Field.Value;
-            Dictionary<Type, HashSet<BinaryOperation>> ops;
-            if (binaryOperations.TryGetValue(lhsType, out ops))
+            if (binaryOperations.TryGetValue(lhsType, out Dictionary<Type, HashSet<BinaryOperation>> ops))
                 foreach (var op in ops.Values.SelectMany(bos => bos).Select(bo => bo.Operator).Distinct())
                     PossibleOperators.Add(op);
-            if(Operator == null || !Operator.HasValue)
+            if (Operator == null || !Operator.HasValue)
             {
                 if (PossibleOperators.Contains(BinaryOperator.Equals))
                     Operator = BinaryOperator.Equals;
@@ -135,8 +134,7 @@ namespace CQL.WPF.Composer
         {
             if(Field != null && Operator != null)
             {
-                Dictionary<Type, HashSet<BinaryOperation>> byRhs;
-                if(binaryOperations.TryGetValue(Field.Value, out byRhs))
+                if (binaryOperations.TryGetValue(Field.Value, out Dictionary<Type, HashSet<BinaryOperation>> byRhs))
                 {
                     foreach (var rhs in byRhs.Keys.ToArray())
                         if (!byRhs[rhs].Any(operation => operation.Operator == Operator))
@@ -166,7 +164,7 @@ namespace CQL.WPF.Composer
                     value.ToExpression());
         }
 
-        public override FilterBoxState Validate(IScope<Type> context)
+        public override FilterBoxState Validate(IValidationScope context)
         {
             return field == null || op == null || !op.HasValue || value == null ? FilterBoxState.HasErrors : FilterBoxState.ReadyToUse;
         }
@@ -196,7 +194,7 @@ namespace CQL.WPF.Composer
             return new BooleanLiteralExpression(null, value);
         }
 
-        public override FilterBoxState Validate(IScope<Type> context)
+        public override FilterBoxState Validate(IValidationScope context)
         {
             return FilterBoxState.ReadyToUse;
         }
@@ -302,13 +300,11 @@ namespace CQL.WPF.Composer
         {
             var str = value as string;
             var type = parameter as Type;
-            bool boolResult;
-            if (type == typeof(bool) && bool.TryParse(str, out boolResult))
+            if (type == typeof(bool) && bool.TryParse(str, out bool boolResult))
                 return new BooleanLiteralValueViewModel(boolResult);
-            double decimalResult;
-            if (type == typeof(double) && double.TryParse(str, out decimalResult))
+            if (type == typeof(double) && double.TryParse(str, out double decimalResult))
                 return new DecimalLiteralValueViewModel(decimalResult);
-            if(type == typeof(string))
+            if (type == typeof(string))
                 return new StringLiteralValueViewModel(str);
             throw new InvalidOperationException("Something is wrong here...");
         }

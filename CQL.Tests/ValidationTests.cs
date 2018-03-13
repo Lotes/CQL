@@ -25,7 +25,7 @@ namespace CQL.Tests
             public int c { get; set; }
         }
 
-        public static IScope<object> context;
+        public static IEvaluationScope context;
 
         [ClassInitialize]
         public static void SetupFixture(TestContext testContext)

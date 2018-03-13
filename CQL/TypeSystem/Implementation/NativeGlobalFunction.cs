@@ -8,27 +8,17 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem.Implementation
 {
-    public abstract class LambdaGlobalFunction : IGlobalFunction
-    {
-        private Delegate body;
-        public LambdaGlobalFunction(Type[] formalParameters, Type returnType, Delegate body)
-        {
-            this.Signature = new GlobalFunctionSignature(returnType, formalParameters);
-            this.body = body;
-        }
-
-        public GlobalFunctionSignature Signature { get; private set; }
-
-        public object Invoke(params object[] parameters)
-        {
-            return body.Method.Invoke(body.Target, parameters);
-        }
-    }
-
+    /// <summary>
+    /// Abstract base class of all native global functions.
+    /// </summary>
     public abstract class NativeGlobalFunction : IGlobalFunction
     {
         private MethodInfo method;
 
+        /// <summary>
+        /// Creates a native global function from a MethodInfo.
+        /// </summary>
+        /// <param name="method"></param>
         public NativeGlobalFunction(MethodInfo method)
         {
             this.method = method;
@@ -38,8 +28,16 @@ namespace CQL.TypeSystem.Implementation
             Signature = new GlobalFunctionSignature(method.ReturnType, parameterTypes);
         }
 
+        /// <summary>
+        /// Type signature.
+        /// </summary>
         public GlobalFunctionSignature Signature { get; private set; }
 
+        /// <summary>
+        /// Calls the native function using the concrete parameters.
+        /// </summary>
+        /// <param name="parameters"></param>
+        /// <returns></returns>
         public object Invoke(params object[] parameters)
         {
             return method.Invoke(null, parameters);

@@ -10,15 +10,34 @@ using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
+    /// <summary>
+    /// AST node representing the ternary ?-operator.
+    /// </summary>
     public class ConditionalExpression: IExpression<ConditionalExpression>
     {
         private IExpression @else;
         private IExpression then;
 
+        /// <summary>
+        /// Condition expression.
+        /// </summary>
         public IExpression Condition { get; private set; }
+        /// <summary>
+        /// Then expression.
+        /// </summary>
         public IExpression Then { get { return then; } }
+        /// <summary>
+        /// Else expression.
+        /// </summary>
         public IExpression Else { get { return @else; } }
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="condition"></param>
+        /// <param name="then"></param>
+        /// <param name="else"></param>
         public ConditionalExpression(IParserLocation context, IExpression condition, IExpression then, IExpression @else)
         {
             Condition = condition;
@@ -27,15 +46,30 @@ namespace CQL.SyntaxTree
             Location = context;
         }
 
+        /// <summary>
+        /// Location in the query text
+        /// </summary>
         public IParserLocation Location { get; private set; }
 
+        /// <summary>
+        /// Validated type.
+        /// </summary>
         public Type SemanticType { get; private set; }
 
+        /// <summary>
+        /// User-friendly representation as string.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"{Condition.ToString()} ? {Then.ToString()} : {Else.ToString()}";
         }
 
+        /// <summary>
+        /// Deep equals.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as ConditionalExpression;
@@ -46,7 +80,12 @@ namespace CQL.SyntaxTree
                 && this.Else.StructurallyEquals(other.Else);
         }
 
-        public ConditionalExpression Validate(IScope<Type> context)
+        /// <summary>
+        /// Validation.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public ConditionalExpression Validate(IValidationScope context)
         {
             Condition = Condition.Validate(context);
             then = then.Validate(context);
@@ -65,12 +104,17 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
 
-        public object Evaluate(IScope<object> context)
+        /// <summary>
+        /// Evaluation... does only execute the branch with the corressponding condition 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public object Evaluate(IEvaluationScope context)
         {
             var condition = Condition.Evaluate(context);
             if((bool)condition == true)

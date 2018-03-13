@@ -14,8 +14,15 @@ using System.Threading.Tasks;
 
 namespace CQL.TypeSystem.Implementation
 {
+	/// <summary>
+    /// Defines a global function by a lambda function.
+    /// </summary>
+    /// <typeparam name="TReturn"></typeparam>
     public class LambdaGlobalFunction<TReturn> : LambdaGlobalFunction
     {
+	    /// <summary>
+        /// Creates a global lambda function.
+        /// </summary>
         public LambdaGlobalFunction(Func<TReturn> body) : base(new Type[0], typeof(TReturn), body)
         {
         }
@@ -39,8 +46,17 @@ namespace CQL.TypeSystem.Implementation
 	{
 		var sequence = getSequence(index, str => "T"+str);
 		var typesOf = getSequence(index, str => "typeof(T"+str+")");
-	#>public class LambdaGlobalFunction<<#=sequence#>, TReturn> : LambdaGlobalFunction
+	#>/// <summary>
+    /// Defines a global function by a lambda function.
+    /// </summary>
+	<#for(var pIndex=1; pIndex<=index; pIndex++)
+	{#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+	<#}#>/// <typeparam name="TReturn"></typeparam>
+    public class LambdaGlobalFunction<<#=sequence#>, TReturn> : LambdaGlobalFunction
     {
+		/// <summary>
+        /// Creates a global lambda function.
+        /// </summary>
         public LambdaGlobalFunction(Func<<#=sequence#>, TReturn> body) : base(new Type[] { <#=typesOf#> }, typeof(TReturn), body)
         {
         }
@@ -49,8 +65,15 @@ namespace CQL.TypeSystem.Implementation
 	}
 	#>
 
+	/// <summary>
+    /// Defines a global function by a native MethodInfo.
+    /// </summary>
+    /// <typeparam name="TReturn"></typeparam>
 	public class NativeGlobalFunction<TReturn> : NativeGlobalFunction
     {
+		/// <summary>
+        /// Creates a global native function.
+        /// </summary>
         public NativeGlobalFunction(MethodInfo info) : base(info)
         {
         }
@@ -62,8 +85,17 @@ namespace CQL.TypeSystem.Implementation
 		var sequence = getSequence(index, str => "T"+str);
 		var typesOf = getSequence(index, str => "typeof(T"+str+")");
 	#>
-	public class NativeGlobalFunction<<#=sequence#>, TReturn> : NativeGlobalFunction
+	/// <summary>
+    /// Defines a global function by MethodInfo.
+    /// </summary>
+	<#for(var pIndex=1; pIndex<=index; pIndex++)
+	{#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+	<#}#>/// <typeparam name="TReturn"></typeparam>
+    public class NativeGlobalFunction<<#=sequence#>, TReturn> : NativeGlobalFunction
     {
+		/// <summary>
+        /// Creates a global native function.
+        /// </summary>
         public NativeGlobalFunction(MethodInfo info) : base(info)
         {
         }
@@ -72,7 +104,9 @@ namespace CQL.TypeSystem.Implementation
 	}
 	#>
 
-
+	/// <summary>
+    /// Extensions for native global functions.
+    /// </summary>
 	public static class NativeGlobalFunctionExtensions
 	{
 		private static Dictionary<int, Type> classes = new Dictionary<int, Type>()
@@ -89,6 +123,11 @@ namespace CQL.TypeSystem.Implementation
 		}
 		#>	
 		};
+		/// <summary>
+        /// Converts a MethodInfo into a global function.
+        /// </summary>
+        /// <param name="info"></param>
+        /// <returns></returns>
 		public static IGlobalFunction CreateByMethodInfo(MethodInfo info)
 		{
             var parameterTypes = info.GetParameters().Select(p => p.ParameterType).ToArray();

@@ -14,7 +14,7 @@ namespace CQL.Contexts
 {
 	public static partial class ScopeExtensions
     {
-        private class Closure<TGlobalFunction> : IFunctionClosure<TGlobalFunction>
+        private class Closure<TGlobalFunction> : IGlobalFunctionClosure<TGlobalFunction>
             where TGlobalFunction : IGlobalFunction
         {
             public Closure(TGlobalFunction method)
@@ -27,27 +27,6 @@ namespace CQL.Contexts
                 return Function.Invoke(parameters);
             }
         }
-
-        public static readonly string ThisName = "this";
-        public static IScope<Type> ToValidationScope(this IScope<object> @this)
-        {
-            if (@this == null)
-                return null;
-            var result = new ValidationScope(@this.TypeSystem, @this.Parent.ToValidationScope());
-            foreach (var elem in @this)
-                result.DefineVariable(elem.Name, elem.Value?.GetType() ?? typeof(object));
-            return result;
-        }
-        public static bool TryGetThis<T>(this IScope<T> @this, out IVariable<T> variable)
-        {
-            return @this.TryGetVariable(ThisName, out variable);
-        }
-        public static IVariable<T> DefineThis<T>(this IScope<T> @this, T value)
-        {
-            return @this.DefineVariable(ThisName, value);
-        }
-
-
 		<#
 		const int MAX = 15; 
 		Func<int, Func<string, string>, string> getSequence = (index, convert) =>
@@ -61,9 +40,15 @@ namespace CQL.Contexts
 			}
 			return string.Join(", ", sequence);
 		};
-		#>
-		
-        public static IVariable<object> DefineForeignGlobalFunction<TResult>(this EvaluationScope @this, string name, Func<TResult> func)
+		#>/// <summary>
+        /// Defines a global function using a lambda function.
+        /// </summary>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="name"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+        public static IVariableDefinition DefineForeignGlobalFunction<TResult>(this EvaluationScope @this, string name, Func<TResult> func)
         {
             return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<TResult>>(new LambdaGlobalFunction<TResult>(func)));
         }
@@ -71,8 +56,18 @@ namespace CQL.Contexts
 		for(var index = 1; index<=MAX; index++) 
 		{
 			var ts = getSequence(index, str => "T"+str);
-		#>
-        
+		#>/// <summary>
+        /// Defines a global function using a lambda function.
+        /// </summary>
+		<#
+		for(var pIndex=1; pIndex<=index; pIndex++) {
+		#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+		<#}#>
+        /// <typeparam name="TResult"></typeparam>
+        /// <param name="this"></param>
+        /// <param name="name"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
 		public static IVariable<object> DefineForeignGlobalFunction<<#=ts#>, TResult>(this EvaluationScope @this, string name, Func<<#=ts#>, TResult> func)
         {
             return @this.DefineVariable(name, new Closure<LambdaGlobalFunction<<#=ts#>, TResult>>(new LambdaGlobalFunction<<#=ts#>, TResult>(func)));

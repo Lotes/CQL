@@ -33,7 +33,19 @@ namespace CQL.TypeSystem.Implementation
 		for(var index = 1; index<=MAX; index++) 
 		{
 			var sequence = getSequence(index);
-		#>public IMemberIndexer AddForeignIndexer<<#=sequence#>TResult>(Func<TType, <#=sequence#> TResult> getter)
+		#>/// <summary>
+        /// Add a indexer using a lambda function.
+        /// </summary>
+		<#
+		for(var pIndex=1; pIndex<=index; pIndex++)
+		{
+		#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+		<#
+		}
+		#>/// <typeparam name="TResult"></typeparam>
+        /// <param name="getter"></param>
+        /// <returns></returns>
+		public IMemberIndexer AddForeignIndexer<<#=sequence#>TResult>(Func<TType, <#=sequence#> TResult> getter)
 		{
             return AddAndReturnIndexer(getter);
         }
@@ -42,7 +54,21 @@ namespace CQL.TypeSystem.Implementation
 		for(var index = 0; index<=MAX; index++) 
 		{
 			var sequence = getSequence(index);
-		#>public IMemberFunction AddForeignFunction<<#=sequence#>TResult>(IdDelimiter delimiter, string name, Func<TType, <#=sequence#> TResult> func)
+		#>/// <summary>
+        /// Add a lambda function as foreign member function to a type.
+        /// </summary>
+        <#
+		for(var pIndex=1; pIndex<=index; pIndex++)
+		{
+		#>/// <typeparam name="T<#=pIndex#>"></typeparam>
+		<#
+		}
+		#>/// <typeparam name="TResult"></typeparam>
+        /// <param name="delimiter"></param>
+        /// <param name="name"></param>
+        /// <param name="func"></param>
+        /// <returns></returns>
+		public IMemberFunction AddForeignFunction<<#=sequence#>TResult>(IdDelimiter delimiter, string name, Func<TType, <#=sequence#> TResult> func)
 		{
             var method = new ForeignMemberFunction<TType, <#=sequence#>TResult>(func);
             AddMemberFunction(delimiter, name, method);

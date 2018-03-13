@@ -7,9 +7,18 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
-
+    /// <summary>
+    /// The parser stack is a helper class. It helps to find the right rule state.
+    /// Different states have different suggestions.
+    /// </summary>
     public class ParserStack
     {
+        /// <summary>
+        /// Checks whether the ATNState is compatiple with the given stack.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <param name="parserStack"></param>
+        /// <returns></returns>
         public static bool IsCompatibleWith(ATNState state, ParserStack parserStack)
         {
             var res = parserStack.Process(state);
@@ -28,6 +37,11 @@ namespace CQL.AutoCompletion
         }
 
         private IEnumerable<ATNState> states;
+
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="states"></param>
         public ParserStack(IEnumerable<ATNState> states = null)
         {
             if (states == null)
@@ -35,8 +49,16 @@ namespace CQL.AutoCompletion
             this.states = states;
         }
 
+        /// <summary>
+        /// Tip of the stack.
+        /// </summary>
         public ATNState Top { get { return states.LastOrDefault(); } }
 
+        /// <summary>
+        /// One step of reading in ATNState.
+        /// </summary>
+        /// <param name="state"></param>
+        /// <returns></returns>
         public Tuple<bool, ParserStack> Process(ATNState state)
         {
             var currentType = state.GetType();
@@ -70,9 +92,10 @@ namespace CQL.AutoCompletion
                 var loopState = state as LoopEndState;
                 if (states.Any())
                 {
-                    var last = states.Last() as StarLoopEntryState;
-                    if (last != null && last.loopBackState == loopState.loopBackState)
+                    if (states.Last() is StarLoopEntryState last && last.loopBackState == loopState.loopBackState)
+                    {
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
+                    }
                 }
                 return new Tuple<bool, ParserStack>(true, this);
             }
@@ -81,14 +104,18 @@ namespace CQL.AutoCompletion
                 var ruleState = state as RuleStopState;
                 if (states.Any())
                 {
-                    var last = states.Last() as RuleStartState;
-                    if (last != null && last.stopState == ruleState)
+                    if (states.Last() is RuleStartState last && last.stopState == ruleState)
+                    {
                         return new Tuple<bool, ParserStack>(true, new ParserStack(states.Take(states.Count() - 1)));
+                    }
                 }
                 return new Tuple<bool, ParserStack>(true, this);
             }
             if (remainingTypes.Any(t => t == currentType))
+            {
                 return new Tuple<bool, ParserStack>(true, this);
+            }
+
             throw new InvalidOperationException(currentType.FullName);
         }
     }

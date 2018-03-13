@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Express 14 for Windows Desktop
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio 15
+VisualStudioVersion = 15.0.27428.2002
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQL.Demo", "CQL.Demo\CQL.Demo.csproj", "{8D68478C-1A27-4293-BFBF-9BB3C63B54F7}"
 	ProjectSection(ProjectDependencies) = postProject
@@ -16,10 +16,15 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CQL.WPF", "CQL.WPF\CQL.WPF.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{60EA63E8-6B25-4AB6-9049-E0AB8A324F73}"
 	ProjectSection(SolutionItems) = preProject
-		DOCUMENTATION.md = DOCUMENTATION.md
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 		TODO.md = TODO.md
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B8DC3D85-D705-48A9-B4EC-B96518CC5632}"
+	ProjectSection(SolutionItems) = preProject
+		docs\CQL.api.md = docs\CQL.api.md
+		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
 Global
@@ -47,5 +52,11 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{B8DC3D85-D705-48A9-B4EC-B96518CC5632} = {60EA63E8-6B25-4AB6-9049-E0AB8A324F73}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {DE4067F5-27DA-44AE-A1C2-6A2187363CE0}
 	EndGlobalSection
 EndGlobal
