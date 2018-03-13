@@ -1,17 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace CQL.TypeSystem
 {
+    /// <summary>
+    /// Exception for types that are not in a given type system.
+    /// </summary>
     public class UnknownTypeException: Exception
     {
-        public readonly Type KnownType;
+        /// <summary>
+        /// The unknown type.
+        /// </summary>
+        public readonly Type UnknownType;
+        /// <summary>
+        /// Creates a exception.
+        /// </summary>
+        /// <param name="type"></param>
         public UnknownTypeException(Type type) : base("This type is unknown to the given type system!")
         {
-            KnownType = type;
+            UnknownType = type;
         }
     }
 }

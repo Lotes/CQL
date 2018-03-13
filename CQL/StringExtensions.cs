@@ -9,8 +9,16 @@ using System.Threading.Tasks;
 
 namespace CQL
 {
+    /// <summary>
+    /// Contains extensions for strings.
+    /// </summary>
     public static class StringExtensions
     {
+        /// <summary>
+        /// Escapes a string from special charaters, using the C# compiler environment.
+        /// </summary>
+        /// <param name="input"></param>
+        /// <returns></returns>
         public static string Escape(this string input)
         {
             using (var writer = new StringWriter())
@@ -24,6 +32,11 @@ namespace CQL
             }
         }
 
+        /// <summary>
+        /// Unescapes an escaped string.
+        /// </summary>
+        /// <param name="this"></param>
+        /// <returns></returns>
         public static string Unescape(this string @this)
         {
             return @this

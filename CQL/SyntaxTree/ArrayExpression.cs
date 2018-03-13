@@ -10,10 +10,21 @@ using CQL.TypeSystem;
 
 namespace CQL.SyntaxTree
 {
+    /// <summary>
+    /// Represents an array literal.
+    /// </summary>
     public class ArrayExpression: IExpression<ArrayExpression>
     {
+        /// <summary>
+        /// Expressions of all elements.
+        /// </summary>
         public IEnumerable<IExpression> Elements { get; private set; }
 
+        /// <summary>
+        /// Creates a ArrayExpression.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="elements"></param>
         public ArrayExpression(IParserLocation context, IEnumerable<IExpression> elements)
         {
             Elements = elements.ToArray();
@@ -21,10 +32,21 @@ namespace CQL.SyntaxTree
             SemanticType = null;
         }
 
+        /// <summary>
+        /// Position of the literal in the user query test.
+        /// </summary>
         public IParserLocation Location { get; private set; }
 
+        /// <summary>
+        /// Validated type of the array.
+        /// </summary>
         public Type SemanticType { get; private set; }
 
+        /// <summary>
+        /// Deep equals.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as ArrayExpression;
@@ -33,17 +55,26 @@ namespace CQL.SyntaxTree
             return this.Elements.StructurallyEquals(other.Elements);
         }
 
+        /// <summary>
+        /// Outputs user friendly string representing this expression.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             return $"[{string.Join(", ", Elements.Select(e => e.ToString()))}]";
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
 
-        public ArrayExpression Validate(IScope<Type> context)
+        /// <summary>
+        /// Validates expression. Trys to align types.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public ArrayExpression Validate(IValidationScope context)
         {
             var elements = Elements.Select(e => e.Validate(context)).ToArray();
             //Attention! The array has at least one element.
@@ -57,7 +88,12 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        public object Evaluate(IScope<object> context)
+        /// <summary>
+        /// Evaluates the value of this array expression.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public object Evaluate(IEvaluationScope context)
         {
             var values = Elements.Select(elem => elem.Evaluate(context)).ToArray();
             var result = (Array)Activator.CreateInstance(SemanticType, values.Length);

@@ -9,15 +9,34 @@ using System.Linq;
 
 namespace CQL.SyntaxTree
 {
+    /// <summary>
+    /// AST node representing binary operator expressions (with two operands).
+    /// </summary>
     public class BinaryOperationExpression: IExpression<BinaryOperationExpression>
     {
         private IExpression leftExpression;
         private IExpression rightExpression;
+        /// <summary>
+        /// Operand on the left side of the operator.
+        /// </summary>
         public IExpression LeftExpression { get { return leftExpression; } }
+        /// <summary>
+        /// Operand on the right side of the operand.
+        /// </summary>
         public IExpression RightExpression { get { return rightExpression; } }
+        /// <summary>
+        /// Binary operator.
+        /// </summary>
         public readonly BinaryOperator Operator;
         private BinaryOperation operation = null;
 
+        /// <summary>
+        /// Constructor.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="operator"></param>
+        /// <param name="leftExpression"></param>
+        /// <param name="rightExpression"></param>
         public BinaryOperationExpression(IParserLocation context, BinaryOperator @operator, IExpression leftExpression, IExpression rightExpression)
         {
             this.leftExpression = leftExpression;
@@ -27,10 +46,20 @@ namespace CQL.SyntaxTree
             SemanticType = null;
         }
 
+        /// <summary>
+        /// Validated type.
+        /// </summary>
         public Type SemanticType { get; private set; }
 
+        /// <summary>
+        /// Position of this expression in the query text.
+        /// </summary>
         public IParserLocation Location { get; private set; }
        
+        /// <summary>
+        /// Outputs user-friendly representation string.
+        /// </summary>
+        /// <returns></returns>
         public override string ToString()
         {
             string opString;
@@ -59,6 +88,11 @@ namespace CQL.SyntaxTree
             return $"{LeftExpression.ToString()} {opString} {RightExpression.ToString()}";
         }
 
+        /// <summary>
+        /// Deep equals.
+        /// </summary>
+        /// <param name="node"></param>
+        /// <returns></returns>
         public bool StructurallyEquals(ISyntaxTreeNode node)
         {
             var other = node as BinaryOperationExpression;
@@ -69,7 +103,12 @@ namespace CQL.SyntaxTree
                 && this.RightExpression.StructurallyEquals(other.RightExpression);
         }
 
-        public BinaryOperationExpression Validate(IScope<Type> context)
+        /// <summary>
+        /// Validation: determines the actual operation and its return type.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public BinaryOperationExpression Validate(IValidationScope context)
         {
             this.leftExpression = this.leftExpression.Validate(context);
             this.rightExpression = this.rightExpression.Validate(context);
@@ -79,10 +118,9 @@ namespace CQL.SyntaxTree
                 case BinaryOperator.NotIn:
                     {
                         Type needleType = leftExpression.SemanticType;
-                        Type elementType;
-                        if (!rightExpression.IfArrayTryGetElementType(out elementType))
+                        if (!rightExpression.IfArrayTryGetElementType(out Type elementType))
                             throw new LocateableException(Location, "The 'in' operator requires an array expression for the right operand.");
-                        if(needleType != elementType)
+                        if (needleType != elementType)
                         {
                             var chain = context.TypeSystem.GetImplicitlyCastChain(needleType, elementType);
                             var newLeft = chain.ApplyCast(leftExpression, context);
@@ -139,8 +177,7 @@ namespace CQL.SyntaxTree
                         }
                         else if (rightExpression is EmptyExpression)
                         {
-                            Type elementType;
-                            if (!leftExpression.IfArrayTryGetElementType(out elementType))
+                            if (!leftExpression.IfArrayTryGetElementType(out Type elementType))
                                 throw new LocateableException(leftExpression.Location, "Left operand must be of an array type.");
                             SemanticType = typeof(bool);
                             operation = new BinaryOperation(leftExpression.SemanticType, rightExpression.SemanticType, typeof(bool), Operator,
@@ -171,12 +208,17 @@ namespace CQL.SyntaxTree
             return this;
         }
 
-        IExpression IExpression.Validate(IScope<Type> context)
+        IExpression IExpression.Validate(IValidationScope context)
         {
             return Validate(context);
         }
 
-        public object Evaluate(IScope<object> context)
+        /// <summary>
+        /// Evaluation: Executes the binary operation.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        public object Evaluate(IEvaluationScope context)
         {
             var lhs = leftExpression.Evaluate(context);
             var rhs = rightExpression.Evaluate(context);

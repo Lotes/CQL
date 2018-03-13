@@ -11,12 +11,15 @@ using System.Threading.Tasks;
 
 namespace CQL.AutoCompletion
 {
+    /// <summary>
+    /// Default implementation of <see cref="IAutoCompletionSuggester"/>.
+    /// </summary>
     public class AutoCompletionSuggester : IAutoCompletionSuggester
     {
         private string[] ruleNames;
         private IVocabulary vocabulary;
         private ATN atn;
-        private IScope<object> context;
+        private IEvaluationScope context;
         private Dictionary<int, Func<IVariable<object>, bool>> lookupPredicateByRuleId = new Dictionary<int, Func<IVariable<object>, bool>>()
         {
             { CQLParser.RULE_typeName, symbol => symbol is IType },
@@ -31,7 +34,11 @@ namespace CQL.AutoCompletion
         };
         private Dictionary<int, IEnumerable<Token>> suggestionsByTokenType;
 
-        public AutoCompletionSuggester(IScope<object> context)
+        /// <summary>
+        /// Creates an auto completion suggester from the evaluation scope.
+        /// </summary>
+        /// <param name="context"></param>
+        public AutoCompletionSuggester(IEvaluationScope context)
         {
             this.context = context;
             this.ruleNames = CQLParser.ruleNames;
@@ -50,6 +57,11 @@ namespace CQL.AutoCompletion
             }
         }
 
+        /// <summary>
+        /// Given the code, let the suggester provide next tokens (suggestions).
+        /// </summary>
+        /// <param name="code"></param>
+        /// <returns></returns>
         public IEnumerable<Suggestion> GetSuggestions(string code)
         {
             var collector = new HashSet<Suggestion>();

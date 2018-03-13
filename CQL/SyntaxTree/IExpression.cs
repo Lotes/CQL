@@ -8,13 +8,38 @@ using System.Threading.Tasks;
 
 namespace CQL.SyntaxTree
 {
-    public interface IExpression: ISyntaxTreeNode, IEvaluator
+    /// <summary>
+    /// An expression is a syntax node that can be validated and evaluated. During the validation 
+    /// process, the syntax tree could be extended with further nodes and annotated with (semantic) types.
+    /// </summary>
+    /// <seealso cref="CQL.SyntaxTree.ISyntaxTreeNode" />
+    public interface IExpression: ISyntaxTreeNode
     {
+        /// <summary>
+        /// Initially is null! After calling the <see cref="IExpression.Validate(IValidationScope)"/> method
+        /// the actual type will be set.
+        /// </summary>
         Type SemanticType { get; }
 
-        IExpression Validate(IScope<Type> context);
+        /// <summary>
+        /// Validates this node and sets the semantic type.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        IExpression Validate(IValidationScope context);
+
+        /// <summary>
+        /// Evaluates this node to a value of the validated semantic type.
+        /// </summary>
+        /// <param name="context"></param>
+        /// <returns></returns>
+        object Evaluate(IEvaluationScope context);
     }
 
+    /// <summary>
+    /// The generic side of an expression. Subtype from this interface!
+    /// </summary>
+    /// <typeparam name="TSelf"></typeparam>
     public interface IExpression<TSelf>: IExpression, ISyntaxTreeNode<TSelf>
     {
     }
