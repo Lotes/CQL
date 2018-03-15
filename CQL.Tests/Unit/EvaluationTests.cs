@@ -62,12 +62,10 @@ namespace CQL.Tests.Unit
         [Test]
         public void MethodParameterCountMismatch()
         {
-            void TestDelegate()
+            Assert.That(() =>
             {
                 Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context);
-            }
-
-            Assert.That((Action) TestDelegate, Throws.TypeOf<ArgumentException>());
+            }, Throws.TypeOf<LocateableException>());
         }
 
         [Test]
