@@ -248,3 +248,4 @@ Tools
 /nuget.exe
 /packaging/specs/nuget.exe
 /packaging/nuget.exe
+/.idea
