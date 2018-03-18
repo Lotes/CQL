@@ -9,11 +9,11 @@ query: expr=expression EOF;
 
 /* Expressions */
 expression
-	: expr=ifThenElseTerm
+	: expr=ifThenElseTerm 
 	;
-
+	
 ifThenElseTerm
-	: cond=logicalOrTerm QUESTION then=expression COLON else=ifThenElseTerm #conditional
+	: cond=logicalOrTerm QUESTION then=expression COLON Else=ifThenElseTerm #conditional
 	| expr=logicalOrTerm                                                    #toOr
 	;
 logicalOrTerm

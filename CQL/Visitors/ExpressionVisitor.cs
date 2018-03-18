@@ -49,7 +49,7 @@ namespace CQL.Visitors
         {
             var condition = Visit(context.cond);
             var then = Visit(context.then);
-            var @else = Visit(context.@else);
+            var @else = Visit(context.Else);
             return new ConditionalExpression((ParserLocation)context, condition, then, @else);
         }
         /// <summary>

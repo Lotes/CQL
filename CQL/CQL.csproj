@@ -26,6 +26,7 @@
     <WarningLevel>4</WarningLevel>
     <DocumentationFile>CQL.doc.xml</DocumentationFile>
     <WarningsAsErrors>CS1591</WarningsAsErrors>
+    <LangVersion>7.2</LangVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -37,7 +38,7 @@
     <DocumentationFile>CQL.doc.xml</DocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Antlr4.Runtime, Version=4.6.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849, processorArchitecture=MSIL">
+    <Reference Include="Antlr4.Runtime, Version=4.6.0.0, Culture=neutral, PublicKeyToken=09abb75b9ed49849">
       <HintPath>..\packages\Antlr4.Runtime.4.6.3\lib\net45\Antlr4.Runtime.dll</HintPath>
     </Reference>
     <Reference Include="QuickGraph, Version=3.6.61114.0, Culture=neutral, PublicKeyToken=f3fb40175eec2af3, processorArchitecture=MSIL">
@@ -234,9 +235,6 @@
     <Error Condition="!Exists('..\packages\Antlr4.CodeGenerator.4.6.3\build\Antlr4.CodeGenerator.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Antlr4.CodeGenerator.4.6.3\build\Antlr4.CodeGenerator.targets'))" />
   </Target>
   <Import Project="..\packages\Antlr4.CodeGenerator.4.6.3\build\Antlr4.CodeGenerator.targets" Condition="Exists('..\packages\Antlr4.CodeGenerator.4.6.3\build\Antlr4.CodeGenerator.targets')" />
-  <PropertyGroup>
-    <PostBuildEvent>Powershell.exe -ExecutionPolicy Unrestricted -file "$(SolutionDir)xmldoc2md.ps1" -xml "$(TargetDir)CQL.doc.xml" -xsl "$(SolutionDir)xmldoc2md.xsl" -output "$(SolutionDir)docs\CQL.api.md"</PostBuildEvent>
-  </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
