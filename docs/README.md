@@ -12,7 +12,7 @@
 
 ## Auto-generated CQL API
 
-Click [here](CQL.api.md) to visit the CQL API documentation.
+Click [here](CQL/Home.md) to visit the CQL API documentation.
 
 ## TODO docs...
 
