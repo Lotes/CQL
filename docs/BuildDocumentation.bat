@@ -4,5 +4,6 @@
 @rmdir /S /Q CQL
 @mkdir CQL
 
+@msbuild %~dp0MarkdownGenerator\MarkdownGenerator.sln /p:Configuration=Debug
 @msbuild %~dp0..\CQL.sln /p:Configuration=Debug /p:DocumentationFile=${SolutionDir}\docs\CQL\source.xml
-@java -jar ..\Tools\saxon\saxon9he.jar CQL.doc.xml doc2mds.xsl outputDir=./CQL
+
