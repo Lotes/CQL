@@ -17,8 +17,6 @@ to empower him to address **complex properties**.
 Here is a solution!
 -------------------
 
-![CQL icon](icon.png =100x)
-
 The two components, provided here, are
 
 * a query language, that can be configured from a high-level point of view
