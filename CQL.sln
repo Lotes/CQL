@@ -27,6 +27,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "docs", "docs", "{B8DC3D85-D
 		docs\README.md = docs\README.md
 	EndProjectSection
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "CI", "CI", "{7FAE9AE0-5329-471C-8C96-19AE1611B6E9}"
+	ProjectSection(SolutionItems) = preProject
+		appveyor.yml = appveyor.yml
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -55,6 +60,7 @@ Global
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{B8DC3D85-D705-48A9-B4EC-B96518CC5632} = {60EA63E8-6B25-4AB6-9049-E0AB8A324F73}
+		{7FAE9AE0-5329-471C-8C96-19AE1611B6E9} = {60EA63E8-6B25-4AB6-9049-E0AB8A324F73}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {DE4067F5-27DA-44AE-A1C2-6A2187363CE0}
