@@ -5,7 +5,7 @@
     <AssemblyName>CQL</AssemblyName>
     <AssemblyTitle>CQL</AssemblyTitle>
     <PackageId>CQL</PackageId>
-    <Version>0.1.2</Version>
+    <Version>0.2.0</Version>
     <Authors>Markus Rudolph</Authors>
     <Owners>Markus Rudolph</Owners>
     <Product>CQL</Product>
