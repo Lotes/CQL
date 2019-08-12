@@ -60,7 +60,7 @@ namespace CQL.Tests
         }
 
         [TestMethod]
-        [ExpectedException(typeof(InvalidOperationException))]
+        [ExpectedException(typeof(LocateableException))]
         public void MethodParameterCountMismatch()
         {
             Assert.IsTrue(Queries.Evaluate("owner.append(1, 3) = \"Markus1\"", ticketOne, context) == true);
